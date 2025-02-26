@@ -1,6 +1,5 @@
 # 2025-OOPL
 
-# Abstract
 
 遊戲名稱：Rabbit & Steel
 
