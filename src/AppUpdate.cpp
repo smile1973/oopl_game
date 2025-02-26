@@ -2,26 +2,46 @@
 
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
-
+#include "Util/logger.hpp"
 void App::Update() {
+    const float moveSpeed = 8.0f; // 調整移動速度
+    auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
 
-    // TODO: Add your own logics to finish the tasks in README.md
-
-    /*
-     *  Do not touch the code below as they serve the purpose for validating the tasks,
-     *  rendering the frame, and exiting the game.
-    */
+    if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
+        rabbitPos.y += moveSpeed; // 向上移動
+    }
+    if (Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
+        rabbitPos.y -= moveSpeed; // 向下移動
+    }
+    if (Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
+        rabbitPos.x -= moveSpeed; // 向左移動
+    }
+    if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
+        rabbitPos.x += moveSpeed; // 向右移動
+    }
+    m_Rabbit->SetPosition(rabbitPos); // 更新位置
 
     if (Util::Input::IsKeyPressed(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
 
-    if (m_EnterDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::RETURN)) {
-            ValidTask();
+    if (m_ZKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
+            LOG_DEBUG("ZKeyUP");
+            m_Rabbit->UseSkill();
         }
     }
-    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
+    m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
 
+
+    // if (m_EnterDown) {
+    //     if (!Util::Input::IsKeyPressed(Util::Keycode::RETURN)) {
+    //         LOG_DEBUG("EKeyUP");
+    //         m_Rabbit->UseSkill();
+    //     }
+    // }
+    // m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
+
+    m_Rabbit->Update();
     m_Root.Update();
 }

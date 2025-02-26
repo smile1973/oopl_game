@@ -5,9 +5,7 @@
 
 #include "Util/Renderer.hpp"
 #include "Character.hpp"
-#include "Util/Text.hpp"
-#include "PhaseResourceManger.hpp"
-#include "AnimatedCharacter.hpp"
+#include "BackGround.hpp"
 
 class App {
 public:
@@ -26,34 +24,28 @@ public:
     void End(); // NOLINT(readability-convert-member-functions-to-static)
 
 private:
-    void ValidTask();
 
-private:
-    enum class Phase {
-        CHANGE_CHARACTER_IMAGE,
-        ABLE_TO_MOVE,
-        COLLIDE_DETECTION,
-        BEE_ANIMATION,
-        OPEN_THE_DOORS,
-        COUNTDOWN,
-    };
+
+//private:
+//    enum class Phase {
+//        CHANGE_CHARACTER_IMAGE,
+//        ABLE_TO_MOVE,
+//        COLLIDE_DETECTION,
+//        BEE_ANIMATION,
+//        OPEN_THE_DOORS,
+//        COUNTDOWN,
+//    };
 
 
     State m_CurrentState = State::START;
-    Phase m_Phase = Phase::CHANGE_CHARACTER_IMAGE;
+//    Phase m_Phase = Phase::CHANGE_CHARACTER_IMAGE;
 
     Util::Renderer m_Root;
-
-    std::shared_ptr<Character> m_Giraffe;
-    std::shared_ptr<Character> m_Chest;
-    std::vector<std::shared_ptr<Character>> m_Doors;
-
-    std::shared_ptr<AnimatedCharacter> m_Bee;
-    std::shared_ptr<AnimatedCharacter> m_Ball;
-
-    std::shared_ptr<PhaseResourceManger> m_PRM;
+    std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
+    std::shared_ptr<Character> m_Rabbit; // 定義兔子
 
     bool m_EnterDown = false;
+    bool m_ZKeyDown = false;
 };
 
 #endif
