@@ -12,6 +12,8 @@
   - [x] 嘗試看看可不可以在主技能上加上動畫(先以這個做為技能有觸發的判斷)
   - [ ] 加上剩下的技能
 - 視窗大小怎麼調整
+- 嘗試渲染看看主技能
+- bullet class 設計
   
 - 敵人
   - [ ] hitbox 判定
@@ -32,3 +34,12 @@
 - hb_rabbit_skill2_1 ~ 5 : skill2(X)
 - hb_rabbit_skill1_1 ~ 6 : skill1 & skill3(Z C)
 - hb_rabbit_skill3_1 ~ 4 : skill4(V)
+
+1. 敵人類別 Enemy class
+   - 該有的屬性要想一下 
+2. 利用class 做一個假人(dummy) 要把圖片放上去
+3. 受擊判定
+   - 先做一個技能的就好 試試看
+   - 可以利用 log_debug 看看有沒有讀到?
+   - 
+4. (bonus) 敵人血條UI
