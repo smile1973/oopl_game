@@ -40,7 +40,9 @@ public:
     // 更新角色狀態（例如切換動畫）
     void Update();
 
-    // [[nodiscard]] bool IfCollides(const std::shared_ptr<Character>& other) const;
+    // 檢測角色是否與另一個角色發生碰撞
+    [[nodiscard]] bool IfCollides(const std::shared_ptr<Character>& other) const;
+
 private:
     // 重置角色位置為原點
     void ResetPosition() { m_Transform.translation = {0, 0}; }

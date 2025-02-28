@@ -29,9 +29,15 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             LOG_DEBUG("ZKeyUP");
             m_Rabbit->UseSkill();
+
+            if (m_Rabbit->IfCollides(m_Enemy)) {
+                m_Enemy->TakeDamage(20);
+                LOG_DEBUG("TakeDamage_20");
+            }
         }
     }
     m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
+
 
 
     // if (m_EnterDown) {

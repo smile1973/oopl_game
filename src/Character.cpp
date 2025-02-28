@@ -3,6 +3,7 @@
 #include "_Sprite.hpp"
 #include "Util/Renderer.hpp"
 #include "Util/Logger.hpp"
+#include <glm/glm.hpp>
 
 // Character 類別的建構函式，初始化角色的閒置動畫
 Character::Character(const std::vector<std::string>& ImagePathSet){
@@ -57,4 +58,19 @@ void Character::SwitchToSkill() {
         m_SkillAnimation->Play(); // 播放技能動畫
         m_Drawable = m_SkillAnimation; // 設置動畫為技能動畫
     }
+}
+
+bool Character::IfCollides(const std::shared_ptr<Character>& other) const{
+    if (!other) return false;
+
+    // 取得當前角色和另一個角色的位置
+    glm::vec2 pos1 = this->GetPosition();
+    glm::vec2 pos2 = other->GetPosition();
+
+    float size = 50.0f;
+
+    // 簡單的 AABB (Axis-Aligned Bounding Box) 碰撞檢測
+    bool isColliding = (abs(pos1.x - pos2.x) < size) && (abs(pos1.y - pos2.y) < size);
+
+    return isColliding;
 }
