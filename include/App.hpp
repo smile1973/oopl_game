@@ -43,6 +43,7 @@ private:
     Util::Renderer m_Root;
     std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
     std::shared_ptr<Character> m_Rabbit; // 定義兔子
+    std::shared_ptr<Character> m_Enemy;   // 定義敵人
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;

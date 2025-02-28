@@ -4,51 +4,57 @@
 #include "Util/Renderer.hpp"
 #include "Util/Logger.hpp"
 
+// Character 類別的建構函式，初始化角色的閒置動畫
 Character::Character(const std::vector<std::string>& ImagePathSet){
-    // 建立閒置動畫
+    // 建立閒置動畫，設置為循環播放，每幀顯示 250 毫秒，並立即開始播放
     m_IdleAnimation = std::make_shared<Util::Animation>(ImagePathSet, true, 250, true, 0);
-    // 初始時設置為閒置動畫
-    m_Drawable = m_IdleAnimation;
-    m_ImagePathSet = ImagePathSet;
-    ResetPosition();
+    m_Drawable = m_IdleAnimation;    // 設置初始動畫為閒置動畫
+    m_ImagePathSet = ImagePathSet;    // 存儲圖片路徑集
+    ResetPosition();    // 重置角色位置
 }
 
+// 設置角色技能動畫的圖片集，並建立對應的動畫物件
 void Character::SetSkillImages(const std::vector<std::string>& SkillImageSet) {
     m_SkillImagePathSet = SkillImageSet;
-    // 提前創建技能動畫物件
+    // 建立技能動畫，設置為非循環播放，每幀顯示 175 毫秒
     m_SkillAnimation = std::make_shared<Util::Animation>(SkillImageSet, true, 175, false, 0);
 }
 
+// 讓角色使用技能，觸發技能動畫
 void Character::UseSkill() {
-    if (m_State == State::IDLE) {
+    if (m_State == State::IDLE) { // 只有當角色處於閒置狀態時才能施放技能
         LOG_DEBUG("Character using skill");
-        SwitchToSkill();
+        SwitchToSkill(); // 切換到技能動畫
         // m_SkillAnimationTime = 0;
     }
 }
 
+// 更新角色狀態，例如檢查技能動畫是否結束
 void Character::Update() {
-    if (m_State == State::SKILL) {
+    if (m_State == State::SKILL) { // 只有當角色處於技能狀態時才檢查
         auto skillAnim = std::dynamic_pointer_cast<Util::Animation>(m_Drawable);
-        if (skillAnim && skillAnim-> GetState() == Util::Animation::State::ENDED) {
+        // 若技能動畫播放結束，則切換回閒置動畫
+        if (skillAnim && skillAnim->GetState() == Util::Animation::State::ENDED) {
             SwitchToIdle();
         }
     }
 }
 
+// 切換回閒置動畫
 void Character::SwitchToIdle() {
-    if (m_State != State::IDLE) {
+    if (m_State != State::IDLE) { // 只有當當前狀態不是 IDLE 才切換
         LOG_DEBUG("Switching to IDLE animation");
         m_State = State::IDLE;
         m_Drawable = m_IdleAnimation; // 直接切換到閒置動畫物件
     }
 }
 
+// 切換到技能動畫
 void Character::SwitchToSkill() {
-    if (m_State != State::SKILL) {
+    if (m_State != State::SKILL) { // 只有當當前狀態不是 SKILL 才切換
         LOG_DEBUG("Switching to SKILL animation");
         m_State = State::SKILL;
-        m_SkillAnimation->Play();
-        m_Drawable = m_SkillAnimation; // 直接切換到技能動畫物件
+        m_SkillAnimation->Play(); // 播放技能動畫
+        m_Drawable = m_SkillAnimation; // 設置動畫為技能動畫
     }
 }
