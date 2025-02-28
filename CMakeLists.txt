@@ -27,6 +27,13 @@ file(GLOB_RECURSE HEADER_FILES include/*.hpp)
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         include/_Sprite.hpp
+        include/Skill.hpp
+        src/Skill.cpp
+        include/Effect/SkillEffect.hpp
+        include/Effect/CircleEffect.hpp
+        include/Effect/_EffectManager.hpp
+        src/CircleEffect.cpp
+        src/_EffectManager.cpp
 )
 
 if(MSVC)

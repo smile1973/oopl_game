@@ -3,6 +3,7 @@
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/logger.hpp"
+
 void App::Update() {
     const float moveSpeed = 8.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
@@ -25,23 +26,43 @@ void App::Update() {
         m_CurrentState = State::END;
     }
 
+    // 技能Z
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
-            LOG_DEBUG("ZKeyUP");
-            m_Rabbit->UseSkill();
+            LOG_DEBUG("Z Key UP - Skill 1");
+            m_Rabbit->UseSkill(1);
         }
     }
     m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
 
+    // 技能X
+    if (m_XKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
+            LOG_DEBUG("X Key UP - Skill 2");
+            m_Rabbit->UseSkill(2);
+        }
+    }
+    m_XKeyDown = Util::Input::IsKeyPressed(Util::Keycode::X);
 
-    // if (m_EnterDown) {
-    //     if (!Util::Input::IsKeyPressed(Util::Keycode::RETURN)) {
-    //         LOG_DEBUG("EKeyUP");
-    //         m_Rabbit->UseSkill();
-    //     }
-    // }
-    // m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
+    // 技能C
+    if (m_CKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::C)) {
+            LOG_DEBUG("C Key UP - Skill 3");
+            m_Rabbit->UseSkill(3);
+        }
+    }
+    m_CKeyDown = Util::Input::IsKeyPressed(Util::Keycode::C);
 
-    m_Rabbit->Update();
+    // 技能V
+    if (m_VKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
+            LOG_DEBUG("V Key UP - Skill 4");
+            m_Rabbit->UseSkill(4);
+        }
+    }
+    m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);
+
+    m_Rabbit->UpdateAndDraw();
     m_Root.Update();
 }
+

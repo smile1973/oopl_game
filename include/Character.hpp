@@ -1,20 +1,17 @@
 #ifndef CHARACTER_HPP
 #define CHARACTER_HPP
 
-#include <string>
-
 #include "Util/GameObject.hpp"
-// #include "Sprite.hpp"
 #include "Util/Animation.hpp"
+#include "Skill.hpp"
 
 class Character : public Util::GameObject {
 public:
     explicit Character(const std::vector<std::string>& ImageSet);
     enum class State {
         IDLE,
-        SKILL
+        USING_SKILL,
     };
-    void SetSkillImages(const std::vector<std::string>& SkillImageSet);
 
     Character(const Character&) = delete;
     Character(Character&&) = delete;
@@ -26,22 +23,30 @@ public:
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
-    void UseSkill();
+
+    // 技能
+    void AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
+                 int duration = 175, float effectRadius = 0.4f,
+                 const Util::Color& effectColor = Util::Color::FromName(Util::Colors::WHITE));
+    void UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
+
+    void UpdateAndDraw();
     void Update();
 
-    // [[nodiscard]] bool IfCollides(const std::shared_ptr<Character>& other) const;
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
     void SwitchToIdle();
-    void SwitchToSkill();
+    void SwitchToSkill(int skillId);
 
     std::vector<std::string> m_ImagePathSet;
-    std::vector<std::string> m_SkillImagePathSet;
     std::shared_ptr<Util::Animation> m_IdleAnimation;
-    std::shared_ptr<Util::Animation> m_SkillAnimation;
+
+    // 存所有技能
+    std::unordered_map<int, std::shared_ptr<Skill>> m_Skills;
+
     State m_State = State::IDLE;
-    // int m_SkillAnimationTime = 0;
-    int m_SkillDuration = 500; // 技能動畫持續時間（毫秒）
+    int m_CurrentSkillId = -1;
+    std::shared_ptr<Skill> m_CurrentSkill = nullptr;
 };
 
 

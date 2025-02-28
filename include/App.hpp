@@ -46,6 +46,9 @@ private:
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
+    bool m_XKeyDown = false;
+    bool m_CKeyDown = false;
+    bool m_VKeyDown = false;
 };
 
 #endif
