@@ -1,9 +1,14 @@
 #include "App.hpp"
 
 #include "Util/Logger.hpp"
+#include "Effect/EffectManager.hpp"
 
 void App::Start() {
     LOG_TRACE("Start");
+    Effect::EffectManager::GetInstance().Initialize(4);
+    // 將特效管理器添加到渲染樹
+    // 注意：使用這種方式將單例添加到渲染樹，不管理生命週期
+    m_Root.AddChild(std::shared_ptr<Util::GameObject>(&Effect::EffectManager::GetInstance(), [](Util::GameObject*){}));
 
     std::vector<std::string> rabbitImages;
     rabbitImages.reserve(2);
@@ -19,7 +24,7 @@ void App::Start() {
         rabbitSkill1Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill1_" + std::to_string(i+1) + ".png");
     }
     m_Rabbit->AddSkill(1, rabbitSkill1Images, 175, 0.45f, Util::Color(1.0f, 1.0f, 1.0f, 0.05f));  // Z鍵技能，ID=1
-    m_Rabbit->AddSkill(3, rabbitSkill1Images, 175, 0.4f, Util::Color::FromName(Util::Colors::CYAN));  // C鍵技能，ID=1
+    m_Rabbit->AddSkill(3, rabbitSkill1Images, 175, 0.4f, Util::Color(1.0f, 1.0f, 1.0f, 0.05f));  // C鍵技能，ID=1
 
     // 技能 X 動畫
     std::vector<std::string> rabbitSkill2Images;
@@ -27,7 +32,7 @@ void App::Start() {
     for (int i = 0; i < 5; ++i) {
         rabbitSkill2Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill2_" + std::to_string(i+1) + ".png");
     }
-    m_Rabbit->AddSkill(2, rabbitSkill2Images, 175, 0.4f, Util::Color::FromName(Util::Colors::CYAN));  // X鍵技能，ID=2
+    m_Rabbit->AddSkill(2, rabbitSkill2Images, 175, 0.4f, Util::Color(0.0f, 1.0f, 1.0f, 0.05f));  // X鍵技能，ID=2
 
     // 技能 V 動畫
     std::vector<std::string> rabbitSkill4Images;

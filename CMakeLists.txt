@@ -29,11 +29,12 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         include/_Sprite.hpp
         include/Skill.hpp
         src/Skill.cpp
-        include/Effect/SkillEffect.hpp
         include/Effect/CircleEffect.hpp
-        include/Effect/_EffectManager.hpp
+        include/Effect/EffectManager.hpp
         src/CircleEffect.cpp
-        src/_EffectManager.cpp
+        include/Effect/Effect.hpp
+        include/Effect/RectEffect.hpp
+        include/Effect/EffectFactory.hpp
 )
 
 if(MSVC)

@@ -1,5 +1,5 @@
-#ifndef CIRCLE_EFFECT_HPP
-#define CIRCLE_EFFECT_HPP
+#ifndef RECT_EFFECT_HPP
+#define RECT_EFFECT_HPP
 
 #include "Effect.hpp"
 #include "Core/Program.hpp"
@@ -8,15 +8,15 @@
 #include "Util/Color.hpp"
 
 namespace Effect {
-    class CircleEffect : public IEffect {
+    class RectEffect : public IEffect {
     public:
-        CircleEffect(float radius = 0.4f, float duration = 0.75f,
-                    const Util::Color& color = Util::Color::FromName(Util::Colors::WHITE));
-        ~CircleEffect() override;
+        RectEffect(const glm::vec2& size = {0.4f, 0.4f}, float duration = 0.75f,
+                  const Util::Color& color = Util::Color::FromName(Util::Colors::WHITE));
+        ~RectEffect() override;
 
         // 實現自 Core::Drawable
         void Draw(const Core::Matrices& data) override;
-        glm::vec2 GetSize() const override { return m_Size; }
+        glm::vec2 GetSize() const override { return m_Dimensions; }
 
         // 實現自 Effect::IEffect
         void Update(float deltaTime) override;
@@ -24,11 +24,10 @@ namespace Effect {
         void Reset() override;
 
         // 設置參數
-        void SetRadius(float radius) { m_Radius = radius; }
+        void SetDimensions(const glm::vec2& dimensions) { m_Dimensions = dimensions; }
         void SetColor(const Util::Color& color) { m_Color = color; }
-        void SetThickness(float thickness) { m_Thickness = thickness; }
+        void SetBorderThickness(float thickness) { m_BorderThickness = thickness; }
         void SetFade(float fade) { m_FadeWidth = fade; }
-        void SetSize(const glm::vec2& size) { m_Size = size; }
 
     private:
         void InitProgram();
@@ -40,18 +39,17 @@ namespace Effect {
 
         std::unique_ptr<Core::UniformBuffer<Core::Matrices>> m_MatricesBuffer;
 
-        GLint m_RadiusLocation = -1;
-        GLint m_ThicknessLocation = -1;
+        GLint m_DimensionsLocation = -1;
+        GLint m_BorderThicknessLocation = -1;
         GLint m_FadeLocation = -1;
         GLint m_ColorLocation = -1;
         GLint m_TimeLocation = -1;
 
-        float m_Radius = 0.4f;           // 圓的半徑
-        float m_Thickness = 0.02f;       // 圓的邊緣寬度
-        float m_FadeWidth = 0.05f;       // 漸變效果的寬度
-        Util::Color m_Color;             // 圓的顏色
-        glm::vec2 m_Size = {400, 400};   // 效果的大小（可自定義）
+        glm::vec2 m_Dimensions = {0.4f, 0.4f};  // 矩形的尺寸
+        float m_BorderThickness = 0.02f;        // 邊框寬度
+        float m_FadeWidth = 0.05f;              // 漸變效果的寬度
+        Util::Color m_Color;                    // 矩形的顏色
     };
 }
 
-#endif // CIRCLE_EFFECT_HPP
+#endif // RECT_EFFECT_HPP

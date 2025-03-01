@@ -47,26 +47,6 @@ void Character::Update() {
     }
 }
 
-void Character::UpdateAndDraw() {
-    Update();
-
-    // 然後繪製技能效果（如果當前正在使用技能）
-    if (m_State == State::USING_SKILL && m_CurrentSkill) {
-        // 創建一個新的變換矩陣，使效果在角色位置上顯示
-        auto effectTransform = m_Transform;
-        // 可能需要調整效果的位置，使其居中於角色
-
-        auto data = Util::ConvertToUniformBufferData(
-            effectTransform, m_CurrentSkill->GetEffect()->GetSize(), m_ZIndex - 0.1f);
-
-        m_CurrentSkill->DrawEffect(data);
-
-        // 添加偵錯資訊
-        // LOG_DEBUG("Drawing effect at position: {}, Z-index: {}",
-        //           m_Transform.translation, m_ZIndex + 1.0f);
-    }
-}
-
 void Character::SwitchToIdle() {
     if (m_State != State::IDLE) {
         LOG_DEBUG("Switching to IDLE animation");
@@ -86,8 +66,8 @@ void Character::SwitchToSkill(int skillId) {
             m_CurrentSkillId = skillId;
             m_CurrentSkill = it->second;
 
-            // 播放技能
-            m_CurrentSkill->Play();
+            // 播放技能動畫和效果，現在需要傳遞位置
+            m_CurrentSkill->Play(m_Transform.translation);
             m_Drawable = m_CurrentSkill->GetAnimation();
         }
     }

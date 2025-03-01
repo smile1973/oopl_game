@@ -29,8 +29,6 @@ public:
                  int duration = 175, float effectRadius = 0.4f,
                  const Util::Color& effectColor = Util::Color::FromName(Util::Colors::WHITE));
     void UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
-
-    void UpdateAndDraw();
     void Update();
 
 private:

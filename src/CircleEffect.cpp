@@ -1,72 +1,77 @@
 #include "Effect/CircleEffect.hpp"
-#include "Util/Time.hpp"
 #include "Util/Logger.hpp"
+#include "Util/TransformUtils.hpp"
 #include "config.hpp"
 
-namespace Util {
+namespace Effect {
 
     std::unique_ptr<Core::Program> CircleEffect::s_Program = nullptr;
     std::unique_ptr<Core::VertexArray> CircleEffect::s_VertexArray = nullptr;
 
     CircleEffect::CircleEffect(float radius, float duration, const Util::Color& color)
         : m_Radius(radius), m_Color(color) {
-        
-        m_Duration = duration * 5.0f;
 
-        m_Size = {1000, 1000};
+        m_Duration = duration * 4.0f;
+
         if (s_Program == nullptr) {
             InitProgram();
         }
-        
+
         if (s_VertexArray == nullptr) {
             InitVertexArray();
         }
-        
+
         m_MatricesBuffer = std::make_unique<Core::UniformBuffer<Core::Matrices>>(
             *s_Program, "Matrices", 0);
-            
+
         InitUniforms();
     }
 
     CircleEffect::~CircleEffect() = default;
 
     void CircleEffect::Draw(const Core::Matrices& data) {
-        if (!m_IsPlaying) return;
-        
+        if (m_State != State::ACTIVE) return;
+
         m_MatricesBuffer->SetData(0, data);
-        
+
+        // 確保啟用混合
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         s_Program->Bind();
-        
+
         // 更新著色器參數
         glUniform1f(m_RadiusLocation, m_Radius);
         glUniform1f(m_ThicknessLocation, m_Thickness);
         glUniform1f(m_FadeLocation, m_FadeWidth);
         glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
         glUniform1f(m_TimeLocation, m_ElapsedTime);
-        
+
         s_Program->Validate();
-        
+
         s_VertexArray->Bind();
         s_VertexArray->DrawTriangles();
     }
 
     void CircleEffect::Update(float deltaTime) {
-        if (m_IsPlaying) {
+        if (m_State == State::ACTIVE) {
             m_ElapsedTime += deltaTime;
             if (m_ElapsedTime >= m_Duration) {
-                m_IsPlaying = false;
+                m_State = State::FINISHED;
             }
         }
     }
 
     void CircleEffect::Reset() {
         m_ElapsedTime = 0.0f;
-        m_IsPlaying = false;
+        m_State = State::INACTIVE;
     }
 
-    void CircleEffect::Play() {
+    void CircleEffect::Play(const glm::vec2& position, float zIndex) {
         Reset();
-        m_IsPlaying = true;
+        m_Transform.translation = position;
+        m_ZIndex = zIndex;
+        m_State = State::ACTIVE;
     }
 
     void CircleEffect::InitProgram() {
@@ -82,7 +87,7 @@ namespace Util {
 
     void CircleEffect::InitVertexArray() {
         s_VertexArray = std::make_unique<Core::VertexArray>();
-        
+
         // 指定一個正方形，將在著色器中轉換為圓形
         s_VertexArray->AddVertexBuffer(std::make_unique<Core::VertexBuffer>(
             std::vector<float>{
@@ -92,7 +97,7 @@ namespace Util {
                 0.5f, 0.5f     // 右上
             },
             2));
-            
+
         // UV 坐標
         s_VertexArray->AddVertexBuffer(std::make_unique<Core::VertexBuffer>(
             std::vector<float>{
@@ -102,7 +107,7 @@ namespace Util {
                 1.0f, 0.0f   // 右上
             },
             2));
-            
+
         // 頂點索引
         s_VertexArray->SetIndexBuffer(std::make_unique<Core::IndexBuffer>(
             std::vector<unsigned int>{
@@ -113,17 +118,16 @@ namespace Util {
 
     void CircleEffect::InitUniforms() {
         s_Program->Bind();
-        
+
         m_RadiusLocation = glGetUniformLocation(s_Program->GetId(), "u_Radius");
         m_ThicknessLocation = glGetUniformLocation(s_Program->GetId(), "u_Thickness");
         m_FadeLocation = glGetUniformLocation(s_Program->GetId(), "u_Fade");
         m_ColorLocation = glGetUniformLocation(s_Program->GetId(), "u_Color");
         m_TimeLocation = glGetUniformLocation(s_Program->GetId(), "u_Time");
-        
-        if (m_RadiusLocation == -1 || m_ThicknessLocation == -1 || 
+
+        if (m_RadiusLocation == -1 || m_ThicknessLocation == -1 ||
             m_FadeLocation == -1 || m_ColorLocation == -1 || m_TimeLocation == -1) {
             LOG_ERROR("Failed to get uniform locations for CircleEffect");
         }
     }
-
 }
