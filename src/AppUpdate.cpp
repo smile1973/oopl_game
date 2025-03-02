@@ -48,6 +48,9 @@ void App::Update() {
     // }
     // m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
 
+    if (! m_Enemy->IsAlive()) {
+        m_Enemy->SetVisible(false);
+    }
     m_Rabbit->Update();
     m_Root.Update();
 }

@@ -8,3 +8,10 @@ void Enemy::TakeDamage(float damage) {
     m_Health -= damage;
     LOG_DEBUG("Enemy took damage, remaining health: {}", m_Health);
 }
+
+bool Enemy::IsAlive() {
+    if (m_Health <= 0) {
+        return false;
+    }
+    return true;
+}

@@ -10,6 +10,7 @@ public:
 
     [[nodiscard]] float GetHealth() const { return m_Health; }
     void TakeDamage(float damage);
+    bool IsAlive();
 
 private:
     float m_Health;
