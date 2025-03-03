@@ -33,6 +33,11 @@ void App::Update() {
             if (m_Rabbit->IfCollides(m_Enemy)) {
                 m_Enemy->TakeDamage(20);
                 LOG_DEBUG("TakeDamage_20");
+
+                if (! m_Enemy->IsAlive()) {
+                    m_Enemy->SetVisible(false);
+                    LOG_DEBUG("The enemy dies");
+                }
             }
         }
     }
@@ -48,9 +53,6 @@ void App::Update() {
     // }
     // m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
 
-    if (! m_Enemy->IsAlive()) {
-        m_Enemy->SetVisible(false);
-    }
     m_Rabbit->Update();
     m_Root.Update();
 }

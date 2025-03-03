@@ -10,8 +10,5 @@ void Enemy::TakeDamage(float damage) {
 }
 
 bool Enemy::IsAlive() {
-    if (m_Health <= 0) {
-        return false;
-    }
-    return true;
+    return m_Health > 0;
 }
