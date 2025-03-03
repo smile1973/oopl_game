@@ -6,7 +6,7 @@ Enemy::Enemy(float health, float speed, const std::vector<std::string>& ImageSet
 
 void Enemy::TakeDamage(float damage) {
     m_Health -= damage;
-    LOG_DEBUG("Enemy took damage, remaining health: {}", m_Health);
+    LOG_DEBUG("Enemy took {:.1f} damage, remaining health: {:.1f}", damage, m_Health);
 }
 
 bool Enemy::IsAlive() {

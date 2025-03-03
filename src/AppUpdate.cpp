@@ -30,9 +30,8 @@ void App::Update() {
             LOG_DEBUG("ZKeyUP");
             m_Rabbit->UseSkill();
 
-            if (m_Rabbit->IfCollides(m_Enemy)) {
+            if (m_Rabbit->IfCollides(m_Enemy) && m_Enemy->IsAlive()) {
                 m_Enemy->TakeDamage(20);
-                LOG_DEBUG("TakeDamage_20");
 
                 if (! m_Enemy->IsAlive()) {
                     m_Enemy->SetVisible(false);
