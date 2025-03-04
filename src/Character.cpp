@@ -67,7 +67,7 @@ bool Character::IfCollides(const std::shared_ptr<Character>& other) const{
     glm::vec2 pos1 = this->GetPosition();
     glm::vec2 pos2 = other->GetPosition();
 
-    float size = 50.0f;
+    float size = 150.0f;
 
     // 簡單的 AABB (Axis-Aligned Bounding Box) 碰撞檢測
     bool isColliding = (abs(pos1.x - pos2.x) < size) && (abs(pos1.y - pos2.y) < size);

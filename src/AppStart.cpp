@@ -24,10 +24,12 @@ void App::Start() {
     m_Root.AddChild(m_Rabbit);
 
     // // 初始化敵人，設定圖片、位置與初始可見狀態
-    m_Enemy = std::make_shared<Enemy>(100,1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
+    m_Enemy = std::make_shared<Enemy>(100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
     m_Enemy->SetZIndex(5);
     m_Enemy->SetPosition({197.5f, -3.5f});
     // m_Enemy->SetVisible(false); // 初始狀態為不可見
+    glm::vec2 healthBarPosition(100.0f, 100.0f);  // 設定血條位置
+    m_Enemy->DrawHealthBar(healthBarPosition);  // 繪製血條
     m_Root.AddChild(m_Enemy);
 
     m_Background = std::make_shared<BackgroundImage>(); // 實際賦值

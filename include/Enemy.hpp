@@ -2,19 +2,33 @@
 #define ENEMY_HPP
 
 #include "Character.hpp"
-#include <vector>
+#include "Util/Renderer.hpp"
+#include "Util/Logger.hpp"
 
 class Enemy : public Character {
 public:
-    explicit Enemy(float health, float speed, const std::vector<std::string>& ImageSet);
+    Enemy(float health, const std::vector<std::string>& ImageSet);
 
-    [[nodiscard]] float GetHealth() const { return m_Health; }
     void TakeDamage(float damage);
-    bool IsAlive();
+    [[nodiscard]] bool IsAlive() const;
+
+    void DrawHealthBar(const glm::vec2& position);
 
 private:
+    static void InitProgram();
+    static void InitVertexArray();
+    void InitUniforms();
+
+    static std::unique_ptr<Core::Program> s_Program;
+    static std::unique_ptr<Core::VertexArray> s_VertexArray;
+
     float m_Health;
-    float m_Speed;
+    float m_MaxHealth;
+    float m_Width;
+    float m_Height;
+
+    GLint m_ColorLocation;
+    GLint m_WidthLocation;
 };
 
 #endif // ENEMY_HPP
