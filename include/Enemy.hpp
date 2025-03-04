@@ -12,8 +12,10 @@ public:
     void TakeDamage(float damage);
     bool IsAlive();
 
+
 private:
     float m_Health;
+    float m_MaxHealth = m_Health;
     float m_Speed;
 };
 
