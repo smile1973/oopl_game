@@ -5,28 +5,46 @@
 #include "Util/Renderer.hpp"
 #include "Util/Logger.hpp"
 
+// Enemy 類別，繼承自 Character，代表遊戲中的敵人角色
 class Enemy : public Character {
 public:
+    // 構造函數，初始化敵人的血量與影像集
     Enemy(float health, const std::vector<std::string>& ImageSet);
 
+    // 讓敵人受到傷害，減少生命值
     void TakeDamage(float damage);
+
+    // 檢查敵人是否仍然存活
     [[nodiscard]] bool IsAlive() const;
 
+    // 繪製敵人的血條
     void DrawHealthBar(const glm::vec2& position);
 
 private:
+    // 初始化著色程序（Shader Program）
     static void InitProgram();
+
+    // 初始化頂點陣列（Vertex Array Object）
     static void InitVertexArray();
+
+    // 初始化 Uniform 變數（著色器中的全域變數）
     void InitUniforms();
 
+    // 靜態成員變數：共享的著色程序
     static std::unique_ptr<Core::Program> s_Program;
+
+    // 靜態成員變數：共享的頂點數據
     static std::unique_ptr<Core::VertexArray> s_VertexArray;
 
+    // 敵人的當前血量與最大血量
     float m_Health;
     float m_MaxHealth;
+
+    // 血條的寬度與高度
     float m_Width;
     float m_Height;
 
+    // Uniform 變數位置（顏色與血條寬度）
     GLint m_ColorLocation;
     GLint m_WidthLocation;
 };
