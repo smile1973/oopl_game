@@ -5,24 +5,53 @@
 #include "Util/logger.hpp"
 #include "Util/Time.hpp"
 #include "Effect/EffectManager.hpp"
+#include "Effect/EffectFactory.hpp"
 
 void App::Update() {
+    // 處理空格鍵 - 測試特效
     if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
         auto cursorPos = Util::Input::GetCursorPosition();
-        auto effect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::CIRCLE);
-        if (auto circleEffect = std::dynamic_pointer_cast<Effect::CircleEffect>(effect)) {
-            circleEffect->SetSize({50, 50});
-            circleEffect->SetRadius(0.3f);
-            circleEffect->SetColor(Util::Color::FromName(Util::Colors::ORANGE));
-            circleEffect->SetThickness(0.03f);
-            circleEffect->SetFade(0.08f);
-            circleEffect->SetDuration(1.5f);
-            circleEffect->Play(cursorPos, 10.0f);
 
-            LOG_DEBUG("Created circle effect at cursor position: ({}, {})", cursorPos.x, cursorPos.y);
+        // 測試不同特效 - 根據當前測試計時器決定顯示哪種特效
+        m_TestEffectTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
+        if (m_TestEffectTimer > 7.0f) m_TestEffectTimer = 0.0f;
+
+        Effect::EffectType effectType;
+        if (m_TestEffectTimer < 1.0f) {
+            effectType = Effect::EffectType::SKILL_Z;
+            LOG_DEBUG("Testing Z skill effect");
+        } else if (m_TestEffectTimer < 2.0f) {
+            effectType = Effect::EffectType::SKILL_X;
+            LOG_DEBUG("Testing X skill effect");
+        } else if (m_TestEffectTimer < 3.0f) {
+            effectType = Effect::EffectType::SKILL_C;
+            LOG_DEBUG("Testing C skill effect");
+        } else if (m_TestEffectTimer < 4.0f) {
+            effectType = Effect::EffectType::SKILL_V;
+            LOG_DEBUG("Testing V skill effect");
+        } else if (m_TestEffectTimer < 5.0f) {
+            effectType = Effect::EffectType::ENEMY_ATTACK_1;
+            LOG_DEBUG("Testing enemy attack 1 effect");
+        } else if (m_TestEffectTimer < 6.0f) {
+            effectType = Effect::EffectType::ENEMY_ATTACK_2;
+            LOG_DEBUG("Testing enemy attack 2 effect");
+        } else {
+            effectType = Effect::EffectType::ENEMY_ATTACK_3;
+            LOG_DEBUG("Testing enemy attack 3 effect");
         }
+
+        // 播放特效
+        auto effect = Effect::EffectManager::GetInstance().PlayEffect(
+            effectType,
+            cursorPos,
+            10.0f, // z-index
+            1.5f   // 持續時間
+        );
+
+        LOG_DEBUG("Created effect at cursor position: ({}, {})", cursorPos.x, cursorPos.y);
     }
 
+    // 角色移動
     const float moveSpeed = 8.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
 
@@ -40,6 +69,7 @@ void App::Update() {
     }
     m_Rabbit->SetPosition(rabbitPos); // 更新位置
 
+    // 退出檢查
     if (Util::Input::IsKeyPressed(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
@@ -80,8 +110,17 @@ void App::Update() {
     }
     m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);
 
+    // 更新特效管理器
     Effect::EffectManager::GetInstance().Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
-    m_Rabbit->Update();
-    m_Root.Update();
-}
 
+    // 更新兔子角色
+    m_Rabbit->Update();
+
+    // 更新所有渲染對象
+    m_Root.Update();
+
+    // 顯示活躍特效數量(調試用)
+    if (Util::Input::IsKeyDown(Util::Keycode::I)) {
+        LOG_DEBUG("Active Effects: {}", Effect::EffectManager::GetInstance().GetActiveEffectsCount());
+    }
+}

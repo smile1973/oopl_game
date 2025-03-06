@@ -3,8 +3,8 @@
 in vec2 v_TexCoord;
 
 // 基本參數
-uniform float u_Radius;     // 圓的半徑 (0.0-0.5)
-uniform vec4 u_Color;       // 圓的基本顏色
+uniform vec2 u_Radii;       // 橢圓的x和y半徑
+uniform vec4 u_Color;       // 橢圓的基本顏色
 uniform float u_Time;       // 用於動畫效果
 
 // 填充修飾器參數
@@ -24,10 +24,12 @@ uniform float u_AnimSpeed;  // 效果速度
 out vec4 fragColor;
 
 void main() {
-    float dist = length(v_TexCoord);
+    // 計算橢圓距離
+    vec2 scaled = v_TexCoord / u_Radii;
+    float dist = length(scaled);
 
-    // 基本圓形
-    float circle = 1.0;
+    // 基本橢圓
+    float ellipse = 1.0;
 
     // 波紋動畫效果
     float animEffect = 0.0;
@@ -37,16 +39,16 @@ void main() {
 
     // 填充類型處理
     if (u_FillType == 0) { // 實心
-        circle = 1.0 - smoothstep(u_Radius + animEffect - 0.01, u_Radius + animEffect, dist);
+        ellipse = 1.0 - smoothstep(1.0 + animEffect - 0.01, 1.0 + animEffect, dist);
     } else { // 空心
-        float inner = u_Radius - u_Thickness;
-        float outer = u_Radius;
-        circle = smoothstep(inner + animEffect - 0.01, inner + animEffect, dist) *
+        float inner = 1.0 - u_Thickness / min(u_Radii.x, u_Radii.y);
+        float outer = 1.0;
+        ellipse = smoothstep(inner + animEffect - 0.01, inner + animEffect, dist) *
                  (1.0 - smoothstep(outer + animEffect - 0.01, outer + animEffect, dist));
     }
 
-    // 丟棄非圓形區域
-    if (circle < 0.01) {
+    // 丟棄非橢圓區域
+    if (ellipse < 0.01) {
         discard;
     }
 
@@ -57,10 +59,10 @@ void main() {
     if (u_EdgeType > 0) {
         float edge = 0.0;
         if (u_FillType == 0) { // 實心的邊緣
-            edge = smoothstep(u_Radius + animEffect - u_EdgeWidth, u_Radius + animEffect, dist);
+            edge = smoothstep(1.0 + animEffect - u_EdgeWidth, 1.0 + animEffect, dist);
         } else { // 空心的邊緣
-            float inner = u_Radius - u_Thickness;
-            float outer = u_Radius;
+            float inner = 1.0 - u_Thickness / min(u_Radii.x, u_Radii.y);
+            float outer = 1.0;
 
             float innerEdge = smoothstep(inner + animEffect, inner + animEffect + u_EdgeWidth, dist);
             float outerEdge = smoothstep(outer + animEffect - u_EdgeWidth, outer + animEffect, dist);
@@ -80,7 +82,7 @@ void main() {
     if (u_AnimType == 2) { // 尾跡效果
         vec2 direction = vec2(1.0, 0.0); // 假設向右
         float trail = smoothstep(0.0, 0.5, dot(normalize(v_TexCoord), -direction) * 0.5 + 0.5) *
-                    (1.0 - dist / (u_Radius + animEffect));
+                    (1.0 - dist / (1.0 + animEffect));
 
         finalColor.rgb = mix(finalColor.rgb, finalColor.rgb * 1.5, trail * u_Intensity);
     }

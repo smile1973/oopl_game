@@ -15,9 +15,9 @@ Character::Character(const std::vector<std::string>& ImagePathSet) {
 }
 
 void Character::AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
-                        int duration, float effectRadius, const Util::Color& effectColor) {
+                        int duration, float effectRadius, const glm::vec2& effectSize, const Util::Color& effectColor) {
     // 創建並儲存新技能
-    auto newSkill = std::make_shared<Skill>(skillId, skillImageSet, duration, effectRadius, effectColor);
+    auto newSkill = std::make_shared<Skill>(skillId, skillImageSet, duration, effectRadius, effectSize, effectColor);
     m_Skills[skillId] = newSkill;
     LOG_DEBUG("Added skill with ID: " + std::to_string(skillId));
 }

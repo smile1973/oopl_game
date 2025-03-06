@@ -14,7 +14,7 @@ public:
 
     // 構造函數
     Skill(int skillId, const std::vector<std::string>& imageSet, int duration = 175,
-          float effectRadius = 0.4f,
+          float effectRadius = 0.4f, const glm::vec2& effectSize = {800, 800},
           const Util::Color& effectColor = Util::Color::FromName(Util::Colors::WHITE));
 
     // 取得動畫物件
@@ -49,6 +49,7 @@ private:
     // 特效參數
     float m_EffectRadius = 0.4f;
     Util::Color m_EffectColor = Util::Color::FromName(Util::Colors::WHITE);
+    glm::vec2 m_EffectSize = {800, 800};
     std::shared_ptr<Effect::IEffect> m_CurrentEffect = nullptr; // 只是用在追蹤 看之後要不要用
 };
 

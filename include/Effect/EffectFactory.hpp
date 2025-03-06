@@ -1,16 +1,22 @@
 #ifndef EFFECT_FACTORY_HPP
 #define EFFECT_FACTORY_HPP
 
-#include "Effect.hpp"
-#include "CircleEffect.hpp"
-#include "RectEffect.hpp"
-#include "ProjectileEffect.hpp"
-#include <functional>
+#include "Effect/CompositeEffect.hpp"
 
 namespace Effect {
+
+    // 預定義特效類型
     enum class EffectType {
-        CIRCLE,
-        PROJECTILE,
+        // 角色技能特效
+        SKILL_Z,        // Z技能 : 實心圓，內部半透明，邊緣加深，不會移動
+        SKILL_X,        // X技能 : 空心圓，邊緣發光，有尾跡效果，會移動
+        SKILL_C,        // C技能 : 實心橢圓，內部半透明，邊緣加深，不會移動
+        SKILL_V,        // V技能 : 實心圓，內部半透明，邊緣發光，有波紋效果，不會移動
+
+        // 敵人攻擊特效
+        ENEMY_ATTACK_1, // 實心圓，邊緣加深，會移動
+        ENEMY_ATTACK_2, // 空心圓，邊緣發光，不會移動
+        ENEMY_ATTACK_3  // 實心圓，不會移動
     };
 
     class EffectFactory {
@@ -20,24 +26,22 @@ namespace Effect {
             return instance;
         }
 
-        // 根據類型創建特效
-        std::shared_ptr<IEffect> CreateEffect(EffectType type) {
-            auto it = m_Creators.find(type);
-            if (it != m_Creators.end()) {
-                return it->second();
-            }
-            return nullptr;
-        }
+        // 創建預定義特效
+        static std::shared_ptr<CompositeEffect> CreateEffect(EffectType type);
+
+        // 創建自定義組合特效
+        std::shared_ptr<CompositeEffect> CreateCustomEffect(
+            bool isCircle = true,
+            const Modifier::FillType& fillType = Modifier::FillType::SOLID,
+            const Modifier::EdgeType& edgeType = Modifier::EdgeType::NONE,
+            bool isMoving = false,
+            const Modifier::AnimationType& animType = Modifier::AnimationType::NONE
+        );
 
     private:
-        EffectFactory() {
-            // 註冊特效創建函數
-            m_Creators[EffectType::CIRCLE] = []() { return std::make_shared<CircleEffect>(); };
-            m_Creators[EffectType::PROJECTILE] = []() { return std::make_shared<ProjectileEffect>(); };
-        }
-
-        std::unordered_map<EffectType, std::function<std::shared_ptr<IEffect>()>> m_Creators;
+        EffectFactory() = default;
     };
-}
+
+} // namespace Effect
 
 #endif // EFFECT_FACTORY_HPP

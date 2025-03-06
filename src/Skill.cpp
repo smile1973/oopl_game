@@ -2,9 +2,11 @@
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
 #include "Effect/EffectManager.hpp"
+#include "Effect/CompositeEffect.hpp"
 
-Skill::Skill(int skillId, const std::vector<std::string>& imageSet, int duration, float effectRadius, const Util::Color& effectColor)
-    : m_ImagePathSet(imageSet), m_Duration(duration), m_SkillId(skillId), m_EffectRadius(effectRadius), m_EffectColor(effectColor) {
+Skill::Skill(int skillId, const std::vector<std::string>& imageSet, int duration, float effectRadius, const glm::vec2& effectSize, const Util::Color& effectColor)
+        : m_ImagePathSet(imageSet), m_Duration(duration), m_SkillId(skillId),
+            m_EffectRadius(effectRadius), m_EffectColor(effectColor), m_EffectSize(effectSize) {
 
     // 創建技能動畫
     m_Animation = std::make_shared<Util::Animation>(imageSet, true, duration, false, 0);
@@ -20,34 +22,35 @@ void Skill::Play(const glm::vec2& position) {
             m_Animation->Play();
         }
 
-        if (m_SkillId == 2) {  // X鍵技能 - 投射物特效
-            auto effect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::PROJECTILE);
-            if (auto projectileEffect = std::dynamic_pointer_cast<Effect::ProjectileEffect>(effect)) {
-                projectileEffect->SetRadius(m_EffectRadius);
-                projectileEffect->SetColor(m_EffectColor);
-                projectileEffect->SetDuration((static_cast<float>(m_Duration) / 200.0f));
-                projectileEffect->SetDirection({1.0f, 0.0f});  // 假設向右發射
-                projectileEffect->SetDistance(600.0f);
-                projectileEffect->SetSpeed(400.0f);
-                projectileEffect->SetSize({300, 300});
-                projectileEffect->Play(position, 45.0f);
-                m_CurrentEffect = effect;
-            }
+        // 根據技能ID創建對應的特效
+        Effect::EffectType effectType;
+
+        switch (m_SkillId) {
+            case 1: // Z技能
+                effectType = Effect::EffectType::SKILL_Z;
+                break;
+            case 2: // X技能
+                effectType = Effect::EffectType::SKILL_X;
+                break;
+            case 3: // C技能
+                effectType = Effect::EffectType::SKILL_C;
+                break;
+            case 4: // V技能
+                effectType = Effect::EffectType::SKILL_V;
+                break;
+            default:
+                effectType = Effect::EffectType::SKILL_Z; // 默認使用Z技能特效
+                break;
         }
-        else {
-            auto effect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::CIRCLE);
-            if (auto circleEffect = std::dynamic_pointer_cast<Effect::CircleEffect>(effect)) {
-                circleEffect->SetRadius(m_EffectRadius);
-                circleEffect->SetColor(m_EffectColor);
-                circleEffect->SetDuration((static_cast<float>(m_Duration) / 1000.0f) * 1.5f); // 轉換為秒
-                circleEffect->Play(position, 0.5f); // 設置特效位置和Z-index
-                circleEffect->SetSize({800, 800});
-                m_CurrentEffect = effect;
-                LOG_DEBUG("Created effect at position: ({}, {}), radius: {}, duration: {}s",
-                      position.x, position.y, m_EffectRadius,
-                      static_cast<float>(m_Duration) / 1000.0f);
-            }
-        }
+
+        auto effect = Effect::EffectManager::GetInstance().GetEffect(effectType);
+        // LOG_DEBUG("get: {}", (effect ? "success" : "fail"));
+        effect->SetDuration(static_cast<float>(m_Duration) / 300.0f);
+        effect->Play(position, 5.0f);
+        m_CurrentEffect = effect;
+
+        LOG_DEBUG("Created effect for skill {}, position: ({}, {})",
+                  m_SkillId, position.x, position.y);
     }
 }
 
@@ -59,6 +62,7 @@ bool Skill::IsEnded() const {
 }
 
 void Skill::Update(float deltaTime) {
+    (void)deltaTime;
     // 如果技能處於活躍狀態
     if (m_State == State::ACTIVE) {
         // 檢查是否結束

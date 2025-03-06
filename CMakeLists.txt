@@ -29,14 +29,27 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         include/_Sprite.hpp
         include/Skill.hpp
         src/Skill.cpp
-        include/Effect/CircleEffect.hpp
         include/Effect/EffectManager.hpp
-        src/CircleEffect.cpp
-        include/Effect/Effect.hpp
-        include/Effect/RectEffect.hpp
+        include/Effect/IEffect.hpp
         include/Effect/EffectFactory.hpp
-        include/Effect/ProjectileEffect.hpp
-        src/ProjectileEffect.cpp
+        include/Effect/Shape/BaseShape.hpp
+        include/Effect/Shape/CircleShape.hpp
+        include/Effect/Shape/EllipseShape.hpp
+        include/Effect/Modifier/FillModifier.hpp
+        include/Effect/Modifier/EdgeModifier.hpp
+        include/Effect/Modifier/MovementModifier.hpp
+        include/Effect/Modifier/AnimationModifier.hpp
+        include/Effect/CompositeEffect.hpp
+        src/Effect/Shape/BaseShape.cpp
+        src/Effect/Shape/CircleShape.cpp
+        src/Effect/Shape/EllipseShape.cpp
+        src/Effect/Modifier/FillModifier.cpp
+        src/Effect/Modifier/EdgeModifier.cpp
+        src/Effect/Modifier/MovementModifier.cpp
+        src/Effect/Modifier/AnimationModifier.cpp
+        src/Effect/CompositeEffect.cpp
+        src/Effect/EffectFactory.cpp
+        src/Effect/EffectManager.cpp
 )
 
 if(MSVC)

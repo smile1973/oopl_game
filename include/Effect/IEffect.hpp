@@ -1,5 +1,5 @@
-#ifndef EFFECT_HPP
-#define EFFECT_HPP
+#ifndef IEFFECT_HPP
+#define IEFFECT_HPP
 
 #include "pch.hpp"
 #include "Core/Drawable.hpp"
@@ -45,4 +45,4 @@ namespace Effect {
     };
 }
 
-#endif // EFFECT_HPP
+#endif // IEFFECT_HPP
