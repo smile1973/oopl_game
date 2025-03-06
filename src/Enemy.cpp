@@ -7,7 +7,8 @@ std::unique_ptr<Core::VertexArray> Enemy::s_VertexArray = nullptr;
 // 構造函數，初始化敵人的生命值與繪製屬性
 Enemy::Enemy(float health, const std::vector<std::string>& ImageSet)
     : Character(ImageSet), m_Health(health), m_MaxHealth(health),
-      m_Width(100.0f), m_Height(10.0f) {
+      m_Width(10.0f), m_Height(2.0f),
+      m_ColorLocation(-1), m_WidthLocation(-1) {
 
     // 確保著色程序（Shader Program）只初始化一次
     if (!s_Program) {

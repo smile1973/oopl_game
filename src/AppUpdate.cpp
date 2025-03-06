@@ -52,6 +52,8 @@ void App::Update() {
     // }
     // m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
 
+    glm::vec2 healthBarPosition(100.0f, 100.0f);  // 設定血條位置
+    m_Enemy->DrawHealthBar(healthBarPosition);  // 繪製血條
     m_Rabbit->Update();
     m_Root.Update();
 }
