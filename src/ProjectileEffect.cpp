@@ -1,93 +1,101 @@
-#include "Effect/CircleEffect.hpp"
+// ProjectileEffect.cpp
+#include "Effect/ProjectileEffect.hpp"
 #include "Util/Logger.hpp"
 #include "Util/TransformUtils.hpp"
 #include "config.hpp"
 
 namespace Effect {
 
-    std::unique_ptr<Core::Program> CircleEffect::s_Program = nullptr;
-    std::unique_ptr<Core::VertexArray> CircleEffect::s_VertexArray = nullptr;
+    std::unique_ptr<Core::Program> ProjectileEffect::s_Program = nullptr;
+    std::unique_ptr<Core::VertexArray> ProjectileEffect::s_VertexArray = nullptr;
 
-    CircleEffect::CircleEffect(float radius, float duration, const Util::Color& color)
-        : m_Radius(radius), m_Color(color) {
+    ProjectileEffect::ProjectileEffect(float radius, float duration, float distance, const Util::Color& color)
+        : m_Radius(radius), m_Distance(distance), m_Color(color) {
 
-        m_Duration = duration * 4.0f;
+        m_Duration = duration;
 
         if (s_Program == nullptr) {
-            InitProgram(); // 創建著色器
+            InitProgram();
         }
 
         if (s_VertexArray == nullptr) {
-            InitVertexArray(); // 創建頂點數組
+            InitVertexArray();
         }
 
         m_MatricesBuffer = std::make_unique<Core::UniformBuffer<Core::Matrices>>(
             *s_Program, "Matrices", 0);
 
-        InitUniforms(); // 獲取著色器uniform變數位置
+        InitUniforms();
     }
 
-    CircleEffect::~CircleEffect() = default;
+    ProjectileEffect::~ProjectileEffect() = default;
 
-    void CircleEffect::Draw(const Core::Matrices& data) {
-        if (m_State != State::ACTIVE) return; // 只渲染active的特效
+    void ProjectileEffect::Draw(const Core::Matrices& data) {
+        if (m_State != State::ACTIVE) return;
 
-        // 1. 更新變換矩陣
-        m_MatricesBuffer->SetData(0, data); // 傳送model和projection矩陣到GPU
+        m_MatricesBuffer->SetData(0, data);
+
+        // 確保啟用混合
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // 2. 啟用著色器程序
         s_Program->Bind();
 
         // 更新著色器參數
         glUniform1f(m_RadiusLocation, m_Radius);
-        glUniform1f(m_ThicknessLocation, m_Thickness);
-        glUniform1f(m_FadeLocation, m_FadeWidth);
         glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
         glUniform1f(m_TimeLocation, m_ElapsedTime);
 
-        // 4. 驗證著色器程序(可選，用於調試)
         s_Program->Validate();
 
-        // 5. 繪製幾何形狀
-        s_VertexArray->Bind(); // 啟用頂點數組
-        s_VertexArray->DrawTriangles(); // 執行繪製指令
+        s_VertexArray->Bind();
+        s_VertexArray->DrawTriangles();
     }
 
-    void CircleEffect::Update(float deltaTime) {
+    void ProjectileEffect::Update(float deltaTime) {
         if (m_State == State::ACTIVE) {
             m_ElapsedTime += deltaTime;
-            if (m_ElapsedTime >= m_Duration) {
+
+            // 更新位置，使投射物移動
+            float moveDistance = m_Speed * deltaTime;
+            m_DistanceTraveled += moveDistance;
+
+            // 沿指定方向移動
+            m_Transform.translation = m_StartPosition + m_Direction * m_DistanceTraveled;
+
+            // 如果超過了最大距離或持續時間，設為完成狀態
+            if (m_DistanceTraveled >= m_Distance || m_ElapsedTime >= m_Duration) {
                 m_State = State::FINISHED;
             }
         }
     }
 
-    void CircleEffect::Reset() {
+    void ProjectileEffect::Reset() {
         m_ElapsedTime = 0.0f;
+        m_DistanceTraveled = 0.0f;
         m_State = State::INACTIVE;
     }
 
-    void CircleEffect::Play(const glm::vec2& position, float zIndex) {
+    void ProjectileEffect::Play(const glm::vec2& position, float zIndex) {
         Reset();
+        m_StartPosition = position;
         m_Transform.translation = position;
         m_ZIndex = zIndex;
         m_State = State::ACTIVE;
     }
 
-    void CircleEffect::InitProgram() {
+    void ProjectileEffect::InitProgram() {
         try {
             s_Program = std::make_unique<Core::Program>(
-                GA_RESOURCE_DIR "/shaders/Circle.vert",
-                GA_RESOURCE_DIR "/shaders/Circle.frag");
-            LOG_INFO("Circle effect shaders loaded successfully");
+                GA_RESOURCE_DIR "/shaders/Projectile.vert",
+                GA_RESOURCE_DIR "/shaders/Projectile.frag");
+            LOG_INFO("Projectile effect shaders loaded successfully");
         } catch (const std::exception& e) {
-            LOG_ERROR("Failed to load circle effect shaders: {}", e.what());
+            LOG_ERROR("Failed to load projectile effect shaders: {}", e.what());
         }
     }
 
-    void CircleEffect::InitVertexArray() {
+    void ProjectileEffect::InitVertexArray() {
         s_VertexArray = std::make_unique<Core::VertexArray>();
 
         // 指定一個正方形，將在著色器中轉換為圓形
@@ -118,18 +126,15 @@ namespace Effect {
             }));
     }
 
-    void CircleEffect::InitUniforms() {
+    void ProjectileEffect::InitUniforms() {
         s_Program->Bind();
 
         m_RadiusLocation = glGetUniformLocation(s_Program->GetId(), "u_Radius");
-        m_ThicknessLocation = glGetUniformLocation(s_Program->GetId(), "u_Thickness");
-        m_FadeLocation = glGetUniformLocation(s_Program->GetId(), "u_Fade");
         m_ColorLocation = glGetUniformLocation(s_Program->GetId(), "u_Color");
         m_TimeLocation = glGetUniformLocation(s_Program->GetId(), "u_Time");
 
-        if (m_RadiusLocation == -1 || m_ThicknessLocation == -1 ||
-            m_FadeLocation == -1 || m_ColorLocation == -1 || m_TimeLocation == -1) {
-            LOG_ERROR("Failed to get uniform locations for CircleEffect");
+        if (m_RadiusLocation == -1 || m_ColorLocation == -1 || m_TimeLocation == -1) {
+            LOG_ERROR("Failed to get uniform locations for ProjectileEffect");
         }
     }
 }

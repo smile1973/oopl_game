@@ -16,7 +16,7 @@ namespace Effect {
 
         // 實現自 Core::Drawable
         void Draw(const Core::Matrices& data) override;
-        glm::vec2 GetSize() const override { return m_Size; }
+        [[nodiscard]] glm::vec2 GetSize() const override { return m_Size; }
 
         // 實現自 Effect::IEffect
         void Update(float deltaTime) override;

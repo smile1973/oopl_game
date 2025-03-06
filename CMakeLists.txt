@@ -35,6 +35,8 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         include/Effect/Effect.hpp
         include/Effect/RectEffect.hpp
         include/Effect/EffectFactory.hpp
+        include/Effect/ProjectileEffect.hpp
+        src/ProjectileEffect.cpp
 )
 
 if(MSVC)

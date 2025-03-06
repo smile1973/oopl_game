@@ -13,7 +13,7 @@ public:
     };
 
     // 構造函數
-    Skill(const std::vector<std::string>& imageSet, int duration = 175,
+    Skill(int skillId, const std::vector<std::string>& imageSet, int duration = 175,
           float effectRadius = 0.4f,
           const Util::Color& effectColor = Util::Color::FromName(Util::Colors::WHITE));
 
@@ -44,11 +44,12 @@ private:
     std::shared_ptr<Util::Animation> m_Animation;
     State m_State = State::IDLE;
     int m_Duration = 175; // 技能動畫持續時間（毫秒）
+    int m_SkillId = 1;
 
     // 特效參數
     float m_EffectRadius = 0.4f;
     Util::Color m_EffectColor = Util::Color::FromName(Util::Colors::WHITE);
-    std::shared_ptr<Effect::IEffect> m_CurrentEffect = nullptr;
+    std::shared_ptr<Effect::IEffect> m_CurrentEffect = nullptr; // 只是用在追蹤 看之後要不要用
 };
 
 #endif //SKILL_HPP

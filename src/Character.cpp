@@ -17,7 +17,7 @@ Character::Character(const std::vector<std::string>& ImagePathSet) {
 void Character::AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
                         int duration, float effectRadius, const Util::Color& effectColor) {
     // 創建並儲存新技能
-    auto newSkill = std::make_shared<Skill>(skillImageSet, duration, effectRadius, effectColor);
+    auto newSkill = std::make_shared<Skill>(skillId, skillImageSet, duration, effectRadius, effectColor);
     m_Skills[skillId] = newSkill;
     LOG_DEBUG("Added skill with ID: " + std::to_string(skillId));
 }
@@ -66,7 +66,7 @@ void Character::SwitchToSkill(int skillId) {
             m_CurrentSkillId = skillId;
             m_CurrentSkill = it->second;
 
-            // 播放技能動畫和效果，現在需要傳遞位置
+            // 播放技能動畫和效果 傳遞位置
             m_CurrentSkill->Play(m_Transform.translation);
             m_Drawable = m_CurrentSkill->GetAnimation();
         }

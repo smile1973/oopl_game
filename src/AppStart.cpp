@@ -5,11 +5,12 @@
 
 void App::Start() {
     LOG_TRACE("Start");
-    Effect::EffectManager::GetInstance().Initialize(4);
+    Effect::EffectManager::GetInstance().Initialize(4, 4);
+
     // 將特效管理器添加到渲染樹
-    // 注意：使用這種方式將單例添加到渲染樹，不管理生命週期
     m_Root.AddChild(std::shared_ptr<Util::GameObject>(&Effect::EffectManager::GetInstance(), [](Util::GameObject*){}));
 
+    // 兔子閒置動畫
     std::vector<std::string> rabbitImages;
     rabbitImages.reserve(2);
     for (int i = 0; i < 2; ++i) {
@@ -32,7 +33,7 @@ void App::Start() {
     for (int i = 0; i < 5; ++i) {
         rabbitSkill2Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill2_" + std::to_string(i+1) + ".png");
     }
-    m_Rabbit->AddSkill(2, rabbitSkill2Images, 175, 0.4f, Util::Color(0.0f, 1.0f, 1.0f, 0.05f));  // X鍵技能，ID=2
+    m_Rabbit->AddSkill(2, rabbitSkill2Images, 175, 0.4f, Util::Color(0.0f, 1.0f, 1.0f, 0.3f));  // X鍵技能，ID=2
 
     // 技能 V 動畫
     std::vector<std::string> rabbitSkill4Images;
@@ -46,7 +47,7 @@ void App::Start() {
     m_Rabbit->SetZIndex(50);
     m_Root.AddChild(m_Rabbit);
 
-    m_Background = std::make_shared<BackgroundImage>(); // 實際賦值
+    m_Background = std::make_shared<BackgroundImage>();
     m_Root.AddChild(m_Background);
 
     m_CurrentState = State::UPDATE;

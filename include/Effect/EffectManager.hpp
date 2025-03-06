@@ -18,17 +18,18 @@ namespace Effect {
         }
 
         // 初始化對象池
-        void Initialize(size_t initialCircleEffects = 4) {
+        void Initialize(size_t initialCircleEffects = 4, size_t initialProjectileEffects = 4) {
             // 預創建一些特效對象
             for (size_t i = 0; i < initialCircleEffects; i++) {
                 auto effect = std::make_shared<CircleEffect>();
                 m_InactiveEffects[EffectType::CIRCLE].push(effect);
             }
 
-            // for (size_t i = 0; i < initialRectEffects; i++) {
-            //     auto effect = std::make_shared<RectEffect>();
-            //     m_InactiveEffects[EffectType::RECT].push(effect);
-            // }
+            // 預創建投射物特效
+            for (size_t i = 0; i < initialProjectileEffects; i++) {
+                auto effect = std::make_shared<ProjectileEffect>();
+                m_InactiveEffects[EffectType::PROJECTILE].push(effect);
+            }
         }
 
         // 獲取或創建特效
@@ -63,8 +64,8 @@ namespace Effect {
                     // 將特效放回對象池中對應的類型隊列
                     if (auto circleEffect = std::dynamic_pointer_cast<CircleEffect>(effect)) {
                         m_InactiveEffects[EffectType::CIRCLE].push(effect);
-                    } else if (auto rectEffect = std::dynamic_pointer_cast<RectEffect>(effect)) {
-                        m_InactiveEffects[EffectType::RECT].push(effect);
+                    } else if (auto projectileEffect = std::dynamic_pointer_cast<ProjectileEffect>(effect)) {
+                        m_InactiveEffects[EffectType::PROJECTILE].push(effect);
                     }
 
                     // 從活躍列表中移除
@@ -109,7 +110,7 @@ namespace Effect {
         }
 
     private:
-        EffectManager() : Util::GameObject(nullptr, 100) {} // 設置高的z-index確保特效在最上層
+        EffectManager() : Util::GameObject(nullptr, 0) {}
 
         // 特效對象池，按類型分類
         std::unordered_map<EffectType, std::queue<std::shared_ptr<IEffect>>> m_InactiveEffects;

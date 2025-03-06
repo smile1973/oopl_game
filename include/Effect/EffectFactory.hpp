@@ -4,15 +4,13 @@
 #include "Effect.hpp"
 #include "CircleEffect.hpp"
 #include "RectEffect.hpp"
-#include <memory>
-#include <unordered_map>
+#include "ProjectileEffect.hpp"
 #include <functional>
 
 namespace Effect {
     enum class EffectType {
         CIRCLE,
-        RECT,
-        // 未來可以添加更多特效類型
+        PROJECTILE,
     };
 
     class EffectFactory {
@@ -35,7 +33,7 @@ namespace Effect {
         EffectFactory() {
             // 註冊特效創建函數
             m_Creators[EffectType::CIRCLE] = []() { return std::make_shared<CircleEffect>(); };
-            // m_Creators[EffectType::RECT] = []() { return std::make_shared<RectEffect>(); };
+            m_Creators[EffectType::PROJECTILE] = []() { return std::make_shared<ProjectileEffect>(); };
         }
 
         std::unordered_map<EffectType, std::function<std::shared_ptr<IEffect>()>> m_Creators;

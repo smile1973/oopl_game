@@ -3,8 +3,8 @@
 #include "Util/Time.hpp"
 #include "Effect/EffectManager.hpp"
 
-Skill::Skill(const std::vector<std::string>& imageSet, int duration, float effectRadius, const Util::Color& effectColor)
-    : m_ImagePathSet(imageSet), m_Duration(duration), m_EffectRadius(effectRadius), m_EffectColor(effectColor) {
+Skill::Skill(int skillId, const std::vector<std::string>& imageSet, int duration, float effectRadius, const Util::Color& effectColor)
+    : m_ImagePathSet(imageSet), m_Duration(duration), m_SkillId(skillId), m_EffectRadius(effectRadius), m_EffectColor(effectColor) {
 
     // 創建技能動畫
     m_Animation = std::make_shared<Util::Animation>(imageSet, true, duration, false, 0);
@@ -20,18 +20,33 @@ void Skill::Play(const glm::vec2& position) {
             m_Animation->Play();
         }
 
-        // 從效果管理器獲取並播放圓形特效
-        auto effect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::CIRCLE);
-        if (auto circleEffect = std::dynamic_pointer_cast<Effect::CircleEffect>(effect)) {
-            circleEffect->SetRadius(m_EffectRadius);
-            circleEffect->SetColor(m_EffectColor);
-            circleEffect->SetDuration((static_cast<float>(m_Duration) / 1000.0f) * 1.5f); // 轉換為秒
-            circleEffect->Play(position, 0.5f); // 設置特效位置和Z-index
-            circleEffect->SetSize({800, 800});
-            m_CurrentEffect = effect;
-            LOG_DEBUG("Created effect at position: ({}, {}), radius: {}, duration: {}s",
-                  position.x, position.y, m_EffectRadius,
-                  static_cast<float>(m_Duration) / 1000.0f);
+        if (m_SkillId == 2) {  // X鍵技能 - 投射物特效
+            auto effect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::PROJECTILE);
+            if (auto projectileEffect = std::dynamic_pointer_cast<Effect::ProjectileEffect>(effect)) {
+                projectileEffect->SetRadius(m_EffectRadius);
+                projectileEffect->SetColor(m_EffectColor);
+                projectileEffect->SetDuration((static_cast<float>(m_Duration) / 200.0f));
+                projectileEffect->SetDirection({1.0f, 0.0f});  // 假設向右發射
+                projectileEffect->SetDistance(600.0f);
+                projectileEffect->SetSpeed(400.0f);
+                projectileEffect->SetSize({300, 300});
+                projectileEffect->Play(position, 45.0f);
+                m_CurrentEffect = effect;
+            }
+        }
+        else {
+            auto effect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::CIRCLE);
+            if (auto circleEffect = std::dynamic_pointer_cast<Effect::CircleEffect>(effect)) {
+                circleEffect->SetRadius(m_EffectRadius);
+                circleEffect->SetColor(m_EffectColor);
+                circleEffect->SetDuration((static_cast<float>(m_Duration) / 1000.0f) * 1.5f); // 轉換為秒
+                circleEffect->Play(position, 0.5f); // 設置特效位置和Z-index
+                circleEffect->SetSize({800, 800});
+                m_CurrentEffect = effect;
+                LOG_DEBUG("Created effect at position: ({}, {}), radius: {}, duration: {}s",
+                      position.x, position.y, m_EffectRadius,
+                      static_cast<float>(m_Duration) / 1000.0f);
+            }
         }
     }
 }
@@ -39,7 +54,7 @@ void Skill::Play(const glm::vec2& position) {
 bool Skill::IsEnded() const {
     if (!m_Animation) return true;
 
-    // 只檢查動畫是否結束，忽略特效
+    // 只檢查動畫是否結束 忽略特效
     return m_Animation->GetState() == Util::Animation::State::ENDED;
 }
 
