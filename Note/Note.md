@@ -1,4 +1,4 @@
-# TODO
+# ?
 - 素材讀取方式建立 (這個框架設計好像無法?)
   - 一張png多個動作，切分出的坐標系儲存
   - 該怎麼存最有效率? 如何分類?
@@ -67,17 +67,7 @@
    - 將計算出的片段與幀緩衝區中的像素混合
    - 最終結果顯示在屏幕上
 ***
-關鍵圖形學概念:
-- 四邊形到圓形轉換:
-  - 實際繪製的是一個四邊形(兩個三角形)
-  在片段著色器中，使用距離函數將四邊形轉換為圓形
-  通過丟棄(discard)圓外部分的片段，實現透明背景
-- 平滑邊緣:
-  - 使用smoothstep函數創建平滑過渡的邊緣
-  避免鋸齒狀邊緣，提高視覺質量
-- 脈動效果:
-  - 使用時間參數和正弦函數創建半徑週期性變化 增加動態
-***
+
 App.hpp
   - m_Background (BackgroundImage) : 背景
   - m_Rabbit (Character): 兔子
@@ -129,25 +119,7 @@ EffectFactory.hpp
   - m_Creators (map< EffectType, function<IEffect>() >) : 特效創建函數註冊表
 
 ***
-Effect:  
-  - Effect 在 App::start() 中 Initialize
-  - Character -> UseSkill() -> SwitchToSkill() 
-    -> Skill::Play() 這裡 get effect並設定好 然後將指標位置給 m_CurrentEffect
-  - 特效更新  
-    Effect::EffectManager::GetInstance().Update(deltaTime)  
-    ↓  
-    EffectManager::Update(deltaTime)  
-    ↓  
-    循環m_ActiveEffects列表:  
-    ↓  
-    effect->Update(deltaTime)  
-    ↓  
-    CircleEffect::Update(deltaTime)
-    → 增加經過時間
-    → 檢查是否超過持續時間
-    → 如果超過: 將狀態設為FINISHED  
-    ↓  
-    檢查effect->IsFinished()  
-    → 如果完成: effect->Reset() → 將特效放回對象池 → 從m_ActiveEffects移除  
-    → 如果未完成: 繼續保留在活躍列表
+# Task
+- 用Z之前 X V不能正常顯示(未解決)
+- 特效會有覆蓋問題 看是要寫渲染順序(麻煩) 還是 特效改中空(簡單)
 
