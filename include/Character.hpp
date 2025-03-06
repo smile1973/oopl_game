@@ -41,7 +41,7 @@ public:
     void Update();
 
     // 檢測角色是否與另一個角色發生碰撞
-    [[nodiscard]] bool IfCollides(const std::shared_ptr<Character>& other) const;
+    [[nodiscard]] bool IfCollides(const std::shared_ptr<Character>& other, float Distance) const;
 
 private:
     // 重置角色位置為原點

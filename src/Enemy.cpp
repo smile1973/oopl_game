@@ -29,7 +29,7 @@ void Enemy::TakeDamage(float damage) {
 }
 
 // 檢查敵人是否仍然存活
-bool Enemy::IsAlive() const {
+bool Enemy::IfAlive() const {
     return m_Health > 0.0f;
 }
 

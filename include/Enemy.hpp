@@ -15,7 +15,7 @@ public:
     void TakeDamage(float damage);
 
     // 檢查敵人是否仍然存活
-    [[nodiscard]] bool IsAlive() const;
+    [[nodiscard]] bool IfAlive() const;
 
     // 繪製敵人的血條
     void DrawHealthBar(const glm::vec2& position);
