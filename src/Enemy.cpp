@@ -7,7 +7,7 @@ std::unique_ptr<Core::VertexArray> Enemy::s_VertexArray = nullptr;
 // 構造函數，初始化敵人的生命值與繪製屬性
 Enemy::Enemy(float health, const std::vector<std::string>& ImageSet)
     : Character(ImageSet), m_Health(health), m_MaxHealth(health),
-      m_Width(10.0f), m_Height(2.0f),
+      m_Width(18.0f), m_Height(1.5f),
       m_ColorLocation(-1), m_WidthLocation(-1) {
 
     // 確保著色程序（Shader Program）只初始化一次
@@ -56,6 +56,7 @@ void Enemy::DrawHealthBar(const glm::vec2& position) {
     // 綁定並繪製血條
     s_VertexArray->Bind();
     s_VertexArray->DrawTriangles();
+    s_Program->Unbind();
 }
 
 // 初始化著色程序，為血條載入對應的著色器文件

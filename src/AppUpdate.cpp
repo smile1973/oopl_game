@@ -31,7 +31,7 @@ void App::Update() {
             m_Rabbit->UseSkill();
 
             if (m_Rabbit->IfCollides(m_Enemy, 150) && m_Enemy->IfAlive()) {
-                m_Enemy->TakeDamage(20);
+                m_Enemy->TakeDamage(5);
 
                 if (! m_Enemy->IfAlive()) {
                     m_Enemy->SetVisible(false);
@@ -52,8 +52,7 @@ void App::Update() {
     // }
     // m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
 
-    glm::vec2 healthBarPosition(100.0f, 100.0f);  // 設定血條位置
-    m_Enemy->DrawHealthBar(healthBarPosition);  // 繪製血條
+    m_Enemy->DrawHealthBar(glm::vec2 (0.0f, 0.0f));  // 繪製血條
     m_Rabbit->Update();
     m_Root.Update();
 }

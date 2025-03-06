@@ -1,14 +1,16 @@
 #version 410 core
 
-layout(location = 0) in vec2 a_Position;  // 頂點位置
-layout(location = 1) in vec2 a_TexCoord;  // UV 坐標
+layout(location = 0) in vec2 a_Position;
+layout(location = 1) in vec2 a_TexCoord;
 
 out vec2 v_TexCoord;
 
-uniform float u_Width;  // 血條寬度
+uniform float u_Width;
+uniform vec2 u_Position;  // 新增血條位置
 
 void main() {
-    // 設定血條寬度，這樣可以根據當前血量縮放血條
-    gl_Position = vec4(a_Position.x * u_Width, a_Position.y, 0.0, 1.0);
+    gl_Position = vec4(u_Position.x + a_Position.x * u_Width,
+                       u_Position.y + a_Position.y+9,
+                       0.0, 10.0);
     v_TexCoord = a_TexCoord;
 }
