@@ -12,42 +12,16 @@ void App::Update() {
     if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
         auto cursorPos = Util::Input::GetCursorPosition();
 
-        // 測試不同特效 - 根據當前測試計時器決定顯示哪種特效
-        m_TestEffectTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
-        if (m_TestEffectTimer > 7.0f) m_TestEffectTimer = 0.0f;
-
         Effect::EffectType effectType;
-        if (m_TestEffectTimer < 1.0f) {
-            effectType = Effect::EffectType::SKILL_Z;
-            LOG_DEBUG("Testing Z skill effect");
-        } else if (m_TestEffectTimer < 2.0f) {
-            effectType = Effect::EffectType::SKILL_X;
-            LOG_DEBUG("Testing X skill effect");
-        } else if (m_TestEffectTimer < 3.0f) {
-            effectType = Effect::EffectType::SKILL_C;
-            LOG_DEBUG("Testing C skill effect");
-        } else if (m_TestEffectTimer < 4.0f) {
-            effectType = Effect::EffectType::SKILL_V;
-            LOG_DEBUG("Testing V skill effect");
-        } else if (m_TestEffectTimer < 5.0f) {
-            effectType = Effect::EffectType::ENEMY_ATTACK_1;
-            LOG_DEBUG("Testing enemy attack 1 effect");
-        } else if (m_TestEffectTimer < 6.0f) {
-            effectType = Effect::EffectType::ENEMY_ATTACK_2;
-            LOG_DEBUG("Testing enemy attack 2 effect");
-        } else {
-            effectType = Effect::EffectType::ENEMY_ATTACK_3;
-            LOG_DEBUG("Testing enemy attack 3 effect");
-        }
+        effectType = Effect::EffectType::ENEMY_ATTACK_1;
+        LOG_DEBUG("Testing enemy attack 1 effect");
 
-        // 播放特效
         auto effect = Effect::EffectManager::GetInstance().PlayEffect(
             effectType,
             cursorPos,
             10.0f, // z-index
             1.5f   // 持續時間
         );
-
         LOG_DEBUG("Created effect at cursor position: ({}, {})", cursorPos.x, cursorPos.y);
     }
 
@@ -131,8 +105,14 @@ void App::Update() {
     // 更新所有渲染對象
     m_Root.Update();
 
-    // 顯示活躍特效數量(調試用)
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
-        LOG_DEBUG("Active Effects: {}", Effect::EffectManager::GetInstance().GetActiveEffectsCount());
+        for (int i = 0; i < 3; ++i) {
+            auto eff = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::ENEMY_ATTACK_1);
+            eff->SetMovementModifier(Effect::Modifier::MovementModifier(true, 250.0f, 1200.0f, {0.0f, -1.0f}));
+            eff->SetDuration(5.0f);
+            eff->Play({-500 + (500 * i), 500}, 30.0f);
+        }
     }
+
+
 }

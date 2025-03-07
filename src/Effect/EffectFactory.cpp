@@ -10,23 +10,23 @@ namespace Effect {
             case EffectType::SKILL_Z: {
                 // Z技能：實心圓，內部半透明，邊緣加深，不會移動
                 auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 1.0f);
-                circleShape->SetColor(Util::Color(1.0f, 1.0f, 1.0f, 0.05f)); // 半透明白色
+                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.03f)); // 半透明白色
                 circleShape->SetSize({500, 500});
                 effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::HOLLOW, 0.02f));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 1.0f, 1.0f, 0.9f)));
+                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
+                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
                 break;
             }
                 
             case EffectType::SKILL_X: {
                 // X技能：空心圓，邊緣發光，有尾跡效果，會移動
                 auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 2.0f);
-                circleShape->SetColor(Util::Color(0.0f, 1.0f, 1.0f, 0.05f));
+                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.1f));
                 circleShape->SetSize({150, 150});
                 
                 effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::HOLLOW, 0.01f));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.01f, Util::Color::FromName(Util::Colors::PINK)));
+                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::HOLLOW, 0.02f));
+                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
                 effect->SetMovementModifier(Modifier::MovementModifier(true, 600.0f, 800.0f, {1.0f, 0.0f}));
                 effect->SetAnimationModifier(Modifier::AnimationModifier(Modifier::AnimationType::TRAIL, 1.0f, 2.0f));
                 break;
@@ -50,20 +50,20 @@ namespace Effect {
 
                 effect = std::make_shared<CompositeEffect>(circleShape);
                 effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.05f, Util::Color(0.0f, 0.7f, 1.0f, 1.0f)));
+                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.05f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
                 effect->SetAnimationModifier(Modifier::AnimationModifier(Modifier::AnimationType::RIPPLE, 1.0f, 1.0f));
                 break;
             }
                 
             case EffectType::ENEMY_ATTACK_1: {
                 // 敵人攻擊1：實心圓，邊緣加深，會移動
-                auto circleShape = std::make_shared<Shape::CircleShape>(0.3f, 0.8f);
+                auto circleShape = std::make_shared<Shape::CircleShape>(0.3f, 3.5f);
                 circleShape->SetColor(Util::Color(1.0f, 0.0f, 0.0f, 0.5f)); // 半透明紅色
                 
                 effect = std::make_shared<CompositeEffect>(circleShape);
                 effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
                 effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::DARK, 0.03f));
-                effect->SetMovementModifier(Modifier::MovementModifier(true, 250.0f, 400.0f, {1.0f, 0.0f}));
+                effect->SetMovementModifier(Modifier::MovementModifier(true, 250.0f, 400.0f, {0.0f, -1.0f}));
                 break;
             }
                 
@@ -90,8 +90,9 @@ namespace Effect {
                 
             default:
                 LOG_ERROR("Unknown effect type requested from EffectFactory");
-                // 提供一個默認特效
+                // Provide a default effect
                 auto defaultShape = std::make_shared<Shape::CircleShape>(0.3f, 1.0f);
+                defaultShape->SetColor(Util::Color(255, 0, 255, 128)); // Semi-transparent magenta
                 effect = std::make_shared<CompositeEffect>(defaultShape);
                 break;
         }
@@ -116,18 +117,18 @@ namespace Effect {
         
         auto effect = std::make_shared<CompositeEffect>(baseShape);
         
-        // 設置填充修飾器
+        // Set fill modifier
         effect->SetFillModifier(Modifier::FillModifier(fillType, 0.03f));
-        
-        // 設置邊緣修飾器
-        effect->SetEdgeModifier(Modifier::EdgeModifier(edgeType, 0.05f));
-        
-        // 設置移動修飾器
+
+        // Set edge modifier
+        effect->SetEdgeModifier(Modifier::EdgeModifier(edgeType, 0.05f, Util::Color(255, 255, 255, 255)));
+
+        // Set movement modifier
         if (isMoving) {
             effect->SetMovementModifier(Modifier::MovementModifier(true, 250.0f, 400.0f, {1.0f, 0.0f}));
         }
-        
-        // 設置動畫修飾器
+
+        // Set animation modifier
         if (animType != Modifier::AnimationType::NONE) {
             effect->SetAnimationModifier(Modifier::AnimationModifier(animType, 1.0f, 1.0f));
         }

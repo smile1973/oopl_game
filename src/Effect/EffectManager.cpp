@@ -5,97 +5,107 @@
 namespace Effect {
 
     void EffectManager::Initialize(size_t initialPoolSize) {
+        // Make sure we initialize in specific order to ensure shader loading works properly
         EffectType initOrder[] = {
-            EffectType::SKILL_Z,  // 可能包含基本的著色器初始化
+            EffectType::SKILL_Z,  // May contain basic shader initialization
             EffectType::SKILL_X,
             EffectType::SKILL_C,
-            EffectType::SKILL_V
+            EffectType::SKILL_V,
+            EffectType::ENEMY_ATTACK_1,
+            EffectType::ENEMY_ATTACK_2,
+            EffectType::ENEMY_ATTACK_3
         };
+        
         for (auto type : initOrder) {
             for (size_t j = 0; j < initialPoolSize; ++j) {
                 auto effect = EffectFactory::GetInstance().CreateEffect(type);
+
+                // Store the effect type in the effect for future reference
+                effect->GetBaseShape()->SetUserData(static_cast<int>(type));
+
                 m_InactiveEffects[type].push(effect);
             }
         }
-        LOG_INFO("EffectManager initialized effect");
+        LOG_INFO("EffectManager initialized with {} effects per type", initialPoolSize);
     }
 
     std::shared_ptr<CompositeEffect> EffectManager::GetEffect(EffectType type) {
-        // LOG_DEBUG("request effect type: {}, size: {}",
-        //      static_cast<int>(type),
-        //      m_InactiveEffects[type].size());
         std::shared_ptr<CompositeEffect> effect;
 
-        // 嘗試從對象池獲取特效
+        // Try to get effect from the pool
         if (!m_InactiveEffects[type].empty()) {
             effect = m_InactiveEffects[type].front();
             m_InactiveEffects[type].pop();
-
             LOG_DEBUG("Retrieved effect from pool, type: {}", static_cast<int>(type));
         } else {
-            // 創建新的特效
+            // Create new effect
             effect = EffectFactory::GetInstance().CreateEffect(type);
+
+            // Store the effect type in the effect for future reference
+            effect->GetBaseShape()->SetUserData(static_cast<int>(type));
+
             LOG_DEBUG("Created new effect, type: {}", static_cast<int>(type));
         }
 
-        // 添加到活躍特效列表
+        // Add to active effects list
         m_ActiveEffects.push_back(effect);
         return effect;
     }
 
     void EffectManager::Draw() {
-        // 這個方法會被GameObject的Draw方法調用
+        // This method is called by GameObject's Draw method
         for (auto& effect : m_ActiveEffects) {
             if (effect->IsActive()) {
-                // 獲取變換矩陣
+                // Get transformation matrix
                 auto data = Util::ConvertToUniformBufferData(
                     Util::Transform{effect->GetPosition(), 0, {1, 1}},
                     effect->GetSize(),
                     m_ZIndex
                 );
 
-                // 繪製特效
+                // Draw effect
                 effect->Draw(data);
             }
         }
     }
-    
+
     std::shared_ptr<CompositeEffect> EffectManager::PlayEffect(
         EffectType type,
         const glm::vec2& position,
         float zIndex,
         float duration
     ) {
-        // 獲取特效
+        // Get effect
         auto effect = GetEffect(type);
-        
-        // 設置持續時間
+
+        // Set duration
         effect->SetDuration(duration);
-        
-        // 播放特效
+
+        // Play effect
         effect->Play(position, zIndex);
-        
+
         return effect;
     }
-    
+
     void EffectManager::Update(float deltaTime) {
-        // 更新所有活躍特效
+        // Update all active effects
         for (auto it = m_ActiveEffects.begin(); it != m_ActiveEffects.end();) {
             auto effect = *it;
             effect->Update(deltaTime);
-            
+
             if (effect->IsFinished()) {
-                // 重置並回收特效
+                // Reset effect
                 effect->Reset();
-                
-                // 將特效放回對象池
-                // 簡化這裡的實現，只將特效放回第一個類型的隊列
-                // 在實際應用中，您可能想要跟踪每個特效的具體類型
-                if (!m_InactiveEffects.empty()) {
-                    m_InactiveEffects.begin()->second.push(effect);
-                }
-                
-                // 從活躍列表中移除
+
+                // Get the effect type from user data
+                int typeValue = effect->GetBaseShape()->GetUserData();
+                EffectType type = static_cast<EffectType>(typeValue);
+
+                // Return effect to its proper pool
+                m_InactiveEffects[type].push(effect);
+                LOG_DEBUG("Returned effect to pool, type: {}", typeValue);
+
+                // Remove from active list
                 it = m_ActiveEffects.erase(it);
             } else {
                 ++it;

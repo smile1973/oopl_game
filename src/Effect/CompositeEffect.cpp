@@ -14,7 +14,7 @@ namespace Effect {
     void CompositeEffect::Draw(const Core::Matrices& data) {
         if (m_State != State::ACTIVE || !m_BaseShape) return;
 
-        // 首先獲取程序ID
+        // First get program ID
         Core::Program* program = nullptr;
 
         if (auto circleShape = dynamic_cast<Shape::CircleShape*>(m_BaseShape.get())) {
@@ -30,15 +30,15 @@ namespace Effect {
             return;
         }
 
-        // 綁定程序
+        // Bind program
         program->Bind();
 
-        // 應用所有修飾器
+        // Apply all modifiers
         m_FillModifier.Apply(*program);
         m_EdgeModifier.Apply(*program);
         m_AnimationModifier.Apply(*program, m_ElapsedTime);
 
-        // 繪製基礎形狀
+        // Draw base shape
         m_BaseShape->Draw(data);
     }
 
@@ -49,30 +49,30 @@ namespace Effect {
     void CompositeEffect::Update(float deltaTime) {
         if (m_State != State::ACTIVE) return;
 
-        // 更新基礎形狀
+        // Update base shape
         m_BaseShape->Update(deltaTime);
 
-        // 應用移動修飾器
+        // Apply movement modifier
         if (m_MovementModifier.IsMoving()) {
             glm::vec2 position = m_Transform.translation;
             m_MovementModifier.Update(deltaTime, position);
             m_Transform.translation = position;
 
-            // 如果到達終點，且基礎形狀還未結束，則結束特效
+            // If reached destination and base shape is still active, end the effect
             if (m_MovementModifier.HasReachedDestination() && m_BaseShape->GetState() == State::ACTIVE) {
                 m_BaseShape->Reset();
                 m_State = State::FINISHED;
             }
         }
 
-        // 同步狀態
+        // Sync state
         if (m_BaseShape->GetState() == State::FINISHED) {
             m_State = State::FINISHED;
         }
 
-        // 更新時間
+        // Update time
         m_ElapsedTime += deltaTime;
-        if (m_ElapsedTime >= m_Duration) {
+        if (m_ElapsedTime >= m_Duration && m_State == State::ACTIVE) {
             m_State = State::FINISHED;
         }
     }
@@ -84,10 +84,10 @@ namespace Effect {
         m_ZIndex = zIndex;
         m_State = State::ACTIVE;
 
-        // 同步位置到基礎形狀
+        // Sync position to base shape
         m_BaseShape->Play(position, zIndex);
 
-        // 重置移動修飾器並設置起始位置
+        // Reset movement modifier and set start position
         if (m_MovementModifier.IsMoving()) {
             m_MovementModifier.Reset();
             m_MovementModifier.SetStartPosition(position);

@@ -123,4 +123,4 @@ EffectFactory.hpp
 - 用Z之前 X V不能正常顯示(未解決)
 - 特效會有覆蓋問題 看是要寫渲染順序(麻煩) 還是 特效改中空(簡單)
 - 特效顏色不能調 why?
-
+- EffectManager::Update 這 特效沒有正確回去池內
