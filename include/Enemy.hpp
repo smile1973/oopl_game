@@ -40,10 +40,6 @@ private:
     float m_Health;
     float m_MaxHealth;
 
-    // 血條的寬度與高度
-    float m_Width;
-    float m_Height;
-
     // Uniform 變數位置（顏色與血條寬度）
     GLint m_ColorLocation;
     GLint m_WidthLocation;

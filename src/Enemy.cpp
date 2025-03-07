@@ -7,7 +7,6 @@ std::unique_ptr<Core::VertexArray> Enemy::s_VertexArray = nullptr;
 // 構造函數，初始化敵人的生命值與繪製屬性
 Enemy::Enemy(float health, const std::vector<std::string>& ImageSet)
     : Character(ImageSet), m_Health(health), m_MaxHealth(health),
-      m_Width(1.8f), m_Height(0.5f),
       m_ColorLocation(-1), m_WidthLocation(-1) {
 
     // 確保著色程序（Shader Program）只初始化一次
@@ -48,8 +47,8 @@ void Enemy::DrawHealthBar(const glm::vec2& position) {
     glUniform4f(m_ColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
 
     // 根據當前生命值調整血條寬度
-    float currentWidth = (m_Health / m_MaxHealth) * m_Width;
-    glUniform1f(m_WidthLocation, currentWidth);
+    float currentWidth = m_Health / m_MaxHealth; // 0 ~ 1 縮放
+    glUniform1f(glGetUniformLocation(s_Program->GetId(), "u_Width"), currentWidth);
     glUniform2f(glGetUniformLocation(s_Program->GetId(), "u_Position"), position.x, position.y);
 
 
@@ -79,13 +78,13 @@ void Enemy::InitProgram() {
 void Enemy::InitVertexArray() {
     s_VertexArray = std::make_unique<Core::VertexArray>();
 
-    // 定義血條矩形的四個頂點（確保左對齊縮放）
-    float halfWidth = 0.5f, halfHeight = 0.01f;
+    // 定義血條矩形的四個頂點（確保右對齊縮放）
+    float Width = 1.8f, halfHeight = 0.01f;
     s_VertexArray->AddVertexBuffer(std::make_unique<Core::VertexBuffer>(std::vector<float>{
-        -halfWidth,  halfHeight,  // 左上
-        -halfWidth, -halfHeight,  // 左下
-         halfWidth, -halfHeight,  // 右下
-         halfWidth,  halfHeight   // 右上
+        -Width,  halfHeight,  // 左上
+        -Width, -halfHeight,  // 左下
+         0.0, -halfHeight,  // 右下
+         0.0,  halfHeight   // 右上
     }, 2));
 
     // UV 坐標對應頂點
