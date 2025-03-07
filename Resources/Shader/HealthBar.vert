@@ -10,7 +10,7 @@ uniform vec2 u_Position;  // 新增血條位置
 
 void main() {
     gl_Position = vec4(u_Position.x + a_Position.x * u_Width,
-                       u_Position.y + a_Position.y+9,
-                       0.0, 10.0);
+                       u_Position.y + a_Position.y,
+                       0.0, 1.0);
     v_TexCoord = a_TexCoord;
 }

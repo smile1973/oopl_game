@@ -52,7 +52,7 @@ void App::Update() {
     // }
     // m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::RETURN);
 
-    m_Enemy->DrawHealthBar(glm::vec2 (0.0f, 0.0f));  // 繪製血條
+    m_Enemy->DrawHealthBar(glm::vec2 (0.0f, 0.9));  // 繪製血條
     m_Rabbit->Update();
     m_Root.Update();
 }
