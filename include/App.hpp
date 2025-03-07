@@ -7,6 +7,7 @@
 #include "Character.hpp"
 #include "Enemy.hpp"
 #include "BackGround.hpp"
+#include "Effect/EffectManager.hpp"
 
 class App {
 public:
@@ -39,7 +40,6 @@ private:
 
 
     State m_CurrentState = State::START;
-//    Phase m_Phase = Phase::CHANGE_CHARACTER_IMAGE;
 
     Util::Renderer m_Root;
     std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
@@ -48,6 +48,10 @@ private:
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
+    bool m_XKeyDown = false;
+    bool m_CKeyDown = false;
+    bool m_VKeyDown = false;
+    float m_TestEffectTimer = 0.0f;
 };
 
 #endif
