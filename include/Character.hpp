@@ -26,8 +26,7 @@ public:
 
     // 技能
     void AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
-                 int duration = 175, float effectRadius = 0.4f, const glm::vec2& effectSize = {800, 800},
-                 const Util::Color& effectColor = Util::Color::FromName(Util::Colors::WHITE));
+                 int duration = 175);
     void UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
     void Update();
 

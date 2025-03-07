@@ -2,67 +2,57 @@
 
 
 #### 核心特效類
-- `Effect/IEffect.hpp` - 基礎特效介面
-- `Effect/Shape/BaseShape.hpp` 和 `.cpp` - 形狀基類
-- `Effect/Shape/CircleShape.hpp` 和 `.cpp` - 圓形特效
-- `Effect/Shape/EllipseShape.hpp` 和 `.cpp` - 橢圓形特效
+- `Effect/IEffect.hpp` - 特效base
+- `Effect/Shape/BaseShape.hpp` 和 `.cpp` - 形狀 base class
+- `Effect/Shape/CircleShape.hpp` 和 `.cpp` - 圓形
+- `Effect/Shape/EllipseShape.hpp` 和 `.cpp` - 橢圓形
 
 #### 修飾器類
-- `Effect/Modifier/FillModifier.hpp` 和 `.cpp` - 填充修飾器
-- `Effect/Modifier/EdgeModifier.hpp` 和 `.cpp` - 邊緣修飾器
-- `Effect/Modifier/MovementModifier.hpp` 和 `.cpp` - 移動修飾器
-- `Effect/Modifier/AnimationModifier.hpp` 和 `.cpp` - 動畫修飾器
+- `Effect/Modifier/FillModifier.hpp` 和 `.cpp` - 填充
+- `Effect/Modifier/EdgeModifier.hpp` 和 `.cpp` - 邊緣
+- `Effect/Modifier/MovementModifier.hpp` 和 `.cpp` - 移動
+- `Effect/Modifier/AnimationModifier.hpp` 和 `.cpp` - 額外動畫
 
 #### 組合特效
-- `Effect/CompositeEffect.hpp` 和 `.cpp` - 組合特效類
+- `Effect/CompositeEffect.hpp` 和 `.cpp` - 複合特效
 
 #### 工廠和管理器
-- `Effect/EffectFactory.hpp` 和 `.cpp` - 特效工廠
+- `Effect/EffectFactory.hpp` 和 `.cpp` - 特效 factory
 - `Effect/EffectManager.hpp` 和 `.cpp` - 特效管理器
 
 #### 著色器
-- `shaders/Circle.vert` 和 `.frag` - 圓形特效著色器
-- `shaders/Ellipse.vert` 和 `.frag` - 橢圓形特效著色器
+- `shaders/Circle.vert` 和 `.frag` - 圓形著色器
+- `shaders/Ellipse.vert` 和 `.frag` - 橢圓形著色器
 
 ### 構建和測試
 
 編譯並運行遊戲，使用以下功能測試特效：
 
-- 按 Z、X、C 和 V 使用不同技能和特效
-- 按空格鍵在光標位置顯示測試特效（每次效果不同，取決於計時器）
-- 按 I 鍵顯示當前活躍特效數量（調試用）
+- 按 Z X C V 使用不同技能和特效
+- 按空格鍵在光標位置顯示測試特效
 
-## 特效系統架構說明
+### 設計
 
-### 設計理念
-
-1. **組合而非繼承**
-    - 使用組合模式實現特效
-    - 將形狀和各種效果修飾器分離
-
-2. **對象池和資源共享**
-    - 使用對象池減少內存分配
-    - 共享OpenGL資源如著色器程序和頂點數組
-
-3. **參數化和可擴展性**
-    - 所有視覺屬性都是可配置的
-    - 易於添加新的形狀和修飾器
+- 組合模式實現特效
+- 形狀效果 分離
+- 用對象池減少內存分配 (效能)
+- 共享著色器 (效能)
 
 ### 主要組件
 
-1. **基礎形狀**
-    - 圓形特效：適用於大多數技能和敵人攻擊
-    - 橢圓形特效：用於C技能特效
+1. **base shape effet**
+    - 圓形特效：
+    - 橢圓形特效：目前只有C
 
-2. **修飾器**
-    - 填充修飾器：控制實心或空心
-    - 邊緣修飾器：創建邊緣加深或發光效果
-    - 移動修飾器：控制特效的移動
-    - 動畫修飾器：添加波紋或尾跡等動畫效果
+2. **modifier**
+    - fill：實心(FILL) 空心(HOLLOW)
+    - edge：邊緣加深(DARK) 發光(GLOW)
+    - movement：特效移動(移動子彈)
+    - animation：其他動畫(未完成)
 
 3. **特效類型**
     - 角色技能特效（Z、X、C、V）
-    - 敵人攻擊特效（三種不同類型）
+    - 敵人攻擊特效（三種up）
 
 ## 著色器說明
 
@@ -77,45 +67,10 @@
     - 基於圓形著色器修改，使用不同的距離計算
     - 支持x和y軸不同半徑
 
-## 擴展指南
-
-要添加新的特效類型，您可以：
-
-1. **添加新的形狀**
-    - 創建繼承自BaseShape的新類
-    - 實現Draw和其他必要方法
-    - 創建相應的著色器
-
-2. **添加新的修飾器**
-    - 創建新的修飾器類
-    - 實現Apply方法
-    - 更新著色器以支持新的參數
-
-3. **擴展EffectFactory**
-    - 在EffectType枚舉中添加新的特效類型
-    - 在CreateEffect方法中實現新特效的創建
-
-4. **自定義組合**
-    - 使用CreateCustomEffect方法創建自定義組合特效
 
 ## 性能優化
+1. 物件池
+2. 著色器共享
 
-特效系統已經實現了一些基本的性能優化：
 
-1. **對象池**
-    - 減少運行時的內存分配
-    - 重用特效對象
-
-2. **資源共享**
-    - 共享著色器程序和頂點數組
-    - 減少GPU內存使用和狀態切換
-
-3. **視錐體剔除**
-    - 非活躍特效不會被繪製
-    - 透明度過低的片段會被丟棄
-
-如果遇到性能問題，您可以考慮：
-
-1. 調整特效數量和複雜度
-2. 實現批處理繪製
-3. 使用粒子系統代替某些複雜特效
+### 性能: 批處理繪製(batch)

@@ -40,7 +40,7 @@ namespace Effect {
         size_t GetActiveEffectsCount() const { return m_ActiveEffects.size(); }
 
     private:
-        EffectManager() : Util::GameObject(nullptr, 0) {}
+        EffectManager() : Util::GameObject(nullptr, 30.0f) {}
 
         // 特效對象池，按類型分類
         std::unordered_map<EffectType, std::queue<std::shared_ptr<CompositeEffect>>> m_InactiveEffects;

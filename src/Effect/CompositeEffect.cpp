@@ -18,8 +18,10 @@ namespace Effect {
         Core::Program* program = nullptr;
 
         if (auto circleShape = dynamic_cast<Shape::CircleShape*>(m_BaseShape.get())) {
+            (void) circleShape;
             program = Shape::CircleShape::GetProgram();
         } else if (auto ellipseShape = dynamic_cast<Shape::EllipseShape*>(m_BaseShape.get())) {
+            (void) ellipseShape;
             program = Shape::EllipseShape::GetProgram();
         }
 

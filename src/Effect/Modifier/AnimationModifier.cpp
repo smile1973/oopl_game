@@ -9,6 +9,7 @@ namespace Effect {
         }
 
         void AnimationModifier::Apply(Core::Program& program, float time) {
+            (void) time;
             // 如果是第一次應用，獲取uniform位置
             if (m_AnimTypeLocation == -1) {
                 m_AnimTypeLocation = glGetUniformLocation(program.GetId(), "u_AnimType");

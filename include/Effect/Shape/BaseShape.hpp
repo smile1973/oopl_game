@@ -26,7 +26,7 @@ namespace Effect {
             const Util::Color& GetColor() const { return m_Color; }
 
         protected:
-            Util::Color m_Color = Util::Color::FromName(Util::Colors::WHITE);
+            Util::Color m_Color = Util::Color::FromName(Util::Colors::PINK);
             virtual void InitializeResources() = 0; // 子類必須實現此方法初始化OpenGL資源
         };
     } // namespace Shape

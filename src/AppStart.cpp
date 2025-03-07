@@ -23,6 +23,8 @@ void App::Start() {
         rabbitImages.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_idle" + std::to_string(i+1) + ".png");
     }
     m_Rabbit = std::make_shared<Character>(rabbitImages);
+    glm::vec2 scale = {0.5f, 0.5f};
+    m_Rabbit -> m_Transform.scale = scale;
 
     // 技能 Z 動畫
     std::vector<std::string> rabbitSkill1Images;
@@ -30,8 +32,8 @@ void App::Start() {
     for (int i = 0; i < 6; ++i) {
         rabbitSkill1Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill1_" + std::to_string(i+1) + ".png");
     }
-    m_Rabbit->AddSkill(1, rabbitSkill1Images, 175, 0.45f, {800, 800}, Util::Color(1.0f, 1.0f, 1.0f, 0.05f));  // Z鍵技能，ID=1
-    m_Rabbit->AddSkill(3, rabbitSkill1Images, 175, 0.4f, {600, 600}, Util::Color(0.5f, 0.5f, 1.0f, 0.05f));   // C鍵技能，ID=3
+    m_Rabbit->AddSkill(1, rabbitSkill1Images, 175);  // Z鍵技能，ID=1
+    m_Rabbit->AddSkill(3, rabbitSkill1Images, 175);   // C鍵技能，ID=3
 
     // 技能 X 動畫
     std::vector<std::string> rabbitSkill2Images;
@@ -39,7 +41,7 @@ void App::Start() {
     for (int i = 0; i < 5; ++i) {
         rabbitSkill2Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill2_" + std::to_string(i+1) + ".png");
     }
-    m_Rabbit->AddSkill(2, rabbitSkill2Images, 175, 0.4f, {200, 200}, Util::Color(0.0f, 1.0f, 1.0f, 0.1f));  // X鍵技能，ID=2
+    m_Rabbit->AddSkill(2, rabbitSkill2Images, 175);  // X鍵技能，ID=2
 
     // 技能 V 動畫
     std::vector<std::string> rabbitSkill4Images;
@@ -47,7 +49,7 @@ void App::Start() {
     for (int i = 0; i < 4; ++i) {
         rabbitSkill4Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill3_" + std::to_string(i+1) + ".png");
     }
-    m_Rabbit->AddSkill(4, rabbitSkill4Images, 175, 0.4f, {400, 400}, Util::Color(0.0f, 0.5f, 1.0f, 0.1f));  // V鍵技能，ID=4
+    m_Rabbit->AddSkill(4, rabbitSkill4Images, 175);  // V鍵技能，ID=4
 
     m_Rabbit->SetPosition({-112.5f, -140.5f});
     m_Rabbit->SetZIndex(50);

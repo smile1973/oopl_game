@@ -15,7 +15,7 @@ namespace Effect {
 
         class EdgeModifier {
         public:
-            EdgeModifier(EdgeType type = EdgeType::NONE, float width = 0.05f, const Util::Color& edgeColor = Util::Color::FromName(Util::Colors::WHITE));
+            EdgeModifier(EdgeType type = EdgeType::NONE, float width = 0.05f, const Util::Color& edgeColor = Util::Color::FromName(Util::Colors::PINK));
 
             // 應用邊緣效果
             void Apply(Core::Program& program);

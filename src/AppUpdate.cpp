@@ -52,7 +52,7 @@ void App::Update() {
     }
 
     // 角色移動
-    const float moveSpeed = 8.0f; // 調整移動速度
+    const float moveSpeed = 6.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
 
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {

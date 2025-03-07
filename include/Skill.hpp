@@ -13,9 +13,7 @@ public:
     };
 
     // 構造函數
-    Skill(int skillId, const std::vector<std::string>& imageSet, int duration = 175,
-          float effectRadius = 0.4f, const glm::vec2& effectSize = {800, 800},
-          const Util::Color& effectColor = Util::Color::FromName(Util::Colors::WHITE));
+    Skill(int skillId, const std::vector<std::string>& imageSet, int duration = 175);
 
     // 取得動畫物件
     std::shared_ptr<Util::Animation> GetAnimation() const { return m_Animation; }
