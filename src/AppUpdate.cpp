@@ -102,9 +102,6 @@ void App::Update() {
     // 更新敵人血條
     m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
 
-    // 更新所有渲染對象
-    m_Root.Update();
-
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
         for (int i = 0; i < 3; ++i) {
             auto eff = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::ENEMY_ATTACK_1);
@@ -141,7 +138,7 @@ void App::Update() {
         if (auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect2->GetBaseShape())) {
             // 設置90度旋轉 (π/2 弧度)
             rectangleShape->SetRotation(1.57f);
-            effect2->SetDuration(5.0f);
+            effect2->SetDuration(10.0f);
             // 可選：調整旋轉速度
             // rectangleShape->SetAutoRotation(true, 1.0f);  // 減慢旋轉速度
         }
@@ -161,4 +158,6 @@ void App::Update() {
         );
         LOG_DEBUG("Created RECT_SLASH effect at position: ({}, {})", cursorPos.x, cursorPos.y);
     }
+    // 更新所有渲染對象
+    m_Root.Update();
 }

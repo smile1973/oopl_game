@@ -32,78 +32,37 @@ namespace Effect {
 
         EllipseShape::~EllipseShape() = default;
 
+        // 修改 EllipseShape.cpp 中的 Draw 方法
         void EllipseShape::Draw(const Core::Matrices& data) {
-    if (m_State != State::ACTIVE) return;
+            if (m_State != State::ACTIVE) return;
 
-    // Update matrices
-    m_MatricesBuffer->SetData(0, data);
+            // Update matrices
+            m_MatricesBuffer->SetData(0, data);
 
-    // Enable blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            // Enable blending
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Bind shader program
-    s_Program->Bind();
+            // 不要在這裡綁定程序，因為 CompositeEffect 已經綁定了
+            // 只設置自己特有的 uniform 變數，不要重設已由修飾器設置的變數
 
-    // Set uniforms with instance values
-    glUniform2f(m_RadiiLocation, m_Radii.x, m_Radii.y);
+            // 設置橢圓特有的 uniform
+            glUniform2f(m_RadiiLocation, m_Radii.x, m_Radii.y);
 
-    // Set color properly
-    glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
+            // 設置顏色 - 這個可能會與修飾器衝突，所以確保順序正確
+            glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
 
-    glUniform1f(m_TimeLocation, m_ElapsedTime);
+            // 設置時間
+            glUniform1f(m_TimeLocation, m_ElapsedTime);
 
-    // 設置必要的默認值以確保兼容性
-    // 填充修飾器
-    GLint fillTypeLocation = glGetUniformLocation(s_Program->GetId(), "u_FillType");
-    if (fillTypeLocation != -1) {
-        glUniform1i(fillTypeLocation, 0); // 默認實心
-    }
+            // 不要進行驗證，因為這可能會干擾修飾器的設置
+            // s_Program->Validate();
 
-    GLint fillThicknessLocation = glGetUniformLocation(s_Program->GetId(), "u_FillThickness");
-    if (fillThicknessLocation != -1) {
-        glUniform1f(fillThicknessLocation, 0.0f);
-    }
+            // Draw
+            s_VertexArray->Bind();
+            s_VertexArray->DrawTriangles();
+        }
 
-    // 邊緣修飾器
-    GLint edgeTypeLocation = glGetUniformLocation(s_Program->GetId(), "u_EdgeType");
-    if (edgeTypeLocation != -1) {
-        glUniform1i(edgeTypeLocation, 0);
-    }
-
-    GLint edgeWidthLocation = glGetUniformLocation(s_Program->GetId(), "u_EdgeWidth");
-    if (edgeWidthLocation != -1) {
-        glUniform1f(edgeWidthLocation, 0.05f);
-    }
-
-    GLint edgeColorLocation = glGetUniformLocation(s_Program->GetId(), "u_EdgeColor");
-    if (edgeColorLocation != -1) {
-        glUniform4f(edgeColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    // 動畫修飾器
-    GLint animTypeLocation = glGetUniformLocation(s_Program->GetId(), "u_AnimType");
-    if (animTypeLocation != -1) {
-        glUniform1i(animTypeLocation, 0);
-    }
-
-    GLint intensityLocation = glGetUniformLocation(s_Program->GetId(), "u_Intensity");
-    if (intensityLocation != -1) {
-        glUniform1f(intensityLocation, 1.0f);
-    }
-
-    GLint speedLocation = glGetUniformLocation(s_Program->GetId(), "u_AnimSpeed");
-    if (speedLocation != -1) {
-        glUniform1f(speedLocation, 1.0f);
-    }
-
-    // Validate shader program
-    s_Program->Validate();
-
-    // Draw
-    s_VertexArray->Bind();
-    s_VertexArray->DrawTriangles();
-}
         void EllipseShape::InitializeResources() {
             // Initialize shader program
             try {

@@ -11,7 +11,7 @@ namespace Effect {
             case EffectType::SKILL_Z: {
                 // Z技能：實心圓，內部半透明，邊緣加深，不會移動
                 auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 1.0f);
-                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 1.0f)); // 半透明白色
+                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.3f)); // 半透明白色
                 circleShape->SetSize({500, 500});
                 effect = std::make_shared<CompositeEffect>(circleShape);
                 effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
