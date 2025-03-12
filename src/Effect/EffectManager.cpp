@@ -16,7 +16,6 @@ namespace Effect {
             EffectType::ENEMY_ATTACK_3,
             EffectType::RECT_LASER,
             EffectType::RECT_BEAM,
-            EffectType::RECT_SLASH
         };
         
         for (auto type : initOrder) {

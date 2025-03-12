@@ -21,7 +21,6 @@ namespace Effect {
         // 矩形特效
         RECT_LASER,     // 矩形雷射，實心，邊緣發光，會移動
         RECT_BEAM,      // 矩形光束，空心，邊緣加深，可旋轉
-        RECT_SLASH      // 矩形斬擊，實心，邊緣發光，有尾跡效果
     };
 
     class EffectFactory {

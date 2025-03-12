@@ -129,6 +129,8 @@ void App::Update() {
 
         // 獲取標準自動旋轉特效
         auto effect1 = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
+        auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect1->GetBaseShape());
+        rectangleShape->SetRotation(0.0f);
         effect1->SetDuration(10.0f);
         effect1->Play(cursorPos, 20.0f);
         LOG_DEBUG("Created standard auto-rotating RECT_BEAM effect at position: ({}, {})", cursorPos.x, cursorPos.y);
@@ -145,18 +147,6 @@ void App::Update() {
 
         // 放置在與第一個光束有點偏移的位置
         effect2->Play(cursorPos, 25.0f);
-    }
-
-    // 測試矩形斬擊特效 - 按下 3 鍵
-    if (Util::Input::IsKeyDown(Util::Keycode::NUM_3)) {
-        auto cursorPos = Util::Input::GetCursorPosition();
-        auto effect = Effect::EffectManager::GetInstance().PlayEffect(
-            Effect::EffectType::RECT_SLASH,
-            cursorPos,
-            20.0f, // z-index
-            1.0f   // 持續時間
-        );
-        LOG_DEBUG("Created RECT_SLASH effect at position: ({}, {})", cursorPos.x, cursorPos.y);
     }
     // 更新所有渲染對象
     m_Root.Update();

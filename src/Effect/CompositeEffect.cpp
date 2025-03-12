@@ -38,12 +38,12 @@ namespace Effect {
         program->Bind();
 
         // 為了調試，檢查 EdgeModifier 的 uniform 是否能夠正常獲取
-        int edgeTypeLocation = glGetUniformLocation(program->GetId(), "u_EdgeType");
-        int edgeWidthLocation = glGetUniformLocation(program->GetId(), "u_EdgeWidth");
-        int edgeColorLocation = glGetUniformLocation(program->GetId(), "u_EdgeColor");
-
-        LOG_DEBUG("EdgeModifier uniform locations in program {}: edgeType={}, edgeWidth={}, edgeColor={}",
-                  program->GetId(), edgeTypeLocation, edgeWidthLocation, edgeColorLocation);
+        // int edgeTypeLocation = glGetUniformLocation(program->GetId(), "u_EdgeType");
+        // int edgeWidthLocation = glGetUniformLocation(program->GetId(), "u_EdgeWidth");
+        // int edgeColorLocation = glGetUniformLocation(program->GetId(), "u_EdgeColor");
+        //
+        // LOG_DEBUG("EdgeModifier uniform locations in program {}: edgeType={}, edgeWidth={}, edgeColor={}",
+        //           program->GetId(), edgeTypeLocation, edgeWidthLocation, edgeColorLocation);
 
         // 依次應用修飾器
         m_FillModifier.Apply(*program);

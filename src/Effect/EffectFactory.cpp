@@ -126,25 +126,6 @@ namespace Effect {
                 effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 0.0f, 1.0f, 0.9f)));
                 break;
             }
-
-            case EffectType::RECT_SLASH: {
-                // 矩形斬擊：實心矩形，邊緣發光，有尾跡效果
-                auto rectangleShape = std::make_shared<Shape::RectangleShape>(
-                    glm::vec2(0.7f, 0.05f),  // 寬高比例
-                    0.0f,                   // 粗細 (實心)
-                    -0.4f,                  // 旋轉角度 (稍微傾斜)
-                    1.0f,                   // 持續時間
-                    false,                  // 不啟用自動旋轉
-                    0.0f                    // 旋轉速度
-                );
-                rectangleShape->SetColor(Util::Color(1.0f, 0.8f, 0.3f, 0.6f)); // 半透明紅色
-                rectangleShape->SetSize({300, 150}); // 效果尺寸
-
-                effect = std::make_shared<CompositeEffect>(rectangleShape);
-                // effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.01f, Util::Color(1.0f, 0.5f, 0.5f, 1.0f)));
-                // effect->SetAnimationModifier(Modifier::AnimationModifier(Modifier::AnimationType::TRAIL, 0.8f, 1.5f));
-                break;
-            }
                 
             default:
                 LOG_ERROR("Unknown effect type requested from EffectFactory");

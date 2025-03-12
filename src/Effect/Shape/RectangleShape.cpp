@@ -76,7 +76,7 @@ namespace Effect {
             glUniform1f(m_ThicknessLocation, m_Thickness); // 保持厚度的設置
             glUniform1f(m_RotationLocation, m_Rotation);
 
-            LOG_DEBUG("RectangleShape::Draw - Rotation: {:.2f} radians", m_Rotation);
+            // LOG_DEBUG("RectangleShape::Draw - Rotation: {:.2f} radians", m_Rotation);
 
             // Set color properly
             glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
@@ -108,10 +108,10 @@ namespace Effect {
                     m_Rotation -= 2.0f * 3.14159f;
                 }
 
-                // 每0.5秒記錄一次旋轉角度（避免日誌過多）
+                // 每1.5秒記錄一次旋轉角度（避免日誌過多）
                 static float logTimer = 0.0f;
                 logTimer += deltaTime;
-                if (logTimer > 0.5f) {
+                if (logTimer > 1.5f) {
                     LOG_DEBUG("RectangleShape auto-rotating: {:.2f} radians, speed: {:.2f}",
                               m_Rotation, m_RotationSpeed);
                     logTimer = 0.0f;

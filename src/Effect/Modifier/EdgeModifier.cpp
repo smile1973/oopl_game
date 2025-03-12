@@ -16,8 +16,8 @@ namespace Effect {
             m_EdgeColorLocation = glGetUniformLocation(program.GetId(), "u_EdgeColor");
 
             // 添加更詳細的日誌，顯示為哪個程序設置 uniform
-            LOG_DEBUG("EdgeModifier applying to program {}: edgeType={}, edgeWidth={}, edgeColor={}",
-                     program.GetId(), m_EdgeTypeLocation, m_EdgeWidthLocation, m_EdgeColorLocation);
+            // LOG_DEBUG("EdgeModifier applying to program {}: edgeType={}, edgeWidth={}, edgeColor={}",
+            //          program.GetId(), m_EdgeTypeLocation, m_EdgeWidthLocation, m_EdgeColorLocation);
 
             if (m_EdgeTypeLocation == -1 || m_EdgeWidthLocation == -1 || m_EdgeColorLocation == -1) {
                 LOG_ERROR("Failed to get uniform locations for EdgeModifier in program {}", program.GetId());

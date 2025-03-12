@@ -27,18 +27,6 @@ public:
 
 private:
 
-
-//private:
-//    enum class Phase {
-//        CHANGE_CHARACTER_IMAGE,
-//        ABLE_TO_MOVE,
-//        COLLIDE_DETECTION,
-//        BEE_ANIMATION,
-//        OPEN_THE_DOORS,
-//        COUNTDOWN,
-//    };
-
-
     State m_CurrentState = State::START;
 
     Util::Renderer m_Root;
@@ -51,7 +39,6 @@ private:
     bool m_XKeyDown = false;
     bool m_CKeyDown = false;
     bool m_VKeyDown = false;
-    float m_TestEffectTimer = 0.0f;
 };
 
 #endif
