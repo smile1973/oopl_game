@@ -9,6 +9,7 @@ uniform float u_Time;       // 用於動畫效果
 
 // 填充修飾器參數
 uniform int u_FillType;     // 0=實心, 1=空心
+uniform float u_Thickness;  // 空心時的線條粗細
 uniform float u_FillThickness; // 替代名稱，用於兼容性 (與 u_Thickness 相同)
 
 // 邊緣修飾器參數
