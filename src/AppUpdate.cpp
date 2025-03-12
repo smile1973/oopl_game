@@ -100,7 +100,10 @@ void App::Update() {
 
     // 更新敵人血條
     if (m_Enemy->GetVisibility()){
-          m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
+        m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
+        m_Onward->SetVisible(false);
+    }else {
+        m_Onward->SetVisible(true);
     }
 
     // 更新所有渲染對象
@@ -115,13 +118,14 @@ void App::Update() {
         }
     }
 
+    // 關卡跳轉測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
             ValidTask();
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
-    if (m_Rabbit->IfCollides(m_Onward, 80)) {
+    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
         ValidTask();
     }
 

@@ -44,11 +44,6 @@ void Enemy::SetHealth(const float Health) {
     }
 }
 
-// 檢查敵人是否仍然存活
-bool Enemy::IfAlive() const {
-    return m_Health > 0.0f;
-}
-
 // 繪製敵人的血條
 void Enemy::DrawHealthBar(const glm::vec2& position) const {
     if (!s_Program || !s_VertexArray) return;

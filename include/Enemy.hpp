@@ -3,6 +3,7 @@
 
 #include "Character.hpp"
 #include "Util/Renderer.hpp"
+#include "Util/Time.hpp"
 #include "Util/Logger.hpp"
 
 // Enemy 類別，繼承自 Character，代表遊戲中的敵人角色
@@ -12,7 +13,7 @@ public:
     Enemy(float health, const std::vector<std::string>& ImageSet);
 
     // 檢查敵人是否仍然存活
-    [[nodiscard]] bool IfAlive() const;
+    [[nodiscard]] bool IfAlive() const{return m_Health > 0.0f;};
 
     // 讓敵人受到傷害，減少生命值
     void TakeDamage(float damage);
