@@ -3,6 +3,7 @@
 
 #include "Effect/Shape/CircleShape.hpp"
 #include "Effect/Shape/EllipseShape.hpp"
+#include "Effect/Shape/RectangleShape.hpp"
 #include "Effect/Modifier/FillModifier.hpp"
 #include "Effect/Modifier/EdgeModifier.hpp"
 #include "Effect/Modifier/MovementModifier.hpp"
