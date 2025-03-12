@@ -14,6 +14,8 @@ public:
     // 讓敵人受到傷害，減少生命值
     void TakeDamage(float damage);
 
+    void SetHealth(float Health =-1.0f);
+
     // 檢查敵人是否仍然存活
     [[nodiscard]] bool IfAlive() const;
 

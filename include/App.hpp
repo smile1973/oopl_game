@@ -35,8 +35,10 @@ private:
     enum class Phase {
         START,
         BATTLE_1,
-        STORE,
         BATTLE_2,
+        BATTLE_3,
+        BATTLE_4,
+        STORE,
     };
 
 

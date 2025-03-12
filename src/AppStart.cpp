@@ -60,6 +60,7 @@ void App::Start() {
     m_Enemy -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
     m_Enemy->SetZIndex(5);
     m_Enemy->SetPosition({197.5f, -3.5f});
+    m_Enemy->SetVisible(false);
     m_Root.AddChild(m_Enemy);
 
     // m_Background = std::make_shared<BackgroundImage>();

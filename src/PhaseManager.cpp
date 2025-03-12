@@ -8,6 +8,5 @@ PhaseManager::PhaseManager() {
 
 void PhaseManager::NextPhase() {
     LOG_DEBUG("Passed! Next phase: {}", m_Phase);
-    m_Background->NextPhase(m_Phase);
-    // m_Phase++;
+    m_Background->NextPhase(m_Phase++);
 }

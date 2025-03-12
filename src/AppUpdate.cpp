@@ -99,7 +99,9 @@ void App::Update() {
     m_Rabbit->Update();
 
     // 更新敵人血條
-    m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
+    if (m_Enemy->GetVisibility()){
+          m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
+    }
 
     // 更新所有渲染對象
     m_Root.Update();

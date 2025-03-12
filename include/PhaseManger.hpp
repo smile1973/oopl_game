@@ -28,7 +28,7 @@ public:
 
 private:
     std::shared_ptr<BackgroundImage> m_Background; ///< 背景物件
-    int m_Phase = 0; ///< 當前階段計數器
+    int m_Phase = 1; ///< 當前階段計數器
 };
 
 #endif // PHASE_MANAGER_HPP
