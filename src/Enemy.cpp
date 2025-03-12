@@ -24,8 +24,15 @@ Enemy::Enemy(float health, const std::vector<std::string>& ImageSet)
 
 // 讓敵人受到傷害，減少生命值
 void Enemy::TakeDamage(float damage) {
-    m_Health = std::max(0.0f, m_Health - damage);
-    LOG_DEBUG("Enemy took {:.1f} damage, remaining health: {:.1f}", damage, m_Health);
+    if (m_Health > 0) {
+        m_Health = std::max(0.0f, m_Health - damage);
+        LOG_DEBUG("Enemy took {:.1f} damage, remaining health: {:.1f}", damage, m_Health);
+
+        if (! this->IfAlive()) {
+            this->SetVisible(false);
+            LOG_DEBUG("The Enemy dies");
+        }
+    }
 }
 
 // 檢查敵人是否仍然存活

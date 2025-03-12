@@ -54,13 +54,8 @@ void App::Update() {
             LOG_DEBUG("Z Key UP - Skill 1");
             m_Rabbit->UseSkill(1);
 
-            if (m_Rabbit->IfCollides(m_Enemy, 150) && m_Enemy->IfAlive()) {
+            if (m_Rabbit->IfCollides(m_Enemy, 150)) {
                 m_Enemy->TakeDamage(5);
-
-                if (! m_Enemy->IfAlive()) {
-                    m_Enemy->SetVisible(false);
-                    LOG_DEBUG("The Enemy dies");
-                }
             }
         }
     }
