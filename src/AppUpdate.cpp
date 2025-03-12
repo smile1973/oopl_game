@@ -121,6 +121,9 @@ void App::Update() {
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
+    if (m_Rabbit->IfCollides(m_Onward, 80)) {
+        ValidTask();
+    }
 
 
 }

@@ -69,6 +69,13 @@ void App::Start() {
     m_PRM = std::make_shared<PhaseManager>();
     m_Root.AddChildren(m_PRM->GetChildren());
 
+    m_Onward = std::make_shared<Enemy>(100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
+    m_Onward -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
+    m_Onward->SetZIndex(5);
+    m_Onward->SetPosition({420.0f, 180.0f});
+    m_Onward->SetVisible(true);
+    m_Root.AddChild(m_Onward);
+
     m_CurrentState = State::UPDATE;
 
     LOG_INFO("Application started successfully");

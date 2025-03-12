@@ -11,13 +11,14 @@ public:
     // 構造函數，初始化敵人的血量與影像集
     Enemy(float health, const std::vector<std::string>& ImageSet);
 
+    // 檢查敵人是否仍然存活
+    [[nodiscard]] bool IfAlive() const;
+
     // 讓敵人受到傷害，減少生命值
     void TakeDamage(float damage);
 
+    // 更改敵人血量，默認原血量
     void SetHealth(float Health =-1.0f);
-
-    // 檢查敵人是否仍然存活
-    [[nodiscard]] bool IfAlive() const;
 
     // 繪製敵人的血條
     void DrawHealthBar(const glm::vec2& position) const;

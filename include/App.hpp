@@ -60,6 +60,7 @@ private:
 
 
     bool m_NKeyDown = false;
+    std::shared_ptr<Enemy> m_Onward;
 };
 
 #endif

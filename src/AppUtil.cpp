@@ -13,7 +13,7 @@ void App::ValidTask() {
         case Phase::START:
             LOG_DEBUG("--START--");
             m_Phase = Phase::BATTLE_1;
-            m_Rabbit->SetPosition({-112.5f, -140.5f});
+            m_Rabbit->SetPosition({-400.0f, 160.0f});
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth();
@@ -24,9 +24,9 @@ void App::ValidTask() {
                 LOG_DEBUG("The enemy is alive");
                 break;
             }
-            LOG_DEBUG("--BATTLE_1--");
+            LOG_DEBUG("--BATTLE_1--END");
             m_Phase = Phase::BATTLE_2;
-            m_Rabbit->SetPosition({-112.5f, -140.5f});
+            m_Rabbit->SetPosition({-400.0f, 160.0f});
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth();
@@ -37,9 +37,9 @@ void App::ValidTask() {
                 LOG_DEBUG("The enemy is alive");
                 break;
             }
-            LOG_DEBUG("--BATTLE_2--");
+            LOG_DEBUG("--BATTLE_2--END");
             m_Phase = Phase::BATTLE_3;
-            m_Rabbit->SetPosition({-112.5f, -140.5f});
+            m_Rabbit->SetPosition({-400.0f, 160.0f});
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(30.0f);
@@ -50,9 +50,9 @@ void App::ValidTask() {
                 LOG_DEBUG("The enemy is alive");
                 break;
             }
-            LOG_DEBUG("--BATTLE_3--");
+            LOG_DEBUG("--BATTLE_3--END");
             m_Phase = Phase::BATTLE_4;
-            m_Rabbit->SetPosition({-112.5f, -140.5f});
+            m_Rabbit->SetPosition({-400.0f, 160.0f});
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(200.0f);
@@ -63,9 +63,9 @@ void App::ValidTask() {
                 LOG_DEBUG("The enemy is alive");
                 break;
             }
-            LOG_DEBUG("--BATTLE_4--");
+            LOG_DEBUG("--BATTLE_4--END");
             m_Phase = Phase::STORE;
-            m_Rabbit->SetPosition({-112.5f, -140.5f});
+            m_Rabbit->SetPosition({-400.0f, 160.0f});
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(1000.0f);

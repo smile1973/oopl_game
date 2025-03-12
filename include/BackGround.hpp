@@ -15,7 +15,7 @@ public:
      * @brief 背景圖片建構函式，預設為一般背景。
      */
     BackgroundImage() : GameObject(
-        std::make_unique<Util::Image>(GA_RESOURCE_DIR "/Image/Background/bg.png"), -10) {
+        std::make_unique<Util::Image>(GA_RESOURCE_DIR "/Image/Background/bg_black.png"), -10) {
     }
 
     /**
@@ -34,10 +34,10 @@ private:
      * @return 對應的圖片路徑。
      */
     static std::string ImagePath(int phase) {
-        return (phase == 2) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
-               (phase == 1) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" :
-               (phase % 2 == 0) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
-               (phase % 2 == 1) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" : GA_RESOURCE_DIR "/Image/Background/bg.png";
+        return (phase == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
+                  (phase == 2) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" :
+                  (phase % 2 == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
+                  (phase % 2 == 0) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" : GA_RESOURCE_DIR "/Image/Background/bg.png";
     }
 };
 
