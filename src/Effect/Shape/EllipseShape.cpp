@@ -42,19 +42,20 @@ namespace Effect {
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            // Bind shader program
-            s_Program->Bind();
+            // 不要在這裡綁定程序，因為 CompositeEffect 已經綁定了
+            // 只設置自己特有的 uniform 變數，不要重設已由修飾器設置的變數
 
-            // Set uniforms with instance values
+            // 設置橢圓特有的 uniform
             glUniform2f(m_RadiiLocation, m_Radii.x, m_Radii.y);
 
-            // Set color properly
+            // 設置顏色 - 這個可能會與修飾器衝突，所以確保順序正確
             glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
 
+            // 設置時間
             glUniform1f(m_TimeLocation, m_ElapsedTime);
 
-            // Validate shader program
-            s_Program->Validate();
+            // 不要進行驗證，因為這可能會干擾修飾器的設置
+            // s_Program->Validate();
 
             // Draw
             s_VertexArray->Bind();

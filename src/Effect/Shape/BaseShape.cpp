@@ -1,4 +1,5 @@
 #include "Effect/Shape/BaseShape.hpp"
+#include "Util/Logger.hpp"
 
 namespace Effect {
     namespace Shape {
@@ -9,6 +10,7 @@ namespace Effect {
 
         void BaseShape::Update(float deltaTime) {
             if (m_State == State::ACTIVE) {
+                // LOG_DEBUG("m_duration = {} ", m_Duration);
                 m_ElapsedTime += deltaTime;
                 if (m_ElapsedTime >= m_Duration) {
                     m_State = State::FINISHED;

@@ -23,22 +23,42 @@ namespace Effect {
         } else if (auto ellipseShape = dynamic_cast<Shape::EllipseShape*>(m_BaseShape.get())) {
             (void) ellipseShape;
             program = Shape::EllipseShape::GetProgram();
+        } else if (auto rectangleShape = dynamic_cast<Shape::RectangleShape*>(m_BaseShape.get())) {
+            (void) rectangleShape;
+            program = Shape::RectangleShape::GetProgram();
         }
 
         if (!program) {
-            LOG_ERROR("Failed to get program for CompositeEffect");
+            LOG_ERROR("Failed to get program for CompositeEffect - BaseShape type not recognized");
             return;
         }
 
-        // Bind program
+        // 先綁定程序，這樣才能設置 uniform
         program->Bind();
 
-        // Apply all modifiers
+        // 為了調試，檢查 EdgeModifier 的 uniform 是否能夠正常獲取
+        // int edgeTypeLocation = glGetUniformLocation(program->GetId(), "u_EdgeType");
+        // int edgeWidthLocation = glGetUniformLocation(program->GetId(), "u_EdgeWidth");
+        // int edgeColorLocation = glGetUniformLocation(program->GetId(), "u_EdgeColor");
+        //
+        // LOG_DEBUG("EdgeModifier uniform locations in program {}: edgeType={}, edgeWidth={}, edgeColor={}",
+        //           program->GetId(), edgeTypeLocation, edgeWidthLocation, edgeColorLocation);
+
+        // 依次應用修飾器
         m_FillModifier.Apply(*program);
         m_EdgeModifier.Apply(*program);
         m_AnimationModifier.Apply(*program, m_ElapsedTime);
 
-        // Draw base shape
+        // 設置時間 uniform - 確保基本的時間變量存在於所有著色器中
+        GLint timeLocation = glGetUniformLocation(program->GetId(), "u_Time");
+        if (timeLocation != -1) {
+            glUniform1f(timeLocation, m_ElapsedTime);
+        }
+
+        // 驗證著色器程序以確保所有 uniform 都已設置正確
+        program->Validate();
+
+        // 繪製基本形狀
         m_BaseShape->Draw(data);
     }
 

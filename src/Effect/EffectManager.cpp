@@ -13,7 +13,9 @@ namespace Effect {
             EffectType::SKILL_V,
             EffectType::ENEMY_ATTACK_1,
             EffectType::ENEMY_ATTACK_2,
-            EffectType::ENEMY_ATTACK_3
+            EffectType::ENEMY_ATTACK_3,
+            EffectType::RECT_LASER,
+            EffectType::RECT_BEAM,
         };
         
         for (auto type : initOrder) {

@@ -122,5 +122,10 @@ EffectFactory.hpp
 # Task
 - 用Z之前 X V不能正常顯示(未解決)
 - 特效會有覆蓋問題 看是要寫渲染順序(麻煩) 還是 特效改中空(簡單)
+<<<<<<< HEAD
 - 特效顏色不能調 why?
 - EffectManager::Update 這 特效沒有正確回去池內
+=======
+- duration如果是傳給shape的話 她船不進去composite effect 造成秒數沒變(待修)
+- 有時候雷射會少一根 why? -> 應該是回去時沒reset? -> 角度不正確
+>>>>>>> effect_rect

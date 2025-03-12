@@ -16,7 +16,11 @@ namespace Effect {
         // 敵人攻擊特效
         ENEMY_ATTACK_1, // 實心圓，邊緣加深，會移動
         ENEMY_ATTACK_2, // 空心圓，邊緣發光，不會移動
-        ENEMY_ATTACK_3  // 實心圓，不會移動
+        ENEMY_ATTACK_3, // 實心圓，不會移動
+
+        // 矩形特效
+        RECT_LASER,     // 矩形雷射，實心，邊緣發光，會移動
+        RECT_BEAM,      // 矩形光束，空心，邊緣加深，可旋轉
     };
 
     class EffectFactory {
