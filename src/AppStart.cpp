@@ -62,8 +62,11 @@ void App::Start() {
     m_Enemy->SetPosition({197.5f, -3.5f});
     m_Root.AddChild(m_Enemy);
 
-    m_Background = std::make_shared<BackgroundImage>();
-    m_Root.AddChild(m_Background);
+    // m_Background = std::make_shared<BackgroundImage>();
+    // m_Root.AddChild(m_Background);
+
+    m_PRM = std::make_shared<PhaseManager>();
+    m_Root.AddChildren(m_PRM->GetChildren());
 
     m_CurrentState = State::UPDATE;
 

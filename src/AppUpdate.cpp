@@ -54,7 +54,7 @@ void App::Update() {
             LOG_DEBUG("Z Key UP - Skill 1");
             m_Rabbit->UseSkill(1);
 
-            if (m_Rabbit->IfCollides(m_Enemy, 150)) {
+            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
                 m_Enemy->TakeDamage(5);
             }
         }
@@ -84,6 +84,10 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
             LOG_DEBUG("V Key UP - Skill 4");
             m_Rabbit->UseSkill(4);
+
+            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
+                m_Enemy->TakeDamage(15);
+            }
         }
     }
     m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);
@@ -108,6 +112,13 @@ void App::Update() {
             eff->Play({-500 + (500 * i), 500}, 30.0f);
         }
     }
+
+    if (m_NKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
+            ValidTask();
+        }
+    }
+    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
 
 }

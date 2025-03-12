@@ -6,7 +6,8 @@
 #include "Util/Renderer.hpp"
 #include "Character.hpp"
 #include "Enemy.hpp"
-#include "BackGround.hpp"
+// #include "BackGround.hpp"
+#include "PhaseManger.hpp" // 階段資源管理
 #include "Effect/EffectManager.hpp"
 
 class App {
@@ -17,7 +18,7 @@ public:
         END,
     };
 
-    State GetCurrentState() const { return m_CurrentState; }
+    [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
 
     void Start();
 
@@ -26,25 +27,27 @@ public:
     void End(); // NOLINT(readability-convert-member-functions-to-static)
 
 private:
+    // 執行有效的任務，內部函式
+    void ValidTask();
 
 
 //private:
-//    enum class Phase {
-//        CHANGE_CHARACTER_IMAGE,
-//        ABLE_TO_MOVE,
-//        COLLIDE_DETECTION,
-//        BEE_ANIMATION,
-//        OPEN_THE_DOORS,
-//        COUNTDOWN,
-//    };
+    enum class Phase {
+        START,
+        BATTLE_1,
+        STORE,
+        BATTLE_2,
+    };
 
 
     State m_CurrentState = State::START;
+    Phase m_Phase = Phase::START; // 當前階段
 
     Util::Renderer m_Root;
-    std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
+    // std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
     std::shared_ptr<Character> m_Rabbit; // 定義兔子
     std::shared_ptr<Enemy> m_Enemy;   // 定義敵人
+    std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
@@ -52,6 +55,9 @@ private:
     bool m_CKeyDown = false;
     bool m_VKeyDown = false;
     float m_TestEffectTimer = 0.0f;
+
+
+    bool m_NKeyDown = false;
 };
 
 #endif
