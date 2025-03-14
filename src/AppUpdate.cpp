@@ -56,6 +56,7 @@ void App::Update() {
 
             if (m_Rabbit->IfCollides(m_Enemy, 200)) {
                 m_Enemy->TakeDamage(5);
+                m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
             }
         }
     }

@@ -1,4 +1,3 @@
-#include "AppUtil.hpp"
 #include "App.hpp"
 
 #include "Util/Logger.hpp"

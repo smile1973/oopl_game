@@ -6,6 +6,9 @@
 #include "Util/Time.hpp"
 #include "Util/Logger.hpp"
 
+#include <glm/glm.hpp>
+#include <iostream>
+
 // Enemy 類別，繼承自 Character，代表遊戲中的敵人角色
 class Enemy : public Character {
 public:
@@ -20,6 +23,9 @@ public:
 
     // 更改敵人血量，默認原血量
     void SetHealth(float Health =-1.0f);
+
+    void MovePosition(const glm::vec2& Position) { m_Transform.translation += Position; }
+    // void MovePosition(const glm::vec2& targetPosition, float totalTime=2.0f);
 
     // 繪製敵人的血條
     void DrawHealthBar(const glm::vec2& position) const;
