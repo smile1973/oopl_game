@@ -34,7 +34,7 @@ void App::ValidTask() {
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth();
 
-            m_Enemy_bird_valedictorian->SetPosition({197.5f, -103.5f});
+            m_Enemy_bird_valedictorian->SetPosition({-197.5f, -103.5f});
             m_Enemy_bird_valedictorian->SetVisible(true);
             m_Enemy_bird_valedictorian->SetHealth();
 
@@ -54,11 +54,11 @@ void App::ValidTask() {
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(30.0f);
 
-            m_Enemy_bird_valedictorian->SetPosition({197.5f, -103.5f});
+            m_Enemy_bird_valedictorian->SetPosition({-197.5f, -103.5f});
             m_Enemy_bird_valedictorian->SetVisible(true);
             m_Enemy_bird_valedictorian->SetHealth(20);
 
-            m_Enemy_dragon_silver->SetPosition({200.0f, 100.0f});
+            m_Enemy_dragon_silver->SetPosition({0.0f, 100.0f});
             m_Enemy_dragon_silver->SetVisible(true);
             m_Enemy_dragon_silver->SetHealth();
 

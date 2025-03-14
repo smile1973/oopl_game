@@ -11,17 +11,10 @@
  */
 class BackgroundImage : public Util::GameObject {
 public:
-    /**
-     * @brief 背景圖片建構函式，預設為一般背景。
-     */
     BackgroundImage() : GameObject(
         std::make_unique<Util::Image>(GA_RESOURCE_DIR "/Image/Background/bg_black.png"), -10) {
     }
 
-    /**
-     * @brief 根據當前階段更換背景圖片。
-     * @param phase 當前遊戲階段。
-     */
     void NextPhase(int phase) const{
         auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
         temp->SetImage(ImagePath(phase));

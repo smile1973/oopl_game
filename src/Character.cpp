@@ -72,3 +72,29 @@ void Character::SwitchToSkill(int skillId) {
         }
     }
 }
+
+
+void Character::ToEwardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies) {
+    float minDistance = std::numeric_limits<float>::max();
+    std::shared_ptr<Character> nearestEnemy = nullptr;
+
+    for (const auto& enemy : m_Enemies) {
+        if (enemy->GetVisibility()) {
+            float distance = glm::distance(this->GetPosition(), enemy->GetPosition());
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+    }
+
+    if (nearestEnemy) {
+        if (nearestEnemy->GetPosition().x > this->GetPosition().x) {
+            LOG_DEBUG("Towards the Right");
+            m_Transform.scale.x = 0.5f;
+        } else {
+            LOG_DEBUG("Towards the Left");
+            m_Transform.scale.x = -0.5f;
+        }
+    }
+}

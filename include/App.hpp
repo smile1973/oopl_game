@@ -30,8 +30,6 @@ private:
     // 執行有效的任務，內部函式
     void ValidTask();
 
-
-//private:
     enum class Phase {
         START,
         BATTLE_1,

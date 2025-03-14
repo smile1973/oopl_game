@@ -53,6 +53,10 @@ void App::Update() {
     m_Enemies.push_back(m_Enemy);
     m_Enemies.push_back(m_Enemy_bird_valedictorian);
     m_Enemies.push_back(m_Enemy_dragon_silver);
+    std::vector<std::shared_ptr<Character>> m_enemies_characters;
+    for (const auto& enemy : m_Enemies) {
+        m_enemies_characters.push_back(enemy); // 隱式轉換 std::shared_ptr<Enemy> 到 std::shared_ptr<Character>
+    }
 
     // 技能Z
     if (m_ZKeyDown) {
@@ -66,6 +70,7 @@ void App::Update() {
                     m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
                 }
             }
+            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
         }
     }
     m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
@@ -81,6 +86,7 @@ void App::Update() {
                     enemy->TakeDamage(5);
                 }
             }
+            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
         }
     }
     m_XKeyDown = Util::Input::IsKeyPressed(Util::Keycode::X);
@@ -96,6 +102,8 @@ void App::Update() {
                     enemy->TakeDamage(5);
                 }
             }
+            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
+
         }
     }
     m_CKeyDown = Util::Input::IsKeyPressed(Util::Keycode::C);
@@ -111,6 +119,7 @@ void App::Update() {
                     enemy->TakeDamage(15);
                 }
             }
+            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
         }
     }
     m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);
@@ -142,6 +151,21 @@ void App::Update() {
         Enemy::s_HealthBarYPositions.clear();
     }
 
+    // 測試
+    if (m_NKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
+            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
+        }
+    }
+    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
+
+    // 關卡跳轉
+    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
+        ValidTask();
+    }
+
+
+
 
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
         for (int i = 0; i < 3; ++i) {
@@ -163,17 +187,6 @@ void App::Update() {
         );
         LOG_DEBUG("Created RECT_LASER effect at position: ({}, {})", cursorPos.x, cursorPos.y);
     }
-    // 關卡跳轉測試
-    if (m_NKeyDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            ValidTask();
-        }
-    }
-    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
-    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
-        ValidTask();
-    }
-
 
     // 測試矩形光束特效 - 按下 2 鍵
     if (Util::Input::IsKeyDown(Util::Keycode::NUM_2)) {
