@@ -13,11 +13,14 @@ void App::ValidTask() {
             LOG_DEBUG("--START--");
             m_Phase = Phase::BATTLE_1;
             m_Rabbit->SetPosition({-400.0f, 160.0f});
+
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth();
+
             m_PRM->NextPhase();
         break;
+
         case Phase::BATTLE_1:
             if (m_Enemy->IfAlive()) {
                 LOG_DEBUG("The enemy is alive");
@@ -26,11 +29,18 @@ void App::ValidTask() {
             LOG_DEBUG("--BATTLE_1--END");
             m_Phase = Phase::BATTLE_2;
             m_Rabbit->SetPosition({-400.0f, 160.0f});
+
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth();
+
+            m_Enemy_bird_valedictorian->SetPosition({197.5f, -103.5f});
+            m_Enemy_bird_valedictorian->SetVisible(true);
+            m_Enemy_bird_valedictorian->SetHealth();
+
             m_PRM->NextPhase();
         break;
+
         case Phase::BATTLE_2:
             if (m_Enemy->IfAlive()) {
                 LOG_DEBUG("The enemy is alive");
@@ -39,11 +49,22 @@ void App::ValidTask() {
             LOG_DEBUG("--BATTLE_2--END");
             m_Phase = Phase::BATTLE_3;
             m_Rabbit->SetPosition({-400.0f, 160.0f});
+
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(30.0f);
+
+            m_Enemy_bird_valedictorian->SetPosition({197.5f, -103.5f});
+            m_Enemy_bird_valedictorian->SetVisible(true);
+            m_Enemy_bird_valedictorian->SetHealth(20);
+
+            m_Enemy_dragon_silver->SetPosition({200.0f, 100.0f});
+            m_Enemy_dragon_silver->SetVisible(true);
+            m_Enemy_dragon_silver->SetHealth();
+
             m_PRM->NextPhase();
         break;
+
         case Phase::BATTLE_3:
             if (m_Enemy->IfAlive()) {
                 LOG_DEBUG("The enemy is alive");
@@ -52,11 +73,14 @@ void App::ValidTask() {
             LOG_DEBUG("--BATTLE_3--END");
             m_Phase = Phase::BATTLE_4;
             m_Rabbit->SetPosition({-400.0f, 160.0f});
+
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(200.0f);
+
             m_PRM->NextPhase();
         break;
+
         case Phase::BATTLE_4:
             if (m_Enemy->IfAlive()) {
                 LOG_DEBUG("The enemy is alive");
@@ -65,9 +89,11 @@ void App::ValidTask() {
             LOG_DEBUG("--BATTLE_4--END");
             m_Phase = Phase::STORE;
             m_Rabbit->SetPosition({-400.0f, 160.0f});
+
             m_Enemy->SetPosition({197.5f, -3.5f});
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(1000.0f);
+
             m_PRM->NextPhase();
         break;
 

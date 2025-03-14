@@ -49,6 +49,8 @@ private:
     // std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
     std::shared_ptr<Character> m_Rabbit; // 定義兔子
     std::shared_ptr<Enemy> m_Enemy;   // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_bird_valedictorian;   // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_dragon_silver;   // 定義敵人
     std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器
 
     bool m_EnterDown = false;

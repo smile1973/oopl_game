@@ -5,8 +5,8 @@ std::unique_ptr<Core::Program> Enemy::s_Program = nullptr;
 std::unique_ptr<Core::VertexArray> Enemy::s_VertexArray = nullptr;
 
 // 構造函數，初始化敵人的生命值與繪製屬性
-Enemy::Enemy(float health, const std::vector<std::string>& ImageSet)
-    : Character(ImageSet), m_Health(health), m_MaxHealth(health),
+Enemy::Enemy(std::string name, float health, const std::vector<std::string>& ImageSet)
+    : Character(ImageSet), m_Name(std::move(name)), m_Health(health), m_MaxHealth(health),
       m_ColorLocation(-1), m_WidthLocation(-1) {
 
     // 確保著色程序（Shader Program）只初始化一次
@@ -26,11 +26,11 @@ Enemy::Enemy(float health, const std::vector<std::string>& ImageSet)
 void Enemy::TakeDamage(float damage) {
     if (this->GetVisibility()) {
         m_Health = std::max(0.0f, m_Health - damage);
-        LOG_DEBUG("Enemy took {:.1f} damage, remaining health: {:.1f}", damage, m_Health);
+        LOG_DEBUG("{} took {:.1f} damage, remaining health: {:.1f}", m_Name, damage, m_Health);
 
         if (! this->IfAlive()) {
             this->SetVisible(false);
-            LOG_DEBUG("The Enemy dies");
+            LOG_DEBUG("The Enemy {} dies", m_Name);
         }
     }
 }
@@ -45,30 +45,35 @@ void Enemy::SetHealth(const float Health) {
 }
 
 // 繪製敵人的血條
+std::set<float> Enemy::s_HealthBarYPositions; // 定義靜態成員變數
 void Enemy::DrawHealthBar(const glm::vec2& position) const {
-    if (!s_Program || !s_VertexArray) return;
+    if (!s_Program || !s_VertexArray || !this->GetVisibility()) return;
 
     // 啟用透明度混合，以確保血條能夠正確顯示
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     s_Program->Bind();
-
     // 設定血條顏色為紅色
     glUniform4f(m_ColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
-
     // 根據當前生命值調整血條寬度
-    float currentWidth = m_Health / m_MaxHealth; // 0 ~ 1 縮放
+    float currentWidth = m_Health / m_MaxHealth;
     glUniform1f(glGetUniformLocation(s_Program->GetId(), "u_Width"), currentWidth);
-    glUniform2f(glGetUniformLocation(s_Program->GetId(), "u_Position"), position.x, position.y);
-
-
-    s_Program->Validate(); // 確保著色程序運行正常
+    // 檢查 Y 座標是否已經被使用
+    float yPosition = position.y;
+    while (s_HealthBarYPositions.find(yPosition) != s_HealthBarYPositions.end()) {
+        yPosition -= 0.05f;
+    }
+    glUniform2f(glGetUniformLocation(s_Program->GetId(), "u_Position"), position.x, yPosition);
+    // 確保著色程序運行正常
+    s_Program->Validate();
 
     // 綁定並繪製血條
     s_VertexArray->Bind();
     s_VertexArray->DrawTriangles();
     s_Program->Unbind();
+    // 將新的 Y 座標加入集合
+    s_HealthBarYPositions.insert(yPosition);
 }
 
 // 初始化著色程序，為血條載入對應的著色器文件

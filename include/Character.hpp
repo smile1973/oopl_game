@@ -4,6 +4,7 @@
 #include "Util/GameObject.hpp"
 #include "Util/Animation.hpp"
 #include "Skill.hpp"
+// #include "Enemy.hpp"
 
 class Character : public Util::GameObject {
 public:
@@ -23,6 +24,7 @@ public:
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
     // 檢測角色是否與另一個角色發生碰撞
     bool IfCollides(const std::shared_ptr<Character>& other, float Distance) const;
+    bool IfCirclesCollide(const std::shared_ptr<Character>& other, float Distance) const;
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
 

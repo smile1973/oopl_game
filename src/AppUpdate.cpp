@@ -48,15 +48,23 @@ void App::Update() {
         m_CurrentState = State::END;
     }
 
+    // 初始化敵人容器
+    std::vector<std::shared_ptr<Enemy>> m_Enemies;
+    m_Enemies.push_back(m_Enemy);
+    m_Enemies.push_back(m_Enemy_bird_valedictorian);
+    m_Enemies.push_back(m_Enemy_dragon_silver);
+
     // 技能Z
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             LOG_DEBUG("Z Key UP - Skill 1");
             m_Rabbit->UseSkill(1);
 
-            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
-                m_Enemy->TakeDamage(5);
-                m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
+            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                if (m_Rabbit->IfCirclesCollide(enemy, 200)) {
+                    enemy->TakeDamage(5);
+                    m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
+                }
             }
         }
     }
@@ -67,6 +75,12 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
             LOG_DEBUG("X Key UP - Skill 2");
             m_Rabbit->UseSkill(2);
+
+            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                if (m_Rabbit->IfCollides(enemy, 200)) {
+                    enemy->TakeDamage(5);
+                }
+            }
         }
     }
     m_XKeyDown = Util::Input::IsKeyPressed(Util::Keycode::X);
@@ -76,6 +90,12 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::C)) {
             LOG_DEBUG("C Key UP - Skill 3");
             m_Rabbit->UseSkill(3);
+
+            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                if (m_Rabbit->IfCollides(enemy, 200)) {
+                    enemy->TakeDamage(5);
+                }
+            }
         }
     }
     m_CKeyDown = Util::Input::IsKeyPressed(Util::Keycode::C);
@@ -86,8 +106,10 @@ void App::Update() {
             LOG_DEBUG("V Key UP - Skill 4");
             m_Rabbit->UseSkill(4);
 
-            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
-                m_Enemy->TakeDamage(15);
+            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                if (m_Rabbit->IfCollides(enemy, 200)) {
+                    enemy->TakeDamage(15);
+                }
             }
         }
     }
@@ -100,12 +122,26 @@ void App::Update() {
     m_Rabbit->Update();
 
     // 更新敵人血條
-    if (m_Enemy->GetVisibility()){
-        m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
-        m_Onward->SetVisible(false);
-    }else {
-        m_Onward->SetVisible(true);
+    // if (m_Enemy->GetVisibility()){
+    //     for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+    //         enemy->DrawHealthBar();
+    //     }
+    //     Enemy::s_HealthBarYPositions.clear();
+    //     m_Onward->SetVisible(false);
+    // }else {
+    //     m_Onward->SetVisible(true);
+    // }
+    // 更新敵人血條，是否允許前進
+    for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+        enemy->DrawHealthBar();
     }
+    if (Enemy::s_HealthBarYPositions.empty()) {
+        m_Onward->SetVisible(true);
+    } else {
+        m_Onward->SetVisible(false);
+        Enemy::s_HealthBarYPositions.clear();
+    }
+
 
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
         for (int i = 0; i < 3; ++i) {

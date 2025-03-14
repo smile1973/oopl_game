@@ -8,12 +8,13 @@
 
 #include <glm/glm.hpp>
 #include <iostream>
+#include <set>
 
 // Enemy 類別，繼承自 Character，代表遊戲中的敵人角色
 class Enemy : public Character {
 public:
     // 構造函數，初始化敵人的血量與影像集
-    Enemy(float health, const std::vector<std::string>& ImageSet);
+    Enemy(std::string name, float health, const std::vector<std::string>& ImageSet);
 
     // 檢查敵人是否仍然存活
     [[nodiscard]] bool IfAlive() const{return m_Health > 0.0f;};
@@ -27,8 +28,9 @@ public:
     void MovePosition(const glm::vec2& Position) { m_Transform.translation += Position; }
     // void MovePosition(const glm::vec2& targetPosition, float totalTime=2.0f);
 
+    static std::set<float> s_HealthBarYPositions;
     // 繪製敵人的血條
-    void DrawHealthBar(const glm::vec2& position) const;
+    void DrawHealthBar(const glm::vec2& position = glm::vec2 (0.9f, 0.9)) const;
 
 private:
     // 初始化著色程序（Shader Program）
@@ -46,6 +48,7 @@ private:
     // 靜態成員變數：共享的頂點數據
     static std::unique_ptr<Core::VertexArray> s_VertexArray;
 
+    std::string m_Name;
     // 敵人的當前血量與最大血量
     float m_Health;
     float m_MaxHealth;
