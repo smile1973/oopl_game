@@ -54,13 +54,9 @@ void App::Update() {
             LOG_DEBUG("Z Key UP - Skill 1");
             m_Rabbit->UseSkill(1);
 
-            if (m_Rabbit->IfCollides(m_Enemy, 150) && m_Enemy->IfAlive()) {
+            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
                 m_Enemy->TakeDamage(5);
-
-                if (! m_Enemy->IfAlive()) {
-                    m_Enemy->SetVisible(false);
-                    LOG_DEBUG("The Enemy dies");
-                }
+                m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
             }
         }
     }
@@ -89,6 +85,10 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
             LOG_DEBUG("V Key UP - Skill 4");
             m_Rabbit->UseSkill(4);
+
+            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
+                m_Enemy->TakeDamage(15);
+            }
         }
     }
     m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);
@@ -100,7 +100,12 @@ void App::Update() {
     m_Rabbit->Update();
 
     // 更新敵人血條
-    m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
+    if (m_Enemy->GetVisibility()){
+        m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
+        m_Onward->SetVisible(false);
+    }else {
+        m_Onward->SetVisible(true);
+    }
 
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
         for (int i = 0; i < 3; ++i) {
@@ -122,6 +127,17 @@ void App::Update() {
         );
         LOG_DEBUG("Created RECT_LASER effect at position: ({}, {})", cursorPos.x, cursorPos.y);
     }
+    // 關卡跳轉測試
+    if (m_NKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
+            ValidTask();
+        }
+    }
+    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
+    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
+        ValidTask();
+    }
+
 
     // 測試矩形光束特效 - 按下 2 鍵
     if (Util::Input::IsKeyDown(Util::Keycode::NUM_2)) {

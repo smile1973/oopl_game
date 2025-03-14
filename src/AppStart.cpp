@@ -60,10 +60,21 @@ void App::Start() {
     m_Enemy -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
     m_Enemy->SetZIndex(5);
     m_Enemy->SetPosition({197.5f, -3.5f});
+    m_Enemy->SetVisible(false);
     m_Root.AddChild(m_Enemy);
 
-    m_Background = std::make_shared<BackgroundImage>();
-    m_Root.AddChild(m_Background);
+    // m_Background = std::make_shared<BackgroundImage>();
+    // m_Root.AddChild(m_Background);
+
+    m_PRM = std::make_shared<PhaseManager>();
+    m_Root.AddChildren(m_PRM->GetChildren());
+
+    m_Onward = std::make_shared<Enemy>(100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
+    m_Onward -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
+    m_Onward->SetZIndex(5);
+    m_Onward->SetPosition({420.0f, 180.0f});
+    m_Onward->SetVisible(true);
+    m_Root.AddChild(m_Onward);
 
     m_CurrentState = State::UPDATE;
 
