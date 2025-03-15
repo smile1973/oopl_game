@@ -28,13 +28,13 @@ public:
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     void SetInversion() { m_Transform.scale.x *= -1; } // 設定左右反轉角色
-    void ToEwardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies); // 朝向最近的敵人
+    void TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies); // 朝向最近的敵人
 
     // 技能
     void AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
                  int duration = 175);
     void UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
-    void Update();
+    virtual void Update();
 
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }

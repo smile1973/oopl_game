@@ -70,7 +70,7 @@ void App::Update() {
                     m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
                 }
             }
-            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
+            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
         }
     }
     m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
@@ -86,7 +86,7 @@ void App::Update() {
                     enemy->TakeDamage(5);
                 }
             }
-            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
+            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
         }
     }
     m_XKeyDown = Util::Input::IsKeyPressed(Util::Keycode::X);
@@ -102,7 +102,7 @@ void App::Update() {
                     enemy->TakeDamage(5);
                 }
             }
-            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
+            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
 
         }
     }
@@ -119,7 +119,7 @@ void App::Update() {
                     enemy->TakeDamage(15);
                 }
             }
-            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
+            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
         }
     }
     m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);
@@ -151,18 +151,25 @@ void App::Update() {
         Enemy::s_HealthBarYPositions.clear();
     }
 
-    // 測試
-    if (m_NKeyDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            m_Rabbit -> ToEwardNearestEnemy(m_enemies_characters);
-        }
-    }
-    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
-
     // 關卡跳轉
     if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
         ValidTask();
     }
+
+    // 更新敵人角色
+    m_Enemy->Update();
+
+
+
+    // 測試
+    if (m_NKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
+            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            // m_Enemy->MoveToPosition(glm::vec2(1.0f, 0.0f), 3.0f);
+            m_Enemy->MovePosition(glm::vec2(-100.0f, 100.0f), 1.0f);
+        }
+    }
+    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
 
 

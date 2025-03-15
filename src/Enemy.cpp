@@ -44,6 +44,36 @@ void Enemy::SetHealth(const float Health) {
     }
 }
 
+
+void Enemy::MovePosition(const glm::vec2& Position, const float totalTime) {
+    MoveToPosition(GetPosition() + Position, totalTime);
+}
+
+void Enemy::MoveToPosition(const glm::vec2& targetPosition, const float totalTime) {
+    m_IsMoving = true;
+    m_MaxDistance = glm::distance(this->GetPosition(), targetPosition);
+    m_Direction = (targetPosition - this->GetPosition()) / m_MaxDistance;
+    m_Speed = m_MaxDistance / totalTime;
+}
+
+void Enemy::Update() {
+    if (!m_IsMoving || !GetVisibility()) return;
+
+    // 計算移動距離
+    float moveDistance = m_Speed * Util::Time::GetDeltaTimeMs() / 1000.0f;
+    m_DistanceTraveled += moveDistance;
+
+    // 更新位置
+    m_Transform.translation += m_Direction * moveDistance;
+
+    // 檢查是否到達目標距離
+    if (m_DistanceTraveled >= m_MaxDistance) {
+        m_IsMoving = false; // 停止移動
+        m_DistanceTraveled = 0;
+        LOG_DEBUG("The Enemy move to {}", m_Transform.translation);
+    }
+}
+
 // 繪製敵人的血條
 std::set<float> Enemy::s_HealthBarYPositions; // 定義靜態成員變數
 void Enemy::DrawHealthBar(const glm::vec2& position) const {

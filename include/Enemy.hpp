@@ -17,7 +17,7 @@ public:
     Enemy(std::string name, float health, const std::vector<std::string>& ImageSet);
 
     // 檢查敵人是否仍然存活
-    [[nodiscard]] bool IfAlive() const{return m_Health > 0.0f;};
+    [[nodiscard]] bool IfAlive() const{ return m_Health > 0.0f; }
 
     // 讓敵人受到傷害，減少生命值
     void TakeDamage(float damage);
@@ -25,8 +25,11 @@ public:
     // 更改敵人血量，默認原血量
     void SetHealth(float Health =-1.0f);
 
-    void MovePosition(const glm::vec2& Position) { m_Transform.translation += Position; }
-    // void MovePosition(const glm::vec2& targetPosition, float totalTime=2.0f);
+    void MovePosition(const glm::vec2& Position) { m_Transform.translation += Position; } //立即平移位置
+    void MovePosition(const glm::vec2& Position, const float totalTime); //平移位置
+    void MoveToPosition(const glm::vec2& targetPosition, const float totalTime); //平移到某位置
+
+    void Update() override;
 
     static std::set<float> s_HealthBarYPositions;
     // 繪製敵人的血條
@@ -52,6 +55,14 @@ private:
     // 敵人的當前血量與最大血量
     float m_Health;
     float m_MaxHealth;
+
+    bool m_IsMoving = false;
+    float m_Speed;
+    float m_MaxDistance;
+    glm::vec2 m_Direction;
+
+    float m_DistanceTraveled = 0;
+
 
     // Uniform 變數位置（顏色與血條寬度）
     GLint m_ColorLocation;

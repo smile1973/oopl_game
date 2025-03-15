@@ -74,7 +74,7 @@ void Character::SwitchToSkill(int skillId) {
 }
 
 
-void Character::ToEwardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies) {
+void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies) {
     float minDistance = std::numeric_limits<float>::max();
     std::shared_ptr<Character> nearestEnemy = nullptr;
 
