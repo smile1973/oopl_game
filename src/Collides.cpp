@@ -2,7 +2,7 @@
 #include "Util/Renderer.hpp"
 #include "Util/Logger.hpp"
 
-bool Character::IfCollides(const std::shared_ptr<Character>& other, float Distance) const{
+bool Character::IfCollides(const std::shared_ptr<Character>& other, const float Distance) const{
     if (!other) return false;
     // 取得當前角色和另一個角色的位置
     glm::vec2 pos1 = this->GetPosition();
@@ -13,7 +13,7 @@ bool Character::IfCollides(const std::shared_ptr<Character>& other, float Distan
     return isColliding;
 }
 
-bool Character::IfCirclesCollide(const std::shared_ptr<Character>& other, float Distance) const {
+bool Character::IfCirclesCollide(const std::shared_ptr<Character>& other, const float Distance) const {
     if (!other) return false;
     // 判斷是否碰撞
     return glm::distance(this->GetPosition(), other->GetPosition()) < Distance ;

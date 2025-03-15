@@ -26,7 +26,7 @@ void App::Update() {
     }
 
     // 角色移動
-    const float moveSpeed = 6.0f; // 調整移動速度
+    constexpr float moveSpeed = 6.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
 
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
@@ -67,7 +67,6 @@ void App::Update() {
             for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                 if (m_Rabbit->IfCirclesCollide(enemy, 200)) {
                     enemy->TakeDamage(5);
-                    m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
                 }
             }
             m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
@@ -103,7 +102,6 @@ void App::Update() {
                 }
             }
             m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
-
         }
     }
     m_CKeyDown = Util::Input::IsKeyPressed(Util::Keycode::C);
@@ -130,16 +128,6 @@ void App::Update() {
     // 更新兔子角色
     m_Rabbit->Update();
 
-    // 更新敵人血條
-    // if (m_Enemy->GetVisibility()){
-    //     for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-    //         enemy->DrawHealthBar();
-    //     }
-    //     Enemy::s_HealthBarYPositions.clear();
-    //     m_Onward->SetVisible(false);
-    // }else {
-    //     m_Onward->SetVisible(true);
-    // }
     // 更新敵人血條，是否允許前進
     for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
         enemy->DrawHealthBar();
@@ -164,7 +152,7 @@ void App::Update() {
     // 測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             // m_Enemy->MoveToPosition(glm::vec2(1.0f, 0.0f), 3.0f);
             m_Enemy->MovePosition(glm::vec2(-100.0f, 100.0f), 1.0f);
         }

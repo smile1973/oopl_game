@@ -28,6 +28,7 @@ public:
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     void SetInversion() { m_Transform.scale.x *= -1; } // 設定左右反轉角色
+
     void TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies); // 朝向最近的敵人
 
     // 技能

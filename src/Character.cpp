@@ -75,12 +75,15 @@ void Character::SwitchToSkill(int skillId) {
 
 
 void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies) {
+    if (m_Enemies.empty()) return;
+
     float minDistance = std::numeric_limits<float>::max();
     std::shared_ptr<Character> nearestEnemy = nullptr;
+    const glm::vec2 currentPosition = this->GetPosition();
 
     for (const auto& enemy : m_Enemies) {
         if (enemy->GetVisibility()) {
-            float distance = glm::distance(this->GetPosition(), enemy->GetPosition());
+            float distance = glm::distance(currentPosition, enemy->GetPosition());
             if (distance < minDistance) {
                 minDistance = distance;
                 nearestEnemy = enemy;
@@ -89,7 +92,7 @@ void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>
     }
 
     if (nearestEnemy) {
-        if (nearestEnemy->GetPosition().x > this->GetPosition().x) {
+        if (nearestEnemy->GetPosition().x > currentPosition.x) {
             LOG_DEBUG("Towards the Right");
             m_Transform.scale.x = 0.5f;
         } else {

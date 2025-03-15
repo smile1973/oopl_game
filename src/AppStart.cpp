@@ -57,10 +57,6 @@ void App::Start() {
 
     // 初始化敵人，設定圖片、位置與初始可見狀態
     m_Enemy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
-    m_Enemy -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
-    m_Enemy->SetZIndex(5);
-    m_Enemy->SetPosition({197.5f, -3.5f});
-    m_Enemy->SetVisible(false);
     m_Root.AddChild(m_Enemy);
 
     // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態
@@ -70,10 +66,6 @@ void App::Start() {
         enemyImages.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_valedictorian/hb_bird_valedictorian_idle_" + std::to_string(i+1) + ".png");
     }
     m_Enemy_bird_valedictorian = std::make_shared<Enemy>("bird_valedictorian",120, enemyImages);
-    m_Enemy_bird_valedictorian -> m_Transform.scale = {0.5f, 0.5f};
-    m_Enemy_bird_valedictorian->SetPosition({197.5f, -103.5f});
-    m_Enemy_bird_valedictorian->SetZIndex(5);
-    m_Enemy_bird_valedictorian->SetVisible(false);
     m_Root.AddChild(m_Enemy_bird_valedictorian);
 
     // 初始化敵人(DragonSilver)，設定圖片、位置與初始閒置狀態
@@ -83,18 +75,12 @@ void App::Start() {
         enemyImages2.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_idle_" + std::to_string(i+1) + ".png");
     }
     m_Enemy_dragon_silver = std::make_shared<Enemy>("dragon_silver",120, enemyImages2);
-    m_Enemy_dragon_silver -> m_Transform.scale = {0.5f, 0.5f};
-    m_Enemy_dragon_silver->SetPosition({197.5f, -103.5f});
-    m_Enemy_dragon_silver->SetZIndex(5);
-    m_Enemy_dragon_silver->SetVisible(false);
     m_Root.AddChild(m_Enemy_dragon_silver);
 
     m_PRM = std::make_shared<PhaseManager>();
     m_Root.AddChildren(m_PRM->GetChildren());
 
     m_Onward = std::make_shared<Enemy>("Onward",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
-    m_Onward -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
-    m_Onward->SetZIndex(5);
     m_Onward->SetPosition({420.0f, 180.0f});
     m_Onward->SetVisible(true);
     m_Root.AddChild(m_Onward);
