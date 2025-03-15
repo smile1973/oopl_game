@@ -28,7 +28,10 @@ private:
      */
     static std::string ImagePath(int phase) {
         return (phase == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
-                  (phase == 2) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" :
+                  (phase == 2) ? GA_RESOURCE_DIR "/Image/Background/bg_2.png" :
+                  (phase == 3) ? GA_RESOURCE_DIR "/Image/Background/bg_3.png" :
+                  (phase == 4) ? GA_RESOURCE_DIR "/Image/Background/bg_4.png" :
+                  (phase == 5) ? GA_RESOURCE_DIR "/Image/Background/bg_5.png" :
                   (phase % 2 == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
                   (phase % 2 == 0) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" : GA_RESOURCE_DIR "/Image/Background/bg.png";
     }
