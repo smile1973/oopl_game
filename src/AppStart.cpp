@@ -80,6 +80,11 @@ void App::Start() {
     m_PRM = std::make_shared<PhaseManager>();
     m_Root.AddChildren(m_PRM->GetChildren());
 
+    // m_CurrentState = State::UPDATE;
+    m_MainPhase = MainPhase::INITIAL_SCENE;
+    m_SubPhaseIndex = 0;
+    m_CurrentSubPhase = SubPhase::BATTLE;
+
     m_Onward = std::make_shared<Enemy>("Onward",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
     m_Onward->SetPosition({420.0f, 180.0f});
     m_Onward->SetVisible(true);

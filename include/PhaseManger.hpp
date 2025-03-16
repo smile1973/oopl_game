@@ -2,7 +2,6 @@
 #define PHASE_MANAGER_HPP
 
 #include "Util/GameObject.hpp"
-#include "Character.hpp"
 #include "Background.hpp"
 
 /**
@@ -22,13 +21,38 @@ public:
     }
 
     /**
-     * @brief 進入下一階段。
+     * @brief 進入下一小關。
+     * @return bool 如果所有小關都完成則返回true，否則返回false。
      */
-    void NextPhase();
+    bool NextSubPhase();
+
+    /**
+     * @brief 進入下一大關。
+     */
+    void NextMainPhase();
+
+    /**
+     * @brief 獲取當前大關索引。
+     * @return 當前大關索引 (0-5)。
+     */
+    [[nodiscard]] int GetCurrentMainPhase() const { return m_MainPhase; }
+
+    /**
+     * @brief 獲取當前小關索引。
+     * @return 當前小關索引 (0-4)。
+     */
+    [[nodiscard]] int GetCurrentSubPhase() const { return m_SubPhase; }
+
+    /**
+     * @brief 獲取背景對象。
+     * @return 背景對象的共享指針。
+     */
+    [[nodiscard]] std::shared_ptr<BackgroundImage> GetBackground() const { return m_Background; }
 
 private:
     std::shared_ptr<BackgroundImage> m_Background; ///< 背景物件
-    int m_Phase = 1; ///< 當前階段計數器
+    int m_MainPhase = 0; ///< 當前大關索引 (0-5)
+    int m_SubPhase = 0;  ///< 當前小關索引 (0-4)
 };
 
 #endif // PHASE_MANAGER_HPP

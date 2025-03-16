@@ -1,4 +1,3 @@
-
 #ifndef BACKGROUND_IMAGE_HPP
 #define BACKGROUND_IMAGE_HPP
 
@@ -12,28 +11,39 @@
 class BackgroundImage : public Util::GameObject {
 public:
     BackgroundImage() : GameObject(
-        std::make_unique<Util::Image>(GA_RESOURCE_DIR "/Image/Background/bg_black.png"), -10) {
+        std::make_unique<Util::Image>(GA_RESOURCE_DIR "/Image/Background/bg.png"), -10) {
     }
 
-    void NextPhase(int phase) const{
+    enum class MainPhaseType {
+        INITIAL_SCENE = 0,
+        KINGDOM_OUTSKIRTS = 1,
+        SCHOLARS_NEST = 2,
+        KINGS_ARSENAL = 3,
+        RED_DARKHOUSE = 4,
+        CHURCHMOUSE_STREETS = 5
+    };
+
+    void SetMainPhase(MainPhaseType mainPhase) const {
         auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
-        temp->SetImage(ImagePath(phase));
+        temp->SetImage(ImagePath(static_cast<int>(mainPhase)));
     }
 
 private:
     /**
-     * @brief 取得對應階段的背景圖片路徑。
-     * @param phase 當前遊戲階段。
+     * @brief 取得對應大關的背景圖片路徑。
+     * @param mainPhase 當前遊戲大關。
      * @return 對應的圖片路徑。
      */
-    static std::string ImagePath(int phase) {
-        return (phase == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
-                  (phase == 2) ? GA_RESOURCE_DIR "/Image/Background/bg_2.png" :
-                  (phase == 3) ? GA_RESOURCE_DIR "/Image/Background/bg_3.png" :
-                  (phase == 4) ? GA_RESOURCE_DIR "/Image/Background/bg_4.png" :
-                  (phase == 5) ? GA_RESOURCE_DIR "/Image/Background/bg_5.png" :
-                  (phase % 2 == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
-                  (phase % 2 == 0) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" : GA_RESOURCE_DIR "/Image/Background/bg.png";
+    static std::string ImagePath(const int mainPhase) {
+        switch (mainPhase) {
+            case 0: return GA_RESOURCE_DIR "/Image/Background/bg_0.png";
+            case 1: return GA_RESOURCE_DIR "/Image/Background/bg_1.png";
+            case 2: return GA_RESOURCE_DIR "/Image/Background/bg_2.png";
+            case 3: return GA_RESOURCE_DIR "/Image/Background/bg_3.png";
+            case 4: return GA_RESOURCE_DIR "/Image/Background/bg_4.png";
+            case 5: return GA_RESOURCE_DIR "/Image/Background/bg_5.png";
+            default: return GA_RESOURCE_DIR "/Image/Background/bg_0.png";
+        }
     }
 };
 

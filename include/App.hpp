@@ -6,7 +6,6 @@
 #include "Util/Renderer.hpp"
 #include "Character.hpp"
 #include "Enemy.hpp"
-// #include "BackGround.hpp"
 #include "PhaseManger.hpp" // 階段資源管理
 #include "Effect/EffectManager.hpp"
 
@@ -29,27 +28,42 @@ public:
 private:
     // 執行有效的任務，內部函式
     void ValidTask();
+    void NextSubPhase();    // 進入下一個小關
+    void NextMainPhase();   // 進入下一個大關
+    void SetupPhase();      // 設置關卡配置
 
-    enum class Phase {
-        START,
-        BATTLE_1,
-        BATTLE_2,
-        BATTLE_3,
-        BATTLE_4,
-        STORE,
+    // 大關類型
+    enum class MainPhase {
+        INITIAL_SCENE,        // 初始場景
+        KINGDOM_OUTSKIRTS,    // 第1大關
+        SCHOLARS_NEST,        // 第2大關
+        KINGS_ARSENAL,        // 第3大關
+        RED_DARKHOUSE,        // 第4大關
+        CHURCHMOUSE_STREETS   // 第5大關
     };
 
+    // 小關類型
+    enum class SubPhase {
+        BATTLE,     // 戰鬥
+        // BATTLE_1,   // 戰鬥1
+        // BATTLE_2,   // 戰鬥2
+        // BATTLE_3,   // 戰鬥3
+        // BATTLE_4,   // 戰鬥4
+        TREASURE,   // 寶箱
+        STORE       // 商店
+    };
 
     State m_CurrentState = State::START;
-    Phase m_Phase = Phase::START; // 當前階段
+    MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
+    int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
+    SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型
 
     Util::Renderer m_Root;
-    // std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
-    std::shared_ptr<Character> m_Rabbit; // 定義兔子
-    std::shared_ptr<Enemy> m_Enemy;   // 定義敵人
-    std::shared_ptr<Enemy> m_Enemy_bird_valedictorian;   // 定義敵人
-    std::shared_ptr<Enemy> m_Enemy_dragon_silver;   // 定義敵人
-    std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器
+    std::shared_ptr<Character> m_Rabbit;               // 定義兔子
+    std::shared_ptr<Enemy> m_Enemy;                    // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_bird_valedictorian; // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_dragon_silver;      // 定義敵人
+    std::shared_ptr<PhaseManager> m_PRM;               // 階段資源管理器
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
