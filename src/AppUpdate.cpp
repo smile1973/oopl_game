@@ -53,6 +53,7 @@ void App::Update() {
     m_Enemies.push_back(m_Enemy);
     m_Enemies.push_back(m_Enemy_bird_valedictorian);
     m_Enemies.push_back(m_Enemy_dragon_silver);
+    m_Enemies.push_back(m_Enemy_treasure);
     std::vector<std::shared_ptr<Character>> m_enemies_characters;
     for (const auto& enemy : m_Enemies) {
         m_enemies_characters.push_back(enemy); // 隱式轉換 std::shared_ptr<Enemy> 到 std::shared_ptr<Character>
@@ -154,9 +155,11 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
             // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             // m_Enemy->MoveToPosition(glm::vec2(1.0f, 0.0f), 3.0f);
-            m_Enemy->MovePosition(glm::vec2(-100.0f, 100.0f), 1.0f);
-        }
-    }
+            // m_Enemy->MovePosition(glm::vec2(-100.0f, 100.0f), 1.0f);
+            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                if (m_Rabbit->IfCirclesCollide(enemy, 1000)) {
+                    enemy->TakeDamage(1000);
+                }}}}
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
 

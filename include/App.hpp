@@ -60,6 +60,8 @@ private:
     std::shared_ptr<Enemy> m_Enemy;                    // 定義敵人
     std::shared_ptr<Enemy> m_Enemy_bird_valedictorian; // 定義敵人
     std::shared_ptr<Enemy> m_Enemy_dragon_silver;      // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_treasure;           // 定義寶箱
+    std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
     std::shared_ptr<PhaseManager> m_PRM;               // 階段資源管理器
 
     bool m_EnterDown = false;

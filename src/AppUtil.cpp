@@ -22,11 +22,6 @@ void App::ValidTask() {
     switch (m_CurrentSubPhase) {
         case SubPhase::BATTLE:
         case SubPhase::BOSS:
-            if (m_Enemy->GetVisibility()) {
-                LOG_DEBUG("The enemy is still alive");
-                break;
-            }
-
             LOG_DEBUG("--Battle is over--");
             NextSubPhase();
             break;
@@ -54,20 +49,16 @@ void App::NextSubPhase() {
         return;
     }
 
-    m_SubPhaseIndex++;
-
     // 根據小關索引設置固定的小關類型
     switch (m_SubPhaseIndex) {
         case 0:
             m_CurrentSubPhase = SubPhase::STORE;
             LOG_DEBUG("Next SubPhase: STORE");
-            // 隱藏所有敵人
-            m_Enemy->SetVisible(false);
-            m_Enemy_bird_valedictorian->SetVisible(false);
-            m_Enemy_dragon_silver->SetVisible(false);
+            m_Enemy_shopkeeper->SetVisible(true);
             m_Rabbit->SetPosition({0.0f, 0.0f});
         break;
         case 1:
+            m_Enemy_shopkeeper->SetVisible(false);
         case 2:
         case 3:
             m_CurrentSubPhase = SubPhase::BATTLE;
@@ -77,10 +68,8 @@ void App::NextSubPhase() {
         case 4:
             m_CurrentSubPhase = SubPhase::TREASURE;
             LOG_DEBUG("Next SubPhase: TREASURE");
-            // 隱藏所有敵人
-            m_Enemy->SetVisible(false);
-            m_Enemy_bird_valedictorian->SetVisible(false);
-            m_Enemy_dragon_silver->SetVisible(false);
+            m_Enemy_treasure->SetVisible(true);
+            m_Enemy_treasure->SetHealth();
             m_Rabbit->SetPosition({0.0f, 0.0f});
         break;
         case 5:
@@ -92,6 +81,8 @@ void App::NextSubPhase() {
             LOG_DEBUG("Wrong SubPhase Index: {}", m_SubPhaseIndex);
         break;
     }
+
+    m_SubPhaseIndex++;
 }
 
 /**

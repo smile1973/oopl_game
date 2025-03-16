@@ -77,6 +77,24 @@ void App::Start() {
     m_Enemy_dragon_silver = std::make_shared<Enemy>("dragon_silver",120, enemyImages2);
     m_Root.AddChild(m_Enemy_dragon_silver);
 
+    // 初始化敵人(Shopkeeper)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> ShopkeeperImages2;
+    ShopkeeperImages2.reserve(2);
+    for (int i = 0; i < 2; ++i) {
+        ShopkeeperImages2.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/shopkeeper/cat_shopkeeper_split_" + std::to_string(i+1) + ".png");
+    }
+    m_Enemy_shopkeeper = std::make_shared<Enemy>("shopkeeper",120, ShopkeeperImages2);
+    m_Enemy_shopkeeper->SetPosition({200.0f, -20.0f});
+    m_Enemy_shopkeeper->SetInversion();
+    m_Root.AddChild(m_Enemy_shopkeeper);
+
+    // 初始化寶箱(Treasure)，設定圖片、位置與初始可見狀態
+    m_Enemy_treasure = std::make_shared<Enemy>("treasure",30,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/treasure.png"});
+    m_Enemy_treasure->SetPosition({200.0f, -20.0f});
+    m_Enemy_treasure->SetInversion();
+    m_Root.AddChild(m_Enemy_treasure);
+
+
     m_PRM = std::make_shared<PhaseManager>();
     m_Root.AddChildren(m_PRM->GetChildren());
 
