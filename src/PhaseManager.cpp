@@ -10,8 +10,8 @@ bool PhaseManager::NextSubPhase() {
     m_SubPhase++;
     LOG_DEBUG("Into SubPhase: {}-{}", m_MainPhase, m_SubPhase);
 
-    // 如果完成了所有5個小關，返回true表示應該進入下一大關
-    return m_SubPhase >= 5;
+    // 如果完成了所有6個小關，返回true表示應該進入下一大關
+    return m_SubPhase >= MAX_SUB_PHASES;
 }
 
 void PhaseManager::NextMainPhase() {
@@ -32,5 +32,5 @@ void PhaseManager::NextMainPhase() {
     LOG_DEBUG("--{}--", phaseName);
 
     // 設置新的背景
-    m_Background->SetMainPhase(static_cast<BackgroundImage::MainPhaseType>(m_MainPhase));
+    m_Background->SetMainPhase(phaseType);
 }

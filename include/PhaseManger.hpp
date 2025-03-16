@@ -53,6 +53,7 @@ private:
     std::shared_ptr<BackgroundImage> m_Background; ///< 背景物件
     int m_MainPhase = 0; ///< 當前大關索引 (0-5)
     int m_SubPhase = 0;  ///< 當前小關索引 (0-4)
+    static constexpr int MAX_SUB_PHASES = 6; // 最大小關數量常數
 };
 
 #endif // PHASE_MANAGER_HPP

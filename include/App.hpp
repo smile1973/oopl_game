@@ -44,13 +44,10 @@ private:
 
     // 小關類型
     enum class SubPhase {
+        STORE,      // 商店
         BATTLE,     // 戰鬥
-        // BATTLE_1,   // 戰鬥1
-        // BATTLE_2,   // 戰鬥2
-        // BATTLE_3,   // 戰鬥3
-        // BATTLE_4,   // 戰鬥4
         TREASURE,   // 寶箱
-        STORE       // 商店
+        BOSS        // 頭目戰
     };
 
     State m_CurrentState = State::START;

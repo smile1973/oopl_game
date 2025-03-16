@@ -21,7 +21,7 @@ void App::ValidTask() {
     // 處理小關類型
     switch (m_CurrentSubPhase) {
         case SubPhase::BATTLE:
-            // 如果戰鬥還在進行中
+        case SubPhase::BOSS:
             if (m_Enemy->GetVisibility()) {
                 LOG_DEBUG("The enemy is still alive");
                 break;
@@ -32,13 +32,11 @@ void App::ValidTask() {
             break;
 
         case SubPhase::TREASURE:
-            // 寶箱關卡
             LOG_DEBUG("--Treasure opened--");
             NextSubPhase();
             break;
 
         case SubPhase::STORE:
-            // 商店關卡
             LOG_DEBUG("--Leave the store--");
             NextSubPhase();
             break;
@@ -58,19 +56,24 @@ void App::NextSubPhase() {
 
     m_SubPhaseIndex++;
 
-    // 隨機決定下一個小關類型
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(0, 5);
-    switch (distrib(gen)) {
+    // 根據小關索引設置固定的小關類型
+    switch (m_SubPhaseIndex) {
         case 0:
+            m_CurrentSubPhase = SubPhase::STORE;
+            LOG_DEBUG("Next SubPhase: STORE");
+            // 隱藏所有敵人
+            m_Enemy->SetVisible(false);
+            m_Enemy_bird_valedictorian->SetVisible(false);
+            m_Enemy_dragon_silver->SetVisible(false);
+            m_Rabbit->SetPosition({0.0f, 0.0f});
+        break;
         case 1:
         case 2:
         case 3:
             m_CurrentSubPhase = SubPhase::BATTLE;
-            LOG_DEBUG("Next SubPhase: BATTLE");
+            LOG_DEBUG("Next SubPhase: BATTLE {}", m_SubPhaseIndex);
             SetupPhase();
-            break;
+        break;
         case 4:
             m_CurrentSubPhase = SubPhase::TREASURE;
             LOG_DEBUG("Next SubPhase: TREASURE");
@@ -79,17 +82,15 @@ void App::NextSubPhase() {
             m_Enemy_bird_valedictorian->SetVisible(false);
             m_Enemy_dragon_silver->SetVisible(false);
             m_Rabbit->SetPosition({0.0f, 0.0f});
-            break;
+        break;
         case 5:
-            m_CurrentSubPhase = SubPhase::STORE;
-            LOG_DEBUG("Next SubPhase: STORE");
-            // 隱藏所有敵人
-            m_Enemy->SetVisible(false);
-            m_Enemy_bird_valedictorian->SetVisible(false);
-            m_Enemy_dragon_silver->SetVisible(false);
-            m_Rabbit->SetPosition({0.0f, 0.0f});
-            break;
-        default: ;
+            m_CurrentSubPhase = SubPhase::BOSS;
+            LOG_DEBUG("Next SubPhase: BOSS");
+            SetupPhase();
+        break;
+        default:
+            LOG_DEBUG("Wrong SubPhase Index: {}", m_SubPhaseIndex);
+        break;
     }
 }
 
@@ -111,7 +112,7 @@ void App::NextMainPhase() {
     }
 
     m_SubPhaseIndex = 0;
-    m_CurrentSubPhase = SubPhase::BATTLE;
+    m_CurrentSubPhase = SubPhase::STORE;
 
     // 切換背景
     m_PRM->NextMainPhase();
@@ -125,7 +126,7 @@ void App::NextMainPhase() {
  */
 void App::SetupPhase() {
     // 只有在戰鬥關卡才需要設置敵人
-    if (m_CurrentSubPhase != SubPhase::BATTLE) {
+    if (m_CurrentSubPhase != SubPhase::BATTLE && m_CurrentSubPhase != SubPhase::BOSS) {
         return;
     }
 
