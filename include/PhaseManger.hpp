@@ -10,7 +10,9 @@
  */
 class PhaseManager {
 public:
-    PhaseManager();
+    PhaseManager() {
+        m_Background = std::make_shared<BackgroundImage>();
+    }
 
     /**
      * @brief 取得場景中的子物件。
@@ -24,7 +26,12 @@ public:
      * @brief 進入下一小關。
      * @return bool 如果所有小關都完成則返回true，否則返回false。
      */
-    bool NextSubPhase();
+    void NextSubPhase();
+
+    /**
+     * @brief 更新小關類型。
+     */
+    void UpdateSubPhaseType();
 
     /**
      * @brief 進入下一大關。
@@ -39,9 +46,15 @@ public:
 
     /**
      * @brief 獲取當前小關索引。
-     * @return 當前小關索引 (0-4)。
+     * @return 當前小關索引 (0-5)。
      */
     [[nodiscard]] int GetCurrentSubPhase() const { return m_SubPhase; }
+
+    /**
+     * @brief 取得對應小關卡的類型編號。
+     * @return 對應的小關卡類型編號 (0-3)。
+     */
+    [[nodiscard]] int GetCurrentSubPhaseType() const { return m_SubPhaseType; }
 
     /**
      * @brief 獲取背景對象。
@@ -53,7 +66,43 @@ private:
     std::shared_ptr<BackgroundImage> m_Background; ///< 背景物件
     int m_MainPhase = 0; ///< 當前大關索引 (0-5)
     int m_SubPhase = 0;  ///< 當前小關索引 (0-4)
-    static constexpr int MAX_SUB_PHASES = 6; // 最大小關數量常數
+    int m_SubPhaseType = 0;  ///< 當前小關類型 (0=STORE, 1=BATTLE, 2=TREASURE, 3=BOSS)
+    static constexpr int m_MaxSubPhase  = 5; // 最大小關數量常數
+    static constexpr int m_MaxMainPhase = 5; // 最大小關數量常數
+
+
+    /**
+     * @brief 取得對應大關卡的名稱。
+     * @param MainPhase 大關卡編號。
+     * @return 對應的大關卡名稱。
+     */
+    static std::string GetMainPhaseName(const int MainPhase) {
+        switch (MainPhase) {
+            case 0: return "INITIAL_SCENE";
+            case 1: return "KINGDOM_OUTSKIRTS";
+            case 2: return "SCHOLARS_NEST";
+            case 3: return "KINGS_ARSENAL";
+            case 4: return "RED_DARKHOUSE";
+            case 5: return "CHURCHMOUSE_STREETS";
+            default: return "Error";
+        }
+    }
+    /**
+     * @brief 取得對應小關卡的類型名稱。
+     * @param SubPhase 小關卡編號。
+     * @return 對應的小關卡類型名稱。
+     */
+    static std::string GetSubPhaseName(const int SubPhase) {
+        switch (SubPhase) {
+            case 0: return "STORE";
+            case 1:
+            case 2:
+            case 3: return "BATTLE";
+            case 4: return "TREASURE";
+            case 5: return "BOSS";
+            default: return "Error";
+        }
+    }
 };
 
 #endif // PHASE_MANAGER_HPP

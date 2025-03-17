@@ -14,18 +14,9 @@ public:
         std::make_unique<Util::Image>(GA_RESOURCE_DIR "/Image/Background/bg_black.png"), -10) {
     }
 
-    enum class MainPhaseType {
-        INITIAL_SCENE = 0,
-        KINGDOM_OUTSKIRTS = 1,
-        SCHOLARS_NEST = 2,
-        KINGS_ARSENAL = 3,
-        RED_DARKHOUSE = 4,
-        CHURCHMOUSE_STREETS = 5
-    };
-
-    void SetMainPhase(MainPhaseType mainPhase) const {
+    void SetBackground(int mainPhase) const {
         auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
-        temp->SetImage(ImagePath(static_cast<int>(mainPhase)));
+        temp->SetImage(ImagePath(mainPhase));
     }
 
 private:

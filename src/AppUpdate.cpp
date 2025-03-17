@@ -159,7 +159,9 @@ void App::Update() {
             for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                 if (m_Rabbit->IfCirclesCollide(enemy, 1000)) {
                     enemy->TakeDamage(1000);
-                }}}}
+                }}
+            ValidTask();
+        }}
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
 

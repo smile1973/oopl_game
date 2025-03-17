@@ -27,33 +27,36 @@ public:
 
 private:
     // 執行有效的任務，內部函式
-    void ValidTask();
+    void ValidTask() const;
     void NextSubPhase();    // 進入下一個小關
     void NextMainPhase();   // 進入下一個大關
-    void SetupPhase();      // 設置關卡配置
+    void SetSubPhase() const;      // 設置關卡配置
+    void SetupStorePhase() const;      // 設置商店關卡配置
+    void SetupTreasurePhase() const;      // 設置寶箱關卡配置
+    void SetupBattlePhase() const;      // 設置戰鬥關卡配置
 
-    // 大關類型
-    enum class MainPhase {
-        INITIAL_SCENE,        // 初始場景
-        KINGDOM_OUTSKIRTS,    // 第1大關
-        SCHOLARS_NEST,        // 第2大關
-        KINGS_ARSENAL,        // 第3大關
-        RED_DARKHOUSE,        // 第4大關
-        CHURCHMOUSE_STREETS   // 第5大關
-    };
-
-    // 小關類型
-    enum class SubPhase {
-        STORE,      // 商店
-        BATTLE,     // 戰鬥
-        TREASURE,   // 寶箱
-        BOSS        // 頭目戰
-    };
+    // // 大關類型
+    // enum class MainPhase {
+    //     INITIAL_SCENE,        // 初始場景
+    //     KINGDOM_OUTSKIRTS,    // 第1大關
+    //     SCHOLARS_NEST,        // 第2大關
+    //     KINGS_ARSENAL,        // 第3大關
+    //     RED_DARKHOUSE,        // 第4大關
+    //     CHURCHMOUSE_STREETS   // 第5大關
+    // };
+    //
+    // // 小關類型
+    // enum class SubPhase {
+    //     STORE,      // 商店
+    //     BATTLE,     // 戰鬥
+    //     TREASURE,   // 寶箱
+    //     BOSS        // 頭目戰
+    // };
 
     State m_CurrentState = State::START;
-    MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
-    int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
-    SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型
+    // MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
+    // int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
+    // SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型
 
     Util::Renderer m_Root;
     std::shared_ptr<Character> m_Rabbit;               // 定義兔子
