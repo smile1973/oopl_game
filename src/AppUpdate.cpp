@@ -6,8 +6,14 @@
 #include "Util/Time.hpp"
 #include "Effect/EffectManager.hpp"
 #include "Effect/EffectFactory.hpp"
+#include "Attack/EnemyAttackController.hpp"
+#include "Attack/CircleAttack.hpp"
+#include "Attack/RectangleAttack.hpp"
 
 void App::Update() {
+    // 獲取時間增量
+    float deltaTime = Util::Time::GetDeltaTimeMs() / 1000.0f;
+
     // 處理空格鍵 - 測試特效
     if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
         auto cursorPos = Util::Input::GetCursorPosition();
@@ -93,8 +99,26 @@ void App::Update() {
     }
     m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);
 
+    // 更新攻擊控制器 (如果處於活動狀態)
+    if (m_EnemyAttackController && m_Enemy->GetVisibility()) {
+        m_EnemyAttackController->Update(deltaTime, m_Rabbit);
+
+        // 檢查是否所有攻擊模式都已完成，如果是則循環
+        if (m_EnemyAttackController->IsAllPatternsCompleted()) {
+            // 根據當前關卡重新初始化攻擊模式
+            if (m_Phase == Phase::BATTLE_1) {
+                m_EnemyAttackController->InitBattle1Patterns();
+            } else if (m_Phase == Phase::BATTLE_2) {
+                m_EnemyAttackController->InitBattle2Patterns();
+            }
+
+            // 重新啟動攻擊控制器
+            m_EnemyAttackController->Start();
+        }
+    }
+
     // 更新特效管理器
-    Effect::EffectManager::GetInstance().Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
+    Effect::EffectManager::GetInstance().Update(deltaTime);
 
     // 更新兔子角色
     m_Rabbit->Update();
@@ -103,10 +127,11 @@ void App::Update() {
     if (m_Enemy->GetVisibility()){
         m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
         m_Onward->SetVisible(false);
-    }else {
+    } else {
         m_Onward->SetVisible(true);
     }
 
+    // 按I鍵測試多個敵人攻擊特效
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
         for (int i = 0; i < 3; ++i) {
             auto eff = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::ENEMY_ATTACK_1);
@@ -116,17 +141,24 @@ void App::Update() {
         }
     }
 
-    // 測試矩形雷射特效 - 按下 1 鍵
-    if (Util::Input::IsKeyDown(Util::Keycode::NUM_1)) {
-        auto cursorPos = Util::Input::GetCursorPosition();
-        auto effect = Effect::EffectManager::GetInstance().PlayEffect(
-            Effect::EffectType::RECT_LASER,
-            cursorPos,
-            20.0f, // z-index
-            2.0f   // 持續時間
-        );
-        LOG_DEBUG("Created RECT_LASER effect at position: ({}, {})", cursorPos.x, cursorPos.y);
+    // 按B鍵手動啟動Battle 1攻擊模式
+    if (Util::Input::IsKeyDown(Util::Keycode::B)) {
+        if (m_EnemyAttackController) {
+            m_EnemyAttackController->InitBattle1Patterns();
+            m_EnemyAttackController->Start();
+            LOG_DEBUG("Manual start Battle 1 attack patterns");
+        }
     }
+
+    // 按M鍵手動啟動Battle 2攻擊模式
+    if (Util::Input::IsKeyDown(Util::Keycode::M)) {
+        if (m_EnemyAttackController) {
+            m_EnemyAttackController->InitBattle2Patterns();
+            m_EnemyAttackController->Start();
+            LOG_DEBUG("Manual start Battle 2 attack patterns");
+        }
+    }
+
     // 關卡跳轉測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
@@ -138,32 +170,6 @@ void App::Update() {
         ValidTask();
     }
 
-
-    // 測試矩形光束特效 - 按下 2 鍵
-    if (Util::Input::IsKeyDown(Util::Keycode::NUM_2)) {
-        auto cursorPos = Util::Input::GetCursorPosition();
-
-        // 獲取標準自動旋轉特效
-        auto effect1 = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
-        auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect1->GetBaseShape());
-        rectangleShape->SetRotation(0.0f);
-        effect1->SetDuration(10.0f);
-        effect1->Play(cursorPos, 20.0f);
-        LOG_DEBUG("Created standard auto-rotating RECT_BEAM effect at position: ({}, {})", cursorPos.x, cursorPos.y);
-
-        // 創建一個新的自定義光束特效 - 從工廠獲取類似的基本特效
-        auto effect2 = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
-        if (auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect2->GetBaseShape())) {
-            // 設置90度旋轉 (π/2 弧度)
-            rectangleShape->SetRotation(1.57f);
-            effect2->SetDuration(10.0f);
-            // 可選：調整旋轉速度
-            // rectangleShape->SetAutoRotation(true, 1.0f);  // 減慢旋轉速度
-        }
-
-        // 放置在與第一個光束有點偏移的位置
-        effect2->Play(cursorPos, 25.0f);
-    }
     // 更新所有渲染對象
     m_Root.Update();
 }

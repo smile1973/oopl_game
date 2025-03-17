@@ -90,21 +90,21 @@ namespace Effect {
             }
 
             case EffectType::RECT_LASER: {
-                // 矩形雷射：實心矩形，邊緣發光，會移動
+                // 矩形雷射：實心矩形，邊緣發光
                 auto rectangleShape = std::make_shared<Shape::RectangleShape>(
-                    glm::vec2(0.8f, 0.1f), // 寬高比例
+                    glm::vec2(1.0f, 0.1f), // 寬高比例
                     0.0f,                  // 粗細 (實心)
                     0.0f,                  // 初始旋轉角度
                     2.0f,                  // 持續時間
                     false,                 // 不啟用自動旋轉
                     0.0f                   // 旋轉速度
                 );
-                rectangleShape->SetColor(Util::Color(0.2f, 0.8f, 1.0f, 0.7f)); // 半透明藍色
-                rectangleShape->SetSize({800, 200}); // 效果尺寸
+                rectangleShape->SetColor(Util::Color(1.0f, 0.7f, 0.4f, 0.3f));
+                rectangleShape->SetSize({2560, 2560}); // 效果尺寸
 
                 effect = std::make_shared<CompositeEffect>(rectangleShape);
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.01f, Util::Color(0.5f, 1.0f, 1.0f, 1.0f)));
-                effect->SetMovementModifier(Modifier::MovementModifier(true, 800.0f, 1200.0f, {1.0f, 0.0f}));
+                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.01f, Util::Color(1.0f, 0.0f, 1.0f, 0.9f)));
+                // effect->SetMovementModifier(Modifier::MovementModifier(true, 800.0f, 1200.0f, {1.0f, 0.0f}));
                 break;
             }
 

@@ -26,6 +26,20 @@ file(GLOB_RECURSE SRC_FILES src/*.cpp)
 file(GLOB_RECURSE HEADER_FILES include/*.hpp)
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
+        include/Attack/Attack.hpp
+        include/Attack/LaserAttack.hpp
+        include/Attack/AttackPattern.hpp
+        src/Attack/Attack.cpp
+        src/Attack/LaserAttack.cpp
+        src/Attack/AttackPattern.cpp
+        include/Attack/CircleAttack.hpp
+        src/Attack/CircleAttack.cpp
+        include/Attack/RectangleAttack.hpp
+        src/Attack/RectangleAttack.cpp
+        include/Attack/AttackPatternFactory.hpp
+        src/Attack/AttackPatternFactory.cpp
+        include/Attack/EnemyAttackController.hpp
+        src/Attack/EnemyAttackController.cpp
 )
 
 if(MSVC)

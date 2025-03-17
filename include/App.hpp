@@ -9,6 +9,7 @@
 // #include "BackGround.hpp"
 #include "PhaseManger.hpp" // 階段資源管理
 #include "Effect/EffectManager.hpp"
+#include "Attack/EnemyAttackController.hpp" // 新增的敵人攻擊控制器
 
 class App {
 public:
@@ -31,7 +32,7 @@ private:
     void ValidTask();
 
 
-//private:
+    //private:
     enum class Phase {
         START,
         BATTLE_1,
@@ -50,6 +51,7 @@ private:
     std::shared_ptr<Character> m_Rabbit; // 定義兔子
     std::shared_ptr<Enemy> m_Enemy;   // 定義敵人
     std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器
+    std::shared_ptr<EnemyAttackController> m_EnemyAttackController; // 敵人攻擊控制器
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;

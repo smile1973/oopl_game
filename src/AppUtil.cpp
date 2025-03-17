@@ -17,6 +17,13 @@ void App::ValidTask() {
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth();
             m_PRM->NextPhase();
+
+            // 初始化並啟動Battle 1的攻擊模式
+            if (m_EnemyAttackController) {
+                m_EnemyAttackController->Reset();
+                m_EnemyAttackController->InitBattle1Patterns();
+                m_EnemyAttackController->Start();
+            }
         break;
         case Phase::BATTLE_1:
             if (m_Enemy->IfAlive()) {
@@ -30,6 +37,13 @@ void App::ValidTask() {
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth();
             m_PRM->NextPhase();
+
+            // 初始化並啟動Battle 2的攻擊模式
+            if (m_EnemyAttackController) {
+                m_EnemyAttackController->Reset();
+                m_EnemyAttackController->InitBattle2Patterns();
+                m_EnemyAttackController->Start();
+            }
         break;
         case Phase::BATTLE_2:
             if (m_Enemy->IfAlive()) {
@@ -43,6 +57,11 @@ void App::ValidTask() {
             m_Enemy->SetVisible(true);
             m_Enemy->SetHealth(30.0f);
             m_PRM->NextPhase();
+
+            // 停止攻擊控制器(因為尚未實現BATTLE_3的攻擊模式)
+            if (m_EnemyAttackController) {
+                m_EnemyAttackController->Reset();
+            }
         break;
         case Phase::BATTLE_3:
             if (m_Enemy->IfAlive()) {

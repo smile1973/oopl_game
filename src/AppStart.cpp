@@ -2,6 +2,7 @@
 
 #include "Util/Logger.hpp"
 #include "Effect/EffectManager.hpp"
+#include "Attack/EnemyAttackController.hpp"
 
 void App::Start() {
     LOG_TRACE("Start");
@@ -57,11 +58,14 @@ void App::Start() {
 
     // 初始化敵人，設定圖片、位置與初始可見狀態
     m_Enemy = std::make_shared<Enemy>(100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
-    m_Enemy -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
+    m_Enemy->m_Transform.scale = glm::vec2 {0.5f, 0.5f};
     m_Enemy->SetZIndex(5);
     m_Enemy->SetPosition({197.5f, -3.5f});
     m_Enemy->SetVisible(false);
     m_Root.AddChild(m_Enemy);
+
+    // 初始化敵人攻擊控制器
+    m_EnemyAttackController = std::make_shared<EnemyAttackController>(m_Enemy);
 
     // m_Background = std::make_shared<BackgroundImage>();
     // m_Root.AddChild(m_Background);
@@ -70,7 +74,7 @@ void App::Start() {
     m_Root.AddChildren(m_PRM->GetChildren());
 
     m_Onward = std::make_shared<Enemy>(100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
-    m_Onward -> m_Transform.scale = glm::vec2 {0.5f, 0.5f};
+    m_Onward->m_Transform.scale = glm::vec2 {0.5f, 0.5f};
     m_Onward->SetZIndex(5);
     m_Onward->SetPosition({420.0f, 180.0f});
     m_Onward->SetVisible(true);
