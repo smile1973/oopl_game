@@ -15,9 +15,9 @@ Character::Character(const std::vector<std::string>& ImagePathSet) {
 }
 
 void Character::AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
-                        int duration) {
+                        int duration, float Cooldown) {
     // 創建並儲存新技能
-    auto newSkill = std::make_shared<Skill>(skillId, skillImageSet, duration);
+    auto newSkill = std::make_shared<Skill>(skillId, skillImageSet, duration, Cooldown);
     m_Skills[skillId] = newSkill;
     LOG_DEBUG("Added skill with ID: " + std::to_string(skillId));
 }
@@ -27,8 +27,14 @@ void Character::UseSkill(int skillId) {
         // 檢查技能是否存在
         auto it = m_Skills.find(skillId);
         if (it != m_Skills.end()) {
-            LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
-            SwitchToSkill(skillId);
+            // LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
+            // SwitchToSkill(skillId);
+            if (!it->second->IsOnCooldown()) {
+                LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
+                SwitchToSkill(skillId);
+            } else {
+                LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " is on cooldown! " + std::to_string(it->second->GetRemainingCooldown()));
+            }
         } else {
             LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " not found!");
         }
@@ -36,9 +42,14 @@ void Character::UseSkill(int skillId) {
 }
 
 void Character::Update() {
+    // 更新技能
+    for (auto it = m_Skills.begin(); it != m_Skills.end(); ++it) {
+        it->second->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
+        // LOG_INFO("Skill {} cooldown still {}sec", it->first, it->second->GetRemainingCooldown());
+    }
     if (m_State == State::USING_SKILL && m_CurrentSkill) {
         // 更新技能
-        m_CurrentSkill->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
+        // m_CurrentSkill->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
 
         // 檢查技能是否結束
         if (m_CurrentSkill->IsEnded()) {
@@ -82,4 +93,13 @@ bool Character::IfCollides(const std::shared_ptr<Character>& other, float Distan
     // 簡單的 AABB (Axis-Aligned Bounding Box) 碰撞檢測
     bool isColliding = (abs(pos1.x - pos2.x) < size) && (abs(pos1.y - pos2.y) < size);
     return isColliding;
+}
+
+
+bool Character::IsSkillOnCooldown(int skillId) const {
+    auto it = m_Skills.find(skillId);
+    if (it != m_Skills.end()) {
+        return it->second->IsOnCooldown();
+    }
+    return false;
 }

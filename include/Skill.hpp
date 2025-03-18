@@ -13,7 +13,7 @@ public:
     };
 
     // 構造函數
-    Skill(int skillId, const std::vector<std::string>& imageSet, int duration = 175);
+    Skill(int skillId, const std::vector<std::string>& imageSet, int duration = 175, float Cooldown = 2.0f);
 
     // 取得動畫物件
     std::shared_ptr<Util::Animation> GetAnimation() const { return m_Animation; }
@@ -37,6 +37,11 @@ public:
     void SetEffectRadius(float radius) { m_EffectRadius = radius; }
     void SetEffectColor(const Util::Color& color) { m_EffectColor = color; }
 
+
+    void SetCooldown(const float cooldown) { m_Cooldown = cooldown; }
+    bool IsOnCooldown() const { return m_IsOnCooldown; }
+    float GetRemainingCooldown() const { return m_CurrentCooldown; }
+
 private:
     std::vector<std::string> m_ImagePathSet;
     std::shared_ptr<Util::Animation> m_Animation;
@@ -49,6 +54,11 @@ private:
     Util::Color m_EffectColor = Util::Color::FromName(Util::Colors::WHITE);
     glm::vec2 m_EffectSize = {800, 800};
     std::shared_ptr<Effect::IEffect> m_CurrentEffect = nullptr; // 只是用在追蹤 看之後要不要用
+
+
+    float m_Cooldown = 2.0f;       // 冷卻時間（秒）
+    float m_CurrentCooldown = 0.0f; // 目前冷卻計時器
+    bool m_IsOnCooldown = false;    // 檢查技能是否處於冷卻狀態的
 };
 
 #endif //SKILL_HPP
