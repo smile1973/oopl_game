@@ -34,7 +34,7 @@ public:
     // 技能
     void AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
                  int duration = 175, float Cooldown = 2.0f);
-    void UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
+    bool UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
     virtual void Update();
 
 

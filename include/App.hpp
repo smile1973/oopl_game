@@ -28,8 +28,6 @@ public:
 private:
     // 執行有效的任務，內部函式
     void ValidTask() const;
-    void NextSubPhase();    // 進入下一個小關
-    void NextMainPhase();   // 進入下一個大關
     void SetSubPhase() const;      // 設置關卡配置
     void SetupStorePhase() const;      // 設置商店關卡配置
     void SetupTreasurePhase() const;      // 設置寶箱關卡配置
