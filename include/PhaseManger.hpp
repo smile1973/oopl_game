@@ -2,6 +2,7 @@
 #define PHASE_MANAGER_HPP
 
 #include "Util/GameObject.hpp"
+#include "Character.hpp"
 #include "Background.hpp"
 
 /**

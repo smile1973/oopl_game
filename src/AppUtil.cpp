@@ -1,7 +1,6 @@
 #include "App.hpp"
 
 #include "Util/Logger.hpp"
-#include <random>
 
 /**
  * @brief 驗證當前任務狀態，並切換至適當的階段。
