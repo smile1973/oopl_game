@@ -63,14 +63,14 @@ void App::Update() {
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             LOG_DEBUG("Z Key UP - Skill 1");
-            m_Rabbit->UseSkill(1);
-
-            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                if (m_Rabbit->IfCirclesCollide(enemy, 200)) {
-                    enemy->TakeDamage(5);
+            if(m_Rabbit->UseSkill(1)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCirclesCollide(enemy, 200)) {
+                        enemy->TakeDamage(5);
+                    }
                 }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
-            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
         }
     }
     m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
@@ -79,14 +79,14 @@ void App::Update() {
     if (m_XKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
             LOG_DEBUG("X Key UP - Skill 2");
-            m_Rabbit->UseSkill(2);
-
-            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                if (m_Rabbit->IfCollides(enemy, 200)) {
-                    enemy->TakeDamage(5);
+            if(m_Rabbit->UseSkill(2)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCirclesCollide(enemy, 200)) {
+                        enemy->TakeDamage(5);
+                    }
                 }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
-            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
         }
     }
     m_XKeyDown = Util::Input::IsKeyPressed(Util::Keycode::X);
@@ -95,14 +95,14 @@ void App::Update() {
     if (m_CKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::C)) {
             LOG_DEBUG("C Key UP - Skill 3");
-            m_Rabbit->UseSkill(3);
-
-            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                if (m_Rabbit->IfCollides(enemy, 200)) {
-                    enemy->TakeDamage(5);
+            if(m_Rabbit->UseSkill(3)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCirclesCollide(enemy, 200)) {
+                        enemy->TakeDamage(15);
+                    }
                 }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
-            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
         }
     }
     m_CKeyDown = Util::Input::IsKeyPressed(Util::Keycode::C);
@@ -111,14 +111,14 @@ void App::Update() {
     if (m_VKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
             LOG_DEBUG("V Key UP - Skill 4");
-            m_Rabbit->UseSkill(4);
-
-            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                if (m_Rabbit->IfCollides(enemy, 200)) {
-                    enemy->TakeDamage(15);
+            if(m_Rabbit->UseSkill(4)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCirclesCollide(enemy, 200)) {
+                        enemy->TakeDamage(25);
+                    }
                 }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
-            m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
         }
     }
     m_VKeyDown = Util::Input::IsKeyPressed(Util::Keycode::V);

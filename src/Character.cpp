@@ -22,7 +22,7 @@ void Character::AddSkill(int skillId, const std::vector<std::string>& skillImage
     LOG_DEBUG("Added skill with ID: " + std::to_string(skillId));
 }
 
-void Character::UseSkill(int skillId) {
+bool Character::UseSkill(const int skillId) {
     if (m_State == State::IDLE) {
         // 檢查技能是否存在
         auto it = m_Skills.find(skillId);
@@ -32,13 +32,14 @@ void Character::UseSkill(int skillId) {
             if (!it->second->IsOnCooldown()) {
                 LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
                 SwitchToSkill(skillId);
-            } else {
-                LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " is on cooldown! " + std::to_string(it->second->GetRemainingCooldown()));
+                return true;
             }
+            LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " is on cooldown! " + std::to_string(it->second->GetRemainingCooldown()));
         } else {
             LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " not found!");
         }
     }
+    return false;
 }
 
 void Character::Update() {
