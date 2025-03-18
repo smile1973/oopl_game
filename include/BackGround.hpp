@@ -36,12 +36,12 @@ private:
      */
     static std::string ImagePath(const int mainPhase) {
         switch (mainPhase) {
-            case 0: return GA_RESOURCE_DIR "/Image/Background/bg_0.png";
-            case 1: return GA_RESOURCE_DIR "/Image/Background/bg_1.png";
-            case 2: return GA_RESOURCE_DIR "/Image/Background/bg_2.png";
-            case 3: return GA_RESOURCE_DIR "/Image/Background/bg_3.png";
-            case 4: return GA_RESOURCE_DIR "/Image/Background/bg_4.png";
-            case 5: return GA_RESOURCE_DIR "/Image/Background/bg_5.png";
+            case 1: return GA_RESOURCE_DIR "/Image/Background/bg_0.png";
+            case 2: return GA_RESOURCE_DIR "/Image/Background/bg_1.png";
+            case 3: return GA_RESOURCE_DIR "/Image/Background/bg_2.png";
+            case 4: return GA_RESOURCE_DIR "/Image/Background/bg_3.png";
+            case 5: return GA_RESOURCE_DIR "/Image/Background/bg_4.png";
+            case 6: return GA_RESOURCE_DIR "/Image/Background/bg_5.png";
             default: return GA_RESOURCE_DIR "/Image/Background/bg_0.png";
         }
     }

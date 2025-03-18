@@ -134,7 +134,7 @@ void App::SetupPhase() {
     m_Enemy->SetHealth(baseHealth + 10.0f * m_SubPhaseIndex);
 
     // 根據小關索引增加敵人數量和難度
-    if (m_SubPhaseIndex >= 1) {
+    if (m_SubPhaseIndex >= 2) {
         m_Enemy_bird_valedictorian->SetPosition({-197.5f, -103.5f});
         m_Enemy_bird_valedictorian->SetVisible(true);
         m_Enemy_bird_valedictorian->SetHealth(baseHealth + 8.0f * m_SubPhaseIndex);
