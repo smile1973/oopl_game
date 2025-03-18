@@ -30,11 +30,13 @@ void CircleAttack::CreateWarningEffect() {
             circleShape->SetSize({visualSize, visualSize});
 
             // 設置顏色 - 半透明紅色用於警告
-            circleShape->SetColor(Util::Color(1.0, 0.3, 0.3, 0.2));
+            circleShape->SetColor(Util::Color(1.0, 0.0, 0.0, 0.2));
+            circleShape->SetDuration(m_Delay + 1.0f);
         }
 
         // 設置填充與邊緣效果
         warningEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
+        warningEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.005, Util::Color(1.0, 0.0, 0.0, 0.7)));
 
         // 設置持續時間和播放特效
         warningEffect->SetDuration(m_Delay + 1.0f);
@@ -69,23 +71,9 @@ void CircleAttack::CreateAttackEffect() {
         }
 
         // 設置填充與邊緣效果
-        circleEffect->SetFillModifier(Effect::Modifier::FillModifier(
-            m_UseGlowEffect ? Effect::Modifier::FillType::HOLLOW : Effect::Modifier::FillType::SOLID,
-            0.03f
-        ));
+        circleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
 
-        if (m_UseGlowEffect) {
-            circleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(
-                Effect::Modifier::EdgeType::GLOW,
-                0.08f,
-                Util::Color::FromRGB(255, 50, 50, 255)
-            ));
-        } else {
-            circleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(
-                Effect::Modifier::EdgeType::DARK,
-                0.05f
-            ));
-        }
+        circleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.005, Util::Color(1.0, 0.0, 0.0, 0.7)));
 
         // 設置持續時間和播放特效
         circleEffect->SetDuration(m_AttackDuration);

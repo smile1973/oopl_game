@@ -62,7 +62,7 @@ namespace Effect {
                 auto data = Util::ConvertToUniformBufferData(
                     Util::Transform{effect->GetPosition(), 0, {1, 1}},
                     effect->GetSize(),
-                    m_ZIndex
+                    effect->GetBaseShape()->GetZIndex()
                 );
 
                 // Draw effect

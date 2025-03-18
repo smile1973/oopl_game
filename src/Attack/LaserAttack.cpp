@@ -13,9 +13,6 @@ LaserAttack::LaserAttack(const glm::vec2& position, float delay, Direction direc
 
     // 計算旋轉角度
     m_RotationAngle = CalculateRotationAngle();
-
-    // 立即創建警告效果
-    CreateWarningEffect();
 }
 
 void LaserAttack::SetDirection(Direction direction) {
@@ -34,6 +31,7 @@ void LaserAttack::SetDirection(Direction direction) {
 }
 
 void LaserAttack::CreateWarningEffect() {
+    LOG_DEBUG("Create laser rotation = {}, pos = {}", m_RotationAngle, m_Position);
     // 使用矩形效果創建雷射警告
     auto rectangleEffect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
 
@@ -47,27 +45,14 @@ void LaserAttack::CreateWarningEffect() {
 
         // 禁用自動旋轉
         rectangleShape->SetAutoRotation(false);
-
-        // 設置尺寸
         rectangleShape->SetSize(glm::vec2(1000, 1000));
+        rectangleShape->SetColor(Util::Color(1.0, 0.0, 0.0, 0.3));
     }
 
     // 設置填充與邊緣效果
     rectangleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
-    rectangleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(
-        Effect::Modifier::EdgeType::GLOW,
-        0.04f,
-        Util::Color::FromRGB(255, 0, 0, 150)
-    ));
-
-    // 設置警告顏色 - 半透明紅色
-    rectangleEffect->GetBaseShape()->SetColor(Util::Color::FromRGB(255, 0, 0, 80));
-
-    // 設置持續時間
     rectangleEffect->SetDuration(m_Delay + 0.5f);  // 警告持續到攻擊結束
-
-    // 播放警告效果
-    rectangleEffect->Play(m_Position, m_ZIndex + 0.1f);
+    rectangleEffect->Play(m_Position, m_ZIndex - 1.0f);
 
     m_WarningEffect = rectangleEffect;
 }
@@ -84,10 +69,7 @@ void LaserAttack::CreateAttackEffect() {
         // 設置旋轉角度
         rectangleShape->SetRotation(m_RotationAngle);
 
-        // 禁用自動旋轉
         rectangleShape->SetAutoRotation(false);
-
-        // 設置尺寸
         rectangleShape->SetSize(glm::vec2(1000, 1000));
     }
 

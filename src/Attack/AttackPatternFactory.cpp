@@ -72,27 +72,6 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateRectanglePattern(
     return pattern;
 }
 
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateLaserPattern(
-    const glm::vec2& position,
-    LaserAttack::Direction direction,
-    float width,
-    float length,
-    float delay) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建雷射攻擊
-    auto attack = std::make_shared<LaserAttack>(position, delay, direction, width, length);
-
-    // 將攻擊添加到模式中
-    pattern->AddAttack(attack, 0.0f);
-
-    // 設置模式總持續時間
-    pattern->SetDuration(delay + 1.0f);
-
-    return pattern;
-}
-
 std::shared_ptr<AttackPattern> AttackPatternFactory::CreateMultiLaserPattern(
     const std::vector<glm::vec2>& positions,
     const std::vector<LaserAttack::Direction>& directions,
@@ -241,9 +220,6 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle2Pattern() {
         {400.0f, topPosition.y}
     };
 
-    std::vector<LaserAttack::Direction> directions = {
-        LaserAttack::Direction::VERTICAL
-    };
 
     float startTime = 1.0f;
     for (int i = 0; i < laserPositions.size(); ++i) {

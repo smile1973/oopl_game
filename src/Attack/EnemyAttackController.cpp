@@ -34,35 +34,34 @@ void EnemyAttackController::InitBattle2Patterns() {
     // 獲取Battle 2的預定義攻擊模式
     auto pattern1 = AttackPatternFactory::GetInstance().CreateBattle2Pattern();
 
-    // 添加一個矩形攻擊模式作為第二個模式
-    glm::vec2 centerPosition(0.0f, 0.0f);
-
-    // 創建多個旋轉的矩形攻擊
-    auto pattern2 = std::make_shared<AttackPattern>();
-
-    // 敵人移動到中心
-    pattern2->AddEnemyMovement([centerPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(centerPosition);
-    }, 0.0f);
-
-    // 添加4個旋轉的矩形攻擊
-    float rotations[] = {0.0f, 0.7854f, 1.5708f, 2.3562f}; // 0, 45, 90, 135度
-    float startTime = 1.0f;
-
-    for (int i = 0; i < 4; ++i) {
-        auto attack = std::make_shared<RectangleAttack>(
-            centerPosition, 2.5f, 500.0f, 80.0f, rotations[i], i + 1
-        );
-        attack->SetColor(Util::Color::FromRGB(0, 200, 100, 150));
-        pattern2->AddAttack(attack, startTime);
-        startTime += 1.0f;
-    }
-
-    pattern2->SetDuration(10.0f);
+    // // 添加一個矩形攻擊模式作為第二個模式
+    // glm::vec2 centerPosition(0.0f, 0.0f);
+    //
+    // // 創建多個旋轉的矩形攻擊
+    // auto pattern2 = std::make_shared<AttackPattern>();
+    //
+    // // 敵人移動到中心
+    // pattern2->AddEnemyMovement([centerPosition](std::shared_ptr<Enemy> enemy) {
+    //     enemy->SetPosition(centerPosition);
+    // }, 0.0f);
+    //
+    // // 添加4個旋轉的矩形攻擊
+    // float rotations[] = {0.0f, 0.7854f, 1.5708f, 2.3562f}; // 0, 45, 90, 135度
+    // float startTime = 1.0f;
+    //
+    // for (int i = 0; i < 4; ++i) {
+    //     auto attack = std::make_shared<RectangleAttack>(
+    //         centerPosition, 2.5f, 500.0f, 80.0f, rotations[i], i + 1
+    //     );
+    //     pattern2->AddAttack(attack, startTime);
+    //     startTime += 1.0f;
+    // }
+    //
+    // pattern2->SetDuration(8.0f);
 
     // 添加到隊列
     AddPattern(pattern1);
-    AddPattern(pattern2);
+    // AddPattern(pattern2);
 
     LOG_DEBUG("Battle 2 attack patterns initialized");
 }

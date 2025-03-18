@@ -36,6 +36,8 @@ namespace Effect {
         float GetDuration() const { return m_Duration; }
         void SetDuration(float duration) { m_Duration = duration; }
 
+        float GetZIndex() const { return m_ZIndex; }
+
     protected:
         State m_State = State::INACTIVE;
         Util::Transform m_Transform;

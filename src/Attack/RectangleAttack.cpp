@@ -97,13 +97,14 @@ void RectangleAttack::CreateAttackEffect() {
             rectangleShape->SetSize({maxDimension * 1.2f, maxDimension * 1.2f});
 
             // 設置顏色
-            rectangleShape->SetColor(m_Color);
+            // rectangleShape->SetColor(m_Color);
+            rectangleShape->SetColor(Util::Color(0.9, 0.7, 0.3, 0.4));
         }
 
         // 設置填充與邊緣效果
         rectangleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
 
-        rectangleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.01f, Util::Color(0.9, 0.1, 0.1, 0.7)));
+        rectangleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.001, Util::Color(0.9, 0.1, 0.1, 0.7)));
 
         // 關閉任何動畫
         rectangleEffect->SetAnimationModifier(Effect::Modifier::AnimationModifier(

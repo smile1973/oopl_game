@@ -10,8 +10,7 @@ Attack::Attack(const glm::vec2& position, float delay, int sequenceNumber)
     : Util::GameObject(nullptr, 20.0f), // Z索引設為20，確保攻擊效果在前景
       m_Position(position),
       m_Delay(delay),
-      m_SequenceNumber(sequenceNumber),
-      m_IsFirstUpdate(true) {
+      m_SequenceNumber(sequenceNumber){
 
     // 初始化設置
     m_Transform.translation = position;
@@ -269,7 +268,7 @@ void Attack::CreateTimeBar() {
         rectangleShape->SetDimensions(glm::vec2(1.0f, 0.1f)); // 寬高比
         rectangleShape->SetSize({200.0, 200.0});
         rectangleShape->SetRotation(0.0f); // 不旋轉
-        rectangleShape->SetAutoRotation(false); // 禁用自動旋轉
+        rectangleShape->SetAutoRotation(false); // 禁用自動旋
     }
 
     // 設置填充與邊緣效果
@@ -288,7 +287,7 @@ void Attack::CreateTimeBar() {
 
     // 播放時間條特效
     rectangleEffect->SetDuration(m_Delay);
-    rectangleEffect->Play(barPosition, m_ZIndex + 0.2f);
+    rectangleEffect->Play(barPosition, m_ZIndex + 1.0f);
 
     m_TimeBarEffect = rectangleEffect;
 }
