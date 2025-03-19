@@ -147,6 +147,7 @@ void App::Update() {
 
     // 更新敵人角色
     m_Enemy->Update();
+    m_PRM->Update();
 
 
 

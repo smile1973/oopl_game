@@ -49,6 +49,7 @@ void Enemy::MoveToPosition(const glm::vec2& targetPosition, const float totalTim
     }
 
     m_IsMoving = true;
+    m_TargetPosition = targetPosition;
     m_MaxDistance = glm::distance(this->GetPosition(), targetPosition);
     m_Direction = (targetPosition - this->GetPosition()) / m_MaxDistance;
     m_Speed = m_MaxDistance / totalTime;
@@ -64,6 +65,7 @@ void Enemy::Update() {
     // 檢查是否到達目標距離
     if (m_DistanceTraveled >= m_MaxDistance) {
         m_IsMoving = false; // 停止移動
+        m_Transform.translation = m_TargetPosition;
         m_DistanceTraveled = 0;
         LOG_DEBUG("{} move to {}",m_Name , m_Transform.translation);
     }

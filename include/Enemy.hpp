@@ -7,6 +7,11 @@
 
 #include <set>
 
+#include "Util/Animation.hpp"
+#include "Util/Animation.hpp"
+#include "Util/Animation.hpp"
+#include "Util/Animation.hpp"
+
 // Enemy 類別，繼承自 Character，代表遊戲中的敵人角色
 class Enemy : public Character {
 public:
@@ -20,6 +25,8 @@ public:
 
     void MovePosition(const glm::vec2& Position, float totalTime = 0.0f);  //平移位置
     void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
+
+    [[nodiscard]] glm::vec2& GetTargetPosition() { return m_TargetPosition; }
 
     void Update() override;
 
@@ -43,6 +50,7 @@ private:
     float m_Speed = 0;
     float m_MaxDistance = 0;
     glm::vec2 m_Direction = glm::vec2(0.0f, 0.0f);
+    glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
     float m_DistanceTraveled = 0;
 
     // Uniform 變數位置（顏色與血條寬度）

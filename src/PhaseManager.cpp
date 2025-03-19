@@ -20,25 +20,26 @@ void PhaseManager::NextSubPhase() {
         m_SubPhase = 0;
         NextMainPhase();
     }
-
-    UpdateSubPhaseType();
 }
 
 /**
  * @brief 更新小關類型。
  */
 void PhaseManager::UpdateSubPhaseType() {
+    UpdateStageTitle();
     switch (m_SubPhase) {
         case 0: m_SubPhaseType = 0; //STORE
+            break;
         case 1:
         case 2:
         case 3: m_SubPhaseType = 1; //BATTLE
+            break;
         case 4: m_SubPhaseType = 2; //TREASURE
+            break;
         case 5: m_SubPhaseType = 3; //BOSS
-            // break;
+            break;
         default: LOG_ERROR("Invalid SubPhaseType: {}", m_SubPhase);
     }
-     m_StageTitle->SetVisible(true);
 }
 
 /**
@@ -56,4 +57,19 @@ void PhaseManager::NextMainPhase() {
 
     // 設置新的背景
     m_Background->SetBackground(m_MainPhase);
+
+    UpdateSubPhaseType();
+}
+
+void PhaseManager::UpdateStageTitle() const {
+    m_MainStageTitle->SetStageTitle(m_MainPhase-1);
+    m_MainStageTitle->MovePosition(glm::vec2(100, 0));
+    m_MainStageTitle->SetVisible(true);
+    m_MainStageTitle->MovePosition(glm::vec2(-100, 0), 1.5f);
+}
+
+
+void PhaseManager::Update() const {
+    m_MainStageTitle->Update();
+    if (m_MainStageTitle->GetPosition() == m_MainStageTitle->GetTargetPosition() ) m_MainStageTitle->SetVisible(false);
 }
