@@ -38,6 +38,7 @@ void PhaseManager::UpdateSubPhaseType() {
             // break;
         default: LOG_ERROR("Invalid SubPhaseType: {}", m_SubPhase);
     }
+     m_StageTitle->SetVisible(true);
 }
 
 /**
