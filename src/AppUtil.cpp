@@ -45,6 +45,7 @@ void App::SetSubPhase() const {
         break;
         case 1:
             m_Enemy_shopkeeper->SetVisible(false);
+            [[fallthrough]];
         case 2:
         case 3:
             LOG_DEBUG("Next SubPhase: BATTLE {}", m_SubPhaseIndex);

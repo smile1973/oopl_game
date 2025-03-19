@@ -11,17 +11,6 @@ public:
         SetZIndex(100);
         SetVisible(true);
     }
-    std::string GetImagePath(const int mainPhase) {
-        switch (mainPhase) {
-            case 0: return GA_RESOURCE_DIR "/Image/StageTitle/stage_title_en_0000.png";
-            case 1: return GA_RESOURCE_DIR "/Image/StageTitle/stage_title_en_0001.png";
-            case 2: return GA_RESOURCE_DIR "/Image/StageTitle/stage_title_en_0002.png";
-            case 3: return GA_RESOURCE_DIR "/Image/StageTitle/stage_title_en_0003.png";
-            case 4: return GA_RESOURCE_DIR "/Image/StageTitle/stage_title_en_0004.png";
-            case 5: return GA_RESOURCE_DIR "/Image/StageTitle/stage_title_en_0005.png";
-            default: return GA_RESOURCE_DIR "/Image/StageTitle/stage_title_en_0000.png";
-        }
-    }
 
     void SetStageTitle(const int mainPhase) {
         m_Drawable = std::make_shared<Util::Image>(ImagePath(mainPhase));
