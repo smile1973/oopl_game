@@ -23,7 +23,10 @@ public:
      * @return 共享指標陣列，包含背景物件。
      */
     [[nodiscard]] std::vector<std::shared_ptr<Util::GameObject>> GetChildren() const {
-        return {m_Background, m_MainStageTitle};
+        std::vector<std::shared_ptr<Util::GameObject>> children = m_ProgressBar->GetChildren();
+        children.push_back(m_Background);
+        children.push_back(m_MainStageTitle);
+        return children;
     }
 
     /**

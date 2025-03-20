@@ -12,10 +12,9 @@ public:
         std::vector<std::string> iconNames = {"R", "battle", "battle", "battle", "treasure", "boss"};
 
         for (int i = 0; i < iconNames.size(); ++i) {
-            constexpr float iconSpacing = 50.0f;
+            constexpr float iconSpacing = 130.0f;
             m_Icons.push_back(std::make_shared<ProgressIcon>(iconNames[i]));
             m_Icons[i]->SetPosition(m_BasePosition + glm::vec2(iconSpacing * (i + 0.0), 0.0f));
-            m_Icons[i]->SetVisible(true);
         }
     }
 
@@ -28,7 +27,7 @@ public:
     }
 
 private:
-    glm::vec2 m_BasePosition = {-150, 150};
+    glm::vec2 m_BasePosition = {-450, 300};
     std::vector<std::shared_ptr<ProgressIcon>> m_Icons;
 };
 
