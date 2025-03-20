@@ -2,9 +2,9 @@
 #define PHASE_MANAGER_HPP
 
 #include "Util/GameObject.hpp"
-#include "Enemy.hpp"
 #include "StageTitle.hpp"
 #include "Background.hpp"
+#include "ProgressBar.hpp"
 
 /**
  * @class PhaseManager
@@ -15,6 +15,7 @@ public:
     PhaseManager() {
         m_Background = std::make_shared<BackgroundImage>();
         m_MainStageTitle = std::make_shared<StageTitle>(m_MainPhase);
+        m_ProgressBar = std::make_shared<ProgressBar>();
     }
 
     /**
@@ -72,6 +73,7 @@ public:
 private:
     std::shared_ptr<BackgroundImage> m_Background; ///< 背景物件
     std::shared_ptr<StageTitle> m_MainStageTitle; ///< 主標題物件
+    std::shared_ptr<ProgressBar> m_ProgressBar; ///< 進度條物件
     int m_MainPhase = 0; ///< 當前大關索引 (0-5)
     int m_SubPhase = 0;  ///< 當前小關索引 (0-4)
     int m_SubPhaseType = 0;  ///< 當前小關類型 (0=STORE, 1=BATTLE, 2=TREASURE, 3=BOSS)

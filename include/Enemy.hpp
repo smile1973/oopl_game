@@ -4,13 +4,9 @@
 #include "Character.hpp"
 #include "Util/Renderer.hpp"
 #include "Util/Time.hpp"
+#include "Util/Animation.hpp"
 
 #include <set>
-
-#include "Util/Animation.hpp"
-#include "Util/Animation.hpp"
-#include "Util/Animation.hpp"
-#include "Util/Animation.hpp"
 
 // Enemy 類別，繼承自 Character，代表遊戲中的敵人角色
 class Enemy : public Character {
