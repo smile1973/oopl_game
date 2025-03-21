@@ -65,7 +65,7 @@ void Skill::Update(float deltaTime) {
             m_CurrentCooldown = 0.0f;
             LOG_DEBUG("Skill {} cooldown finished", m_SkillId);
         }
-        LOG_DEBUG("Skill {} cooldown still {}sec", m_SkillId, m_CurrentCooldown);
+        LOG_DEBUG("Skill {} cooldown still {}sec", m_SkillId, (m_CurrentCooldown));
     }
     (void)deltaTime;
     // 如果技能處於活躍狀態

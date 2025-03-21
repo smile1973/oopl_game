@@ -8,7 +8,7 @@
 /**
  * @brief 離開當前小關。
  */
-void PhaseManager::LeaveSubPhase() {
+void PhaseManager::LeaveSubPhase() const {
     if (m_ProgressBar->GetVisibility()) return;
     UpdateProgressBar();
     m_ProgressBar->SetVisible(true);

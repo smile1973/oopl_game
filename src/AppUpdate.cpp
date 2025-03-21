@@ -162,7 +162,7 @@ void App::Update() {
                 if (m_Rabbit->IfCirclesCollide(enemy, 1000)) {
                     enemy->TakeDamage(1000);
                 }}
-            ValidTask();
+            // SetSubPhase();
         }}
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 

@@ -60,7 +60,7 @@ void Enemy::MoveToPosition(const glm::vec2& targetPosition, const float totalTim
 void Enemy::Update() {
     if (!m_IsMoving || !GetVisibility()) return;
     // 計算移動距離
-    float DeltaTimeMs = Util::Time::GetDeltaTimeMs();
+    const float DeltaTimeMs = Util::Time::GetDeltaTimeMs();
     const float moveDistance = m_Speed * DeltaTimeMs / 1000.0f;
     // m_TotalTime -= DeltaTimeMs;
     m_DistanceTraveled += moveDistance;

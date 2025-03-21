@@ -29,7 +29,7 @@ public:
         return children;
     }
 
-    void LeaveSubPhase();
+    void LeaveSubPhase() const;
 
     /**
      * @brief 進入下一小關。
