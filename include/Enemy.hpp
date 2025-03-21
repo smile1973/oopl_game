@@ -43,11 +43,12 @@ private:
     float m_MaxHealth;
 
     bool m_IsMoving = false;
-    float m_Speed = 0;
-    float m_MaxDistance = 0;
+    float m_Speed = 0.0f;
+    float m_MaxDistance = 0.0f;
+    float m_DistanceTraveled = 0.0f;
+    float m_TotalTime = 0.0f;
     glm::vec2 m_Direction = glm::vec2(0.0f, 0.0f);
     glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
-    float m_DistanceTraveled = 0;
 
     // Uniform 變數位置（顏色與血條寬度）
     GLint m_ColorLocation;

@@ -9,13 +9,16 @@
  * @brief 離開當前小關。
  */
 void PhaseManager::LeaveSubPhase() {
+    if (m_ProgressBar->GetVisibility()) return;
     UpdateProgressBar();
+    m_ProgressBar->SetVisible(true);
 }
 
 /**
  * @brief 進入下一個小關。
  */
 void PhaseManager::NextSubPhase() {
+    m_ProgressBar->SetVisible(false);
     UpdateSubPhaseType();
     if (m_MainPhase == 0) {
         NextMainPhase();

@@ -87,6 +87,7 @@ private:
     int m_SubPhaseType = 0;  ///< 當前小關類型 (0=STORE, 1=BATTLE, 2=TREASURE, 3=BOSS)
     static constexpr int m_MaxSubPhase  = 5; // 最大小關數量常數
     static constexpr int m_MaxMainPhase = 5; // 最大小關數量常數
+    bool m_IfProgressBarSet = false;
 
 
     /**
