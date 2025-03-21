@@ -17,6 +17,9 @@ public:
             m_Icons[i]->SetPosition(m_BasePosition + glm::vec2(iconSpacing * (i + 0.0), 0.0f));
         }
         m_Icons[6]->SetZIndex(32);
+        m_Icons[6]->SetPosition(glm::vec2(200.0f, 300));
+        m_Icons[7]->m_Transform.scale = glm::vec2(1.12f, 0.7f);
+        m_Icons[7]->SetPosition(glm::vec2(-125.0f, 300));
     }
 
     [[nodiscard]] std::vector<std::shared_ptr<Util::GameObject>> GetChildren() const {
@@ -49,13 +52,14 @@ public:
             }else {
                 icon->SetVisible(true);
             }
-            // icon->SetVisible(icon->GetVisibility() && m_IfVisible);
         }
+        m_Icons[7]->m_Transform.scale.x = 1.12f * (200-m_Icons[6]->m_Transform.translation.x)/650;
+        m_Icons[7]->m_Transform.translation.x = (m_Icons[6]->m_Transform.translation.x+200)/2;
     }
 
 private:
     bool m_IfVisible = false;
-    glm::vec2 m_BasePosition = {-450, 300};
+    glm::vec2 m_BasePosition = {-450, 300}; //{200, 300}
     std::vector<std::shared_ptr<ProgressIcon>> m_Icons;
 };
 
