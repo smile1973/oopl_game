@@ -6,18 +6,26 @@
 #include "Util/Logger.hpp"
 
 /**
+ * @brief 離開當前小關。
+ */
+void PhaseManager::LeaveSubPhase() {
+    UpdateProgressBar();
+}
+
+/**
  * @brief 進入下一個小關。
  */
 void PhaseManager::NextSubPhase() {
+    UpdateSubPhaseType();
     if (m_MainPhase == 0) {
         NextMainPhase();
         return;
     }
     m_SubPhase++;
+    std::cout << "\nPhaseManager::NextSubPhase" << std::endl;
     LOG_DEBUG("Into SubPhase: {}-{}--{}", m_MainPhase, m_SubPhase, GetSubPhaseName(m_SubPhase));
 
     if (m_SubPhase > m_MaxSubPhase) {
-        m_SubPhase = 0;
         NextMainPhase();
     }
 }
@@ -26,7 +34,6 @@ void PhaseManager::NextSubPhase() {
  * @brief 更新小關類型。
  */
 void PhaseManager::UpdateSubPhaseType() {
-    UpdateStageTitle();
     switch (m_SubPhase) {
         case 0: m_SubPhaseType = 0; //STORE
             break;
@@ -53,12 +60,12 @@ void PhaseManager::NextMainPhase() {
         m_MainPhase = 0;
         std::cout << "\nClear All Phase\n" << std::endl;
     }
-    LOG_INFO("Into--{}--", GetMainPhaseName(m_MainPhase));
+    std::cout << "\nPhaseManager::NextMainPhase" << std::endl;
+    LOG_INFO("Into--{}--{}", GetMainPhaseName(m_MainPhase), m_MainPhase);
 
     // 設置新的背景
     m_Background->SetBackground(m_MainPhase);
-
-    UpdateSubPhaseType();
+    UpdateStageTitle();
 }
 
 void PhaseManager::UpdateStageTitle() const {
@@ -68,8 +75,16 @@ void PhaseManager::UpdateStageTitle() const {
     m_MainStageTitle->MovePosition(glm::vec2(-100, 0), 1.5f);
 }
 
-
+void PhaseManager::UpdateProgressBar() const {
+    const int nextSubPhase = (m_SubPhase+1 > m_MaxSubPhase)? 0 : m_SubPhase+1;
+    m_ProgressBar->SetProgressBar(nextSubPhase);
+}
+bool PhaseManager::IfProgressBarSet() const {
+    const int nextSubPhase = (m_SubPhase+1 > m_MaxSubPhase)? 0 : m_SubPhase+1;
+    return m_ProgressBar->IfSetComplete(nextSubPhase);
+}
 void PhaseManager::Update() const {
     m_MainStageTitle->Update();
+    m_ProgressBar->Update();
     if (m_MainStageTitle->GetPosition() == m_MainStageTitle->GetTargetPosition() ) m_MainStageTitle->SetVisible(false);
 }

@@ -6,22 +6,34 @@
  * @brief 驗證當前任務狀態，並切換至適當的階段。
  */
 void App::ValidTask() const {
+    // 關卡跳轉
+    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
+        m_PRM->LeaveSubPhase();
+        if (m_PRM->IfProgressBarSet()) {
+            LeavePhase();
+        }
+    }
+}
+/**
+ * @brief 驗證當前任務狀態，並切換至適當的階段。
+ */
+void App::LeavePhase() const {
     int m_CurrentMainPhase = m_PRM->GetCurrentMainPhase();
     int m_CurrentSubPhase = m_PRM->GetCurrentSubPhase();
     int m_CurrentSubPhaseType = m_PRM->GetCurrentSubPhaseType();
-    LOG_DEBUG("ValidTask: MainPhase {}, SubPhase {}", m_CurrentMainPhase, m_CurrentSubPhase);
+    LOG_DEBUG("App::LeavePhase: MainPhase {}, SubPhase {}", m_CurrentMainPhase, m_CurrentSubPhase);
     // 處理小關類型
     switch (m_CurrentSubPhaseType) {
         case 0:
             LOG_DEBUG("--Leave the store--");
-            break;
+        break;
         case 1:
         case 3:
             LOG_DEBUG("--Battle is over--");
-            break;
+        break;
         case 2:
             LOG_DEBUG("--Treasure opened--");
-            break;
+        break;
         default: ;
     }
     SetSubPhase();

@@ -29,6 +29,8 @@ public:
         return children;
     }
 
+    void LeaveSubPhase();
+
     /**
      * @brief 進入下一小關。
      * @return bool 如果所有小關都完成則返回true，否則返回false。
@@ -46,6 +48,9 @@ public:
     void NextMainPhase();
 
     void UpdateStageTitle() const;
+
+    void UpdateProgressBar() const;
+    [[nodiscard]] bool IfProgressBarSet() const;
 
     void Update() const;
 
@@ -78,7 +83,7 @@ private:
     std::shared_ptr<StageTitle> m_MainStageTitle; ///< 主標題物件
     std::shared_ptr<ProgressBar> m_ProgressBar; ///< 進度條物件
     int m_MainPhase = 0; ///< 當前大關索引 (0-5)
-    int m_SubPhase = 0;  ///< 當前小關索引 (0-4)
+    int m_SubPhase = -1;  ///< 當前小關索引 (0-4)
     int m_SubPhaseType = 0;  ///< 當前小關類型 (0=STORE, 1=BATTLE, 2=TREASURE, 3=BOSS)
     static constexpr int m_MaxSubPhase  = 5; // 最大小關數量常數
     static constexpr int m_MaxMainPhase = 5; // 最大小關數量常數

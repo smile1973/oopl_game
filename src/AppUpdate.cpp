@@ -141,9 +141,10 @@ void App::Update() {
     }
 
     // 關卡跳轉
-    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
-        ValidTask();
-    }
+    // if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
+    //     ValidTask();
+    // }
+    ValidTask();
 
     // 更新敵人角色
     m_Enemy->Update();
