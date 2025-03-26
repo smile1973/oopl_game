@@ -98,10 +98,20 @@ void App::Start() {
     m_PRM = std::make_shared<PhaseManager>();
     m_Root.AddChildren(m_PRM->GetChildren());
 
-    m_Onward = std::make_shared<Enemy>("Onward",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
+    m_Onward = std::make_shared<Enemy>("Onward",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
     m_Onward->SetPosition({420.0f, 180.0f});
-    m_Onward->SetVisible(true);
     m_Root.AddChild(m_Onward);
+
+    m_GetReady = std::make_shared<Enemy>("GetReady",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/get_ready.png"});
+    m_GetReady->SetPosition({0.0f, 320.0f});
+    m_GetReady->SetVisible(true);
+    m_Root.AddChild(m_GetReady);
+
+    m_PressZtoJoin = std::make_shared<Enemy>("GetReady",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/press_Z_to_join.png"});
+    m_PressZtoJoin->SetPosition({0.0f, 260.0f});
+    m_PressZtoJoin -> m_Transform.scale =  {0.21f, 0.21f};
+    m_PressZtoJoin->SetVisible(true);
+    m_Root.AddChild(m_PressZtoJoin);
 
     m_CurrentState = State::UPDATE;
 

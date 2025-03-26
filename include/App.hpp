@@ -26,6 +26,8 @@ public:
     void End(); // NOLINT(readability-convert-member-functions-to-static)
 
 private:
+    void GetReady() ;
+
     // 執行有效的任務，內部函式
     void ValidTask() const;
     void LeavePhase() const;
@@ -76,6 +78,9 @@ private:
     // 測試關卡切換
     bool m_NKeyDown = false;
     std::shared_ptr<Enemy> m_Onward;
+    std::shared_ptr<Enemy> m_GetReady;
+    std::shared_ptr<Enemy> m_PressZtoJoin;
+    bool m_IsReady = false;
 };
 
 #endif

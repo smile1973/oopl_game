@@ -9,7 +9,6 @@ public:
     explicit ProgressIcon(const std::string& imageName) : Enemy(imageName, 1.0f, {IconImagePath(imageName)}) { // 修正建構子
         m_Transform.scale = {0.5f, 0.5f};
         SetZIndex(30);
-        SetVisible(true);
     }
 
     void SetProgressIcon(const std::string &imageName) {

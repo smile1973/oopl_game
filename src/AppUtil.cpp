@@ -1,6 +1,25 @@
 #include "App.hpp"
 
+#include "Util/Input.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Keycode.hpp"
+
+/**
+ * @brief 驗證當前任務狀態，並切換至適當的階段。
+ */
+void App::GetReady() {
+    // 按下Z
+    if (m_ZKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
+            m_PressZtoJoin->SetVisible(false);
+            m_GetReady->SetVisible(false);
+            m_IsReady = true;
+        }
+    }
+    m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
+
+    m_Root.Update();
+}
 
 /**
  * @brief 驗證當前任務狀態，並切換至適當的階段。
@@ -14,6 +33,7 @@ void App::ValidTask() const {
         }
     }
 }
+
 /**
  * @brief 驗證當前任務狀態，並切換至適當的階段。
  */

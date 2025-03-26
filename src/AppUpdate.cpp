@@ -8,6 +8,12 @@
 #include "Effect/EffectFactory.hpp"
 
 void App::Update() {
+    if (!m_IsReady) {
+        GetReady();
+        return;
+    }
+
+
     // 處理空格鍵 - 測試特效
     if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
         auto cursorPos = Util::Input::GetCursorPosition();
