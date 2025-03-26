@@ -51,13 +51,16 @@ void App::Start() {
     }
     m_Rabbit->AddSkill(4, rabbitSkill4Images, 175, 12.0f);  // V鍵技能，ID=4
 
-    m_Rabbit->SetPosition({-112.5f, -140.5f});
+    m_Rabbit->SetPosition({-600.5f, -140.5f});
     m_Rabbit->SetZIndex(50);
     m_Root.AddChild(m_Rabbit);
 
     // 初始化敵人，設定圖片、位置與初始可見狀態
     m_Enemy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
     m_Root.AddChild(m_Enemy);
+
+    m_Enemy_dummy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
+    m_Root.AddChild(m_Enemy_dummy);
 
     // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態
     std::vector<std::string> enemyImages;

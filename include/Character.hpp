@@ -37,8 +37,11 @@ public:
     bool UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
     virtual void Update();
 
-
     bool IsSkillOnCooldown(int skillId) const;
+
+    virtual void MovePosition(const glm::vec2& Position, float totalTime = 0.0f);  //平移位置
+    virtual void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
+    [[nodiscard]] virtual glm::vec2& GetTargetPosition() { return m_TargetPosition; }
 
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
@@ -54,6 +57,16 @@ private:
     State m_State = State::IDLE;
     int m_CurrentSkillId = -1;
     std::shared_ptr<Skill> m_CurrentSkill = nullptr;
+
+
+    bool m_IsMoving = false;
+    // float m_Speed = 0.0f;
+    // float m_MaxDistance = 0.0f;
+    float m_DistanceTraveled = 0.0f;
+    float m_TotalTime = 0.0f;
+    // glm::vec2 m_Direction = glm::vec2(0.0f, 0.0f);
+    glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
+    glm::vec2 m_MoveSpeed = glm::vec2(0.0f, 0.0f);
 };
 
 

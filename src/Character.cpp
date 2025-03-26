@@ -53,6 +53,21 @@ void Character::Update() {
             SwitchToIdle();
         }
     }
+
+    // 移動位置
+    if (m_IsMoving) {
+        // 計算移動距離
+        const float DeltaTimeMs = Util::Time::GetDeltaTimeMs();
+        m_TotalTime -= DeltaTimeMs;
+        // 更新位置
+        m_Transform.translation += m_MoveSpeed * DeltaTimeMs / 1000.0f;
+        if (m_TotalTime < 0.0f) {
+            m_IsMoving = false; // 停止移動
+            m_Transform.translation = m_TargetPosition;
+            m_TotalTime = 0;
+            LOG_DEBUG("move to {}", m_Transform.translation);
+        }
+    }
 }
 
 void Character::SwitchToIdle() {
@@ -117,4 +132,24 @@ bool Character::IsSkillOnCooldown(int skillId) const {
         return it->second->IsOnCooldown();
     }
     return false;
+}
+
+void Character::MovePosition(const glm::vec2& Position, const float totalTime) {
+    MoveToPosition(GetPosition() + Position, totalTime);
+}
+
+void Character::MoveToPosition(const glm::vec2& targetPosition, const float totalTime) {
+    if (totalTime <= 0.0f) {
+        m_Transform.translation = targetPosition;
+        return;
+    }
+
+    m_IsMoving = true;
+    m_TargetPosition = targetPosition;
+    // m_MaxDistance = glm::distance(this->GetPosition(), targetPosition);
+    // m_Direction = (targetPosition - this->GetPosition()) / m_MaxDistance;
+    // m_Speed = m_MaxDistance / totalTime;
+    m_MoveSpeed = (targetPosition - this->GetPosition()) / totalTime;
+    m_TotalTime = totalTime * 1000.0f; //(ms)
+    LOG_DEBUG("Move to {}", m_Transform.translation);
 }

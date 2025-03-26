@@ -13,11 +13,28 @@ void App::GetReady() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             m_PressZtoJoin->SetVisible(false);
             m_GetReady->SetVisible(false);
-            m_IsReady = true;
+
+            m_Rabbit->SetVisible(true);
+            m_Rabbit->SetPosition(glm::vec2(-580,200));
+            m_Rabbit->MoveToPosition(glm::vec2(-100,0),1.3);
+
+            m_Enemy_dummy->SetVisible(true);
+            m_Enemy_dummy->SetPosition(glm::vec2(580,0));
+            m_Enemy_dummy->MoveToPosition(glm::vec2(100,0),1.3);
         }
     }
     m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
 
+    if (m_Rabbit->GetPosition().x >= m_Rabbit->GetTargetPosition().x *2) {
+        m_IsReady = true;
+    }
+
+    if (m_Rabbit->GetPosition() == m_Rabbit->GetTargetPosition()) {
+        m_IsReady = true;
+    }
+
+    m_Rabbit->Update();
+    m_Enemy_dummy->Update();
     m_Root.Update();
 }
 

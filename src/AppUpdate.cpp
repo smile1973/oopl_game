@@ -156,6 +156,7 @@ void App::Update() {
     m_Enemy->Update();
     m_PRM->Update();
 
+    m_Enemy_dummy->Update();
 
 
     // 測試
