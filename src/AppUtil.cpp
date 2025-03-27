@@ -42,39 +42,35 @@ void App::GetReady() {
     m_Root.Update();
 }
 
+/**
+ * @brief 暫停畫面。
+ */
 void App::Pause() {
-    LOG_DEBUG("--App::Pause--");
     m_IsPaused = true;
     m_PauseContinue->SetVisible(true);
     m_PauseRestart->SetVisible(true);
 
-    if (m_EnterDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER)) {
-            switch (m_PausedCurrentOption) {
-                case 0:
-                    m_IsPaused = false;
-                    m_PauseContinue->SetVisible(false);
-                    m_PauseRestart->SetVisible(false);
-                    LOG_DEBUG("--App::Pause Continue--");
-                break;
-                default: ;
-            }
+    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER)) {
+        switch (m_PausedCurrentOption) {
+            case 0:
+                m_IsPaused = false;
+                m_PauseContinue->SetVisible(false);
+                m_PauseRestart->SetVisible(false);
+                LOG_DEBUG("--App::Pause Continue--");
+            break;
+            default: ;
         }
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER);
 
     constexpr int maxOption=1;
-    if (m_UpKeyDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::UP)) {
-            m_PausedCurrentOption = (m_PausedCurrentOption == 0) ? maxOption : m_PausedCurrentOption - 1;
-        }
+    if (m_UpKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::UP)) {
+        m_PausedCurrentOption = (m_PausedCurrentOption == 0) ? maxOption : m_PausedCurrentOption - 1;
     }
     m_UpKeyDown = Util::Input::IsKeyPressed(Util::Keycode::UP);
 
-    if (m_DownKeyDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
+    if (m_DownKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
             m_PausedCurrentOption = (m_PausedCurrentOption == maxOption) ? 0 : m_PausedCurrentOption + 1;
-        }
     }
     m_DownKeyDown = Util::Input::IsKeyPressed(Util::Keycode::DOWN);
 

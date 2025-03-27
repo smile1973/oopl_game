@@ -17,7 +17,6 @@ void App::Update() {
         m_Enemy_dummy->SetVisible(false);
     }
     if (m_IsPaused) {
-        LOG_DEBUG("Paused");
         Pause();
         return;
     }
