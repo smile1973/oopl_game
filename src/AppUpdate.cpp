@@ -12,6 +12,7 @@ void App::Update() {
         GetReady();
         return;
     }
+    m_GetReady->SetVisible(false);
 
 
     // 處理空格鍵 - 測試特效

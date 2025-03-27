@@ -53,6 +53,7 @@ void App::Start() {
 
     m_Rabbit->SetPosition({-600.5f, -140.5f});
     m_Rabbit->SetZIndex(50);
+    m_Rabbit->SetVisible(false);
     m_Root.AddChild(m_Rabbit);
 
     // 初始化敵人，設定圖片、位置與初始可見狀態
