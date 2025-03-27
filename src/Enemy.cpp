@@ -58,11 +58,11 @@ void Enemy::MoveToPosition(const glm::vec2& targetPosition, const float totalTim
 }
 
 void Enemy::Update() {
-    if (!m_IsMoving || !GetVisibility()) return;
+    // if (!m_IsMoving || !GetVisibility()) return;
+    if (!m_IsMoving) return;
     // 計算移動距離
     const float DeltaTimeMs = Util::Time::GetDeltaTimeMs();
     const float moveDistance = m_Speed * DeltaTimeMs / 1000.0f;
-    // m_TotalTime -= DeltaTimeMs;
     m_DistanceTraveled += moveDistance;
     // 更新位置
     m_Transform.translation += m_Direction * moveDistance;
@@ -73,10 +73,4 @@ void Enemy::Update() {
         m_DistanceTraveled = 0;
         LOG_DEBUG("{} move to {}",m_Name , m_Transform.translation);
     }
-    // if (m_TotalTime < 0.0f) {
-    //     m_IsMoving = false; // 停止移動
-    //     m_Transform.translation = m_TargetPosition;
-    //     m_TotalTime = 0;
-    //     LOG_DEBUG("{} move to {}",m_Name , m_Transform.translation);
-    // }
 }

@@ -12,7 +12,15 @@ void App::Update() {
         GetReady();
         return;
     }
-    m_GetReady->SetVisible(false);
+    if (m_PRM->GetCurrentMainPhase()==1) {
+        m_GetReady->SetVisible(false);
+        m_Enemy_dummy->SetVisible(false);
+    }
+    if (m_IsPaused) {
+        LOG_DEBUG("Paused");
+        Pause();
+        return;
+    }
 
 
     // 處理空格鍵 - 測試特效
@@ -166,12 +174,14 @@ void App::Update() {
             // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             // m_Enemy->MoveToPosition(glm::vec2(1.0f, 0.0f), 3.0f);
             // m_Enemy->MovePosition(glm::vec2(-100.0f, 100.0f), 1.0f);
-            for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                if (m_Rabbit->IfCirclesCollide(enemy, 1000)) {
-                    enemy->TakeDamage(1000);
-                }}
-            // SetSubPhase();
-        }}
+            // for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+            //     if (m_Rabbit->IfCirclesCollide(enemy, 1000)) {
+            //         enemy->TakeDamage(1000);
+            //     }
+            // }
+            Pause();
+        }
+    }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
 

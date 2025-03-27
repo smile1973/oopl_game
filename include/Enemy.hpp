@@ -21,6 +21,7 @@ public:
 
     void MovePosition(const glm::vec2& Position, float totalTime = 0.0f);  //平移位置
     void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
+    void ShakePosition(const glm::vec2& Position, float totalTime = 0.0f);
 
     [[nodiscard]] glm::vec2& GetTargetPosition() { return m_TargetPosition; }
 

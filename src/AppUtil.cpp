@@ -5,20 +5,20 @@
 #include "Util/Keycode.hpp"
 
 /**
- * @brief 驗證當前任務狀態，並切換至適當的階段。
+ * @brief 初始準備階段。
  */
 void App::GetReady() {
     // 按下Z
     if (m_ZKeyDown && m_Rabbit->GetVisibility()==false) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             m_PressZtoJoin->SetVisible(false);
-            // m_GetReady->SetVisible(false);
 
             m_Rabbit->SetVisible(true);
             m_Rabbit->SetPosition(glm::vec2(-600,200));
             m_Rabbit->MoveToPosition(glm::vec2(-200,0),1.3);
 
             m_Enemy_dummy->SetPosition(glm::vec2(580,0));
+            m_Onward->SetPosition(glm::vec2(980,160));
         }
     }
     m_ZKeyDown = Util::Input::IsKeyPressed(Util::Keycode::Z);
@@ -28,6 +28,8 @@ void App::GetReady() {
 
         m_Enemy_dummy->SetVisible(true);
         m_Enemy_dummy->MoveToPosition(glm::vec2(100,0),1.3);
+        m_Onward->SetVisible(true);
+        m_Onward->MoveToPosition(glm::vec2(500,160),1.3);
     }
 
     if (m_Rabbit->GetPosition().x == -100) {
@@ -36,6 +38,60 @@ void App::GetReady() {
 
     m_Rabbit->Update();
     m_Enemy_dummy->Update();
+    m_Onward->Update();
+    m_Root.Update();
+}
+
+void App::Pause() {
+    LOG_DEBUG("--App::Pause--");
+    m_IsPaused = true;
+    m_PauseContinue->SetVisible(true);
+    m_PauseRestart->SetVisible(true);
+
+    if (m_EnterDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER)) {
+            switch (m_PausedCurrentOption) {
+                case 0:
+                    m_IsPaused = false;
+                    m_PauseContinue->SetVisible(false);
+                    m_PauseRestart->SetVisible(false);
+                    LOG_DEBUG("--App::Pause Continue--");
+                break;
+                default: ;
+            }
+        }
+    }
+    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER);
+
+    constexpr int maxOption=1;
+    if (m_UpKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::UP)) {
+            m_PausedCurrentOption = (m_PausedCurrentOption == 0) ? maxOption : m_PausedCurrentOption - 1;
+        }
+    }
+    m_UpKeyDown = Util::Input::IsKeyPressed(Util::Keycode::UP);
+
+    if (m_DownKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
+            m_PausedCurrentOption = (m_PausedCurrentOption == maxOption) ? 0 : m_PausedCurrentOption + 1;
+        }
+    }
+    m_DownKeyDown = Util::Input::IsKeyPressed(Util::Keycode::DOWN);
+
+    switch (m_PausedCurrentOption) {
+        case 0:
+            m_PauseContinue -> m_Transform.scale =  {1.3f, 1.3f};
+            m_PauseRestart -> m_Transform.scale =  {1.1f, 1.1f};
+        break;
+        case 1:
+            m_PauseContinue -> m_Transform.scale =  {1.1f, 1.1f};
+            m_PauseRestart -> m_Transform.scale =  {1.3f, 1.3f};
+        break;
+        default: return ;
+    }
+
+    m_PauseContinue->Update();
+    m_PauseRestart->Update();
     m_Root.Update();
 }
 

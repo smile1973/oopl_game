@@ -26,7 +26,8 @@ public:
     void End(); // NOLINT(readability-convert-member-functions-to-static)
 
 private:
-    void GetReady() ;
+    void GetReady();
+    void Pause();
 
     // 執行有效的任務，內部函式
     void ValidTask() const;
@@ -54,7 +55,17 @@ private:
     //     BOSS        // 頭目戰
     // };
 
+    // 暫停指令
+    enum class PausedOption {
+        COUNTINUE,
+        RESTART,
+        MANAGE_PLAYER,
+        GAME_SETTING,
+        RETURN_TITLE_PAGE,
+    };
+
     State m_CurrentState = State::START;
+    PausedOption m_CurrenPausedOption = PausedOption::COUNTINUE;
     // MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
     // int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
     // SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型
@@ -78,10 +89,16 @@ private:
 
     // 測試關卡切換
     bool m_NKeyDown = false;
+    bool m_UpKeyDown = false;
+    bool m_DownKeyDown = false;
     std::shared_ptr<Enemy> m_Onward;
     std::shared_ptr<Enemy> m_GetReady;
     std::shared_ptr<Enemy> m_PressZtoJoin;
+    std::shared_ptr<Enemy> m_PauseContinue;
+    std::shared_ptr<Enemy> m_PauseRestart;
     bool m_IsReady = false;
+    bool m_IsPaused = false;
+    int m_PausedCurrentOption = 0;
 };
 
 #endif

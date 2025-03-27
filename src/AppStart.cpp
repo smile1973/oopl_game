@@ -103,7 +103,7 @@ void App::Start() {
     m_Root.AddChildren(m_PRM->GetChildren());
 
     m_Onward = std::make_shared<Enemy>("Onward",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
-    m_Onward->SetPosition({420.0f, 180.0f});
+    m_Onward->SetPosition({500.0f, 160.0f});
     m_Root.AddChild(m_Onward);
 
     m_GetReady = std::make_shared<Enemy>("GetReady",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/get_ready.png"});
@@ -116,6 +116,19 @@ void App::Start() {
     m_PressZtoJoin -> m_Transform.scale =  {0.21f, 0.21f};
     m_PressZtoJoin->SetVisible(true);
     m_Root.AddChild(m_PressZtoJoin);
+
+
+    m_PauseContinue = std::make_shared<Enemy>("GetReady",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/continue.png"});
+    m_PauseContinue->SetPosition({373.0f, 120.0f});
+    m_PauseContinue -> m_Transform.scale =  {1.1f, 1.1f};
+    // m_PauseContinue->SetVisible(true);
+    m_Root.AddChild(m_PauseContinue);
+
+    m_PauseRestart = std::make_shared<Enemy>("GetReady",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/restart.png"});
+    m_PauseRestart->SetPosition({343.0f, 0.0f});
+    m_PauseRestart -> m_Transform.scale =  {1.1f, 1.1f};
+    // m_PauseRestart->SetVisible(true);
+    m_Root.AddChild(m_PauseRestart);
 
     m_CurrentState = State::UPDATE;
 
