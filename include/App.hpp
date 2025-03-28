@@ -7,6 +7,7 @@
 #include "Character.hpp"
 #include "Enemy.hpp"
 #include "PhaseManger.hpp" // 階段資源管理
+#include "PauseScreen.hpp"
 #include "Effect/EffectManager.hpp"
 
 class App {
@@ -79,6 +80,7 @@ private:
     std::shared_ptr<Enemy> m_Enemy_treasure;           // 定義寶箱
     std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
     std::shared_ptr<PhaseManager> m_PRM;               // 階段資源管理器
+    std::shared_ptr<PausedScreen> m_PausedOption;               // 階段資源管理器
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
@@ -94,11 +96,8 @@ private:
     std::shared_ptr<Enemy> m_Onward;
     std::shared_ptr<Enemy> m_GetReady;
     std::shared_ptr<Enemy> m_PressZtoJoin;
-    std::shared_ptr<Enemy> m_PauseContinue;
-    std::shared_ptr<Enemy> m_PauseRestart;
     bool m_IsReady = false;
-    bool m_IsPaused = false;
-    int m_PausedCurrentOption = 0;
+    int m_CurrentPausedOption = 0;
 };
 
 #endif

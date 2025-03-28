@@ -15,7 +15,9 @@ void Enemy::DrawHealthBar(const glm::vec2& position) const {
 
     s_Program->Bind();
     // 設定血條顏色為紅色
-    glUniform4f(m_ColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+    Util::Color m_Color = Util::Color(1.0, 0.1, 0.1, 0.4);
+    glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
+    // glUniform4f(m_ColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
     // 根據當前生命值調整血條寬度
     float currentWidth = m_Health / m_MaxHealth;
     glUniform1f(glGetUniformLocation(s_Program->GetId(), "u_Width"), currentWidth);

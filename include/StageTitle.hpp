@@ -6,7 +6,7 @@
 
 class StageTitle : public Enemy {
 public:
-    explicit StageTitle(int mainPhase) : Enemy("StageTitle", 1.0f, {ImagePath(mainPhase)}) { // 修正建構子
+    explicit StageTitle(const int mainPhase) : Enemy("StageTitle", 1.0f, {ImagePath(mainPhase)}) { // 修正建構子
         m_Transform.scale = {0.5f, 0.5f};
         SetZIndex(49);
     }

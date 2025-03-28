@@ -16,7 +16,7 @@ void App::Update() {
         m_GetReady->SetVisible(false);
         m_Enemy_dummy->SetVisible(false);
     }
-    if (m_IsPaused) {
+    if (m_PausedOption->GetVisibility() == true) {
         Pause();
         return;
     }
@@ -80,7 +80,7 @@ void App::Update() {
             if (m_Rabbit->UseSkill(1)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(5);
+                        enemy->TakeDamage(10005);
                     }
                 }
                 m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
@@ -163,6 +163,7 @@ void App::Update() {
     // 更新敵人角色
     m_Enemy->Update();
     m_PRM->Update();
+    // m_Paused_option->Update();
 
     m_Enemy_dummy->Update();
 

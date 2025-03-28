@@ -46,48 +46,32 @@ void App::GetReady() {
  * @brief 暫停畫面。
  */
 void App::Pause() {
-    m_IsPaused = true;
-    m_PauseContinue->SetVisible(true);
-    m_PauseRestart->SetVisible(true);
-
+    m_PausedOption->SetVisible(true);
+    m_PRM->SetProgressBarVisible(true);
     if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER)) {
-        switch (m_PausedCurrentOption) {
+        switch (m_PausedOption->GetCurrentOption()) {
             case 0:
-                m_IsPaused = false;
-                m_PauseContinue->SetVisible(false);
-                m_PauseRestart->SetVisible(false);
+                m_PausedOption->SetVisible(false);
+                m_PRM->SetProgressBarVisible(false);
                 LOG_DEBUG("--App::Pause Continue--");
             break;
             default: ;
         }
+        m_PausedOption->Reset();
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER);
-
-    constexpr int maxOption=1;
     if (m_UpKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::UP)) {
-        m_PausedCurrentOption = (m_PausedCurrentOption == 0) ? maxOption : m_PausedCurrentOption - 1;
+        m_PausedOption->Switch(true);
     }
     m_UpKeyDown = Util::Input::IsKeyPressed(Util::Keycode::UP);
 
     if (m_DownKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::DOWN)) {
-            m_PausedCurrentOption = (m_PausedCurrentOption == maxOption) ? 0 : m_PausedCurrentOption + 1;
+        m_PausedOption->Switch(false);
     }
     m_DownKeyDown = Util::Input::IsKeyPressed(Util::Keycode::DOWN);
 
-    switch (m_PausedCurrentOption) {
-        case 0:
-            m_PauseContinue -> m_Transform.scale =  {1.3f, 1.3f};
-            m_PauseRestart -> m_Transform.scale =  {1.1f, 1.1f};
-        break;
-        case 1:
-            m_PauseContinue -> m_Transform.scale =  {1.1f, 1.1f};
-            m_PauseRestart -> m_Transform.scale =  {1.3f, 1.3f};
-        break;
-        default: return ;
-    }
-
-    m_PauseContinue->Update();
-    m_PauseRestart->Update();
+    m_PRM->Update();
+    m_PausedOption->Update();
     m_Root.Update();
 }
 

@@ -23,7 +23,12 @@ public:
     void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
     void ShakePosition(const glm::vec2& Position, float totalTime = 0.0f);
 
-    [[nodiscard]] glm::vec2& GetTargetPosition() { return m_TargetPosition; }
+    [[nodiscard]] glm::vec2& GetTargetPosition() override { return m_TargetPosition; }
+
+    [[nodiscard]] std::string& GetName() { return m_Name; }
+
+
+    virtual void SetProgressIcon(const std::string &ImagePath) { m_Drawable = std::make_shared<Util::Image>(ImagePath); }
 
     void Update() override;
 

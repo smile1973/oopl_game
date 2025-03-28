@@ -11,7 +11,7 @@ public:
         SetZIndex(30);
     }
 
-    void SetProgressIcon(const std::string &imageName) {
+    void SetProgressIcon(const std::string &imageName) override {
         m_Drawable = std::make_shared<Util::Image>(IconImagePath(imageName));
     }
 

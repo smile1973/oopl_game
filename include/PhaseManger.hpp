@@ -52,6 +52,8 @@ public:
     void UpdateProgressBar() const;
     [[nodiscard]] bool IfProgressBarSet() const;
 
+    void SetProgressBarVisible(const bool visible) const { m_ProgressBar->SetVisible(visible); }
+
     void Update() const;
 
     /**
