@@ -40,6 +40,8 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         src/Attack/EnemyAttackController.cpp
         include/Attack/CornerBulletAttack.hpp
         src/Attack/CornerBulletAttack.cpp
+        include/Attack/AttackManager.hpp
+        src/Attack/AttackManager.cpp
 )
 
 if(MSVC)

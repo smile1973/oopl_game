@@ -1,5 +1,5 @@
-// src/AttackPattern.cpp
 #include "Attack/AttackPattern.hpp"
+#include "Attack/AttackManager.hpp"
 #include "Util/Logger.hpp"
 #include <algorithm>
 
@@ -79,19 +79,18 @@ void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
         return;
     }
 
-    // 更新攻擊
+    // 更新攻擊 - 只負責初始化和啟動攻擊，不再更新攻擊邏輯
     for (auto& item : m_Attacks) {
         // 檢查是否到達攻擊開始時間
         if (!item.started && m_ElapsedTime >= item.startTime) {
             item.started = true;
-            item.attack->SetTargetCharacter(player);
-            LOG_DEBUG("Starting attack at time {}", m_ElapsedTime);
-        }
 
-        // 更新已開始的攻擊
-        if (item.started && !item.attack->IsFinished()) {
-            // 只需要更新攻擊，碰撞檢測將在 OnAttackUpdate 中進行
-            item.attack->Update(deltaTime);
+            // 設置目標玩家
+            item.attack->SetTargetCharacter(player);
+
+            // 將攻擊註冊到攻擊管理器，後續更新由管理器處理
+            AttackManager::GetInstance().RegisterAttack(item.attack);
+            LOG_DEBUG("Starting attack at time {}", m_ElapsedTime);
         }
     }
 

@@ -160,14 +160,23 @@ void CornerBulletAttack::CreateAttackEffect() {
 
 bool CornerBulletAttack::CheckCollisionInternal(const std::shared_ptr<Character>& character) {
     if (!character) return false;
-    
+    SyncWithEffect();
     glm::vec2 characterPos = character->GetPosition();
     for (const auto& path : m_BulletPaths) {
         if (path.bulletEffect && path.bulletEffect->IsActive()) {
-            glm::vec2 bulletPos = path.bulletEffect->GetPosition();
-            float distance = glm::length(characterPos - bulletPos);
-            if (distance <= m_BulletRadius) return true;
+            float distance = glm::length(characterPos - path.currentPosition);
+            if (distance <= m_BulletRadius) {
+                return true;
+            }
         }
     }
     return false;
+}
+
+void CornerBulletAttack::SyncWithEffect() {
+    for (auto& path : m_BulletPaths) {
+        if (path.bulletEffect && path.bulletEffect->IsActive()) {
+            path.currentPosition = path.bulletEffect->GetPosition();
+        }
+    }
 }

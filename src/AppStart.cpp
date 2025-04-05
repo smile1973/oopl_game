@@ -3,6 +3,7 @@
 #include "Util/Logger.hpp"
 #include "Effect/EffectManager.hpp"
 #include "Attack/EnemyAttackController.hpp"
+#include "Attack/AttackManager.hpp" // 添加攻擊管理器
 
 void App::Start() {
     LOG_TRACE("Start");

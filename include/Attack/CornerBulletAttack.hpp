@@ -23,6 +23,7 @@ protected:
     void CreateWarningEffect() override;
     void CreateAttackEffect() override;
     bool CheckCollisionInternal(const std::shared_ptr<Character>& character) override;
+    void SyncWithEffect() override;
 
 private:
     // 生成隨機子彈角度
@@ -30,10 +31,12 @@ private:
 
     // 子彈路徑結構
     struct BulletPath {
-        glm::vec2 startPosition;  // 發射起點
-        float angle;              // 發射角度（弧度）
+        glm::vec2 startPosition;      // 發射起點
+        glm::vec2 currentPosition;    // 當前位置 (用於碰撞檢測)
+        float angle;                  // 發射角度（弧度）
         std::shared_ptr<Effect::CompositeEffect> warningEffect;  // 軌跡警告效果
         std::shared_ptr<Effect::CompositeEffect> bulletEffect;   // 子彈特效
+        bool isActive = false;        // 子彈是否活躍
     };
 
     // 成員變量

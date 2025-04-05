@@ -6,10 +6,10 @@
 #include "Util/Renderer.hpp"
 #include "Character.hpp"
 #include "Enemy.hpp"
-// #include "BackGround.hpp"
 #include "PhaseManger.hpp" // 階段資源管理
 #include "Effect/EffectManager.hpp"
-#include "Attack/EnemyAttackController.hpp" // 新增的敵人攻擊控制器
+#include "Attack/EnemyAttackController.hpp" // 敵人攻擊控制器
+#include "Attack/AttackManager.hpp" // 新增: 攻擊管理器
 
 class App {
 public:
@@ -62,7 +62,6 @@ private:
     Phase m_Phase = Phase::START; // 當前階段
 
     Util::Renderer m_Root;
-    // std::shared_ptr<BackgroundImage> m_Background; // 定義背景類
     std::shared_ptr<Character> m_Rabbit; // 定義兔子
     std::shared_ptr<Enemy> m_Enemy;   // 定義敵人
     std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器

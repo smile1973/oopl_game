@@ -1,5 +1,5 @@
-// src/Attack/EnemyAttackController.cpp
 #include "Attack/EnemyAttackController.hpp"
+#include "Attack/AttackManager.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
 
@@ -31,22 +31,19 @@ void EnemyAttackController::InitBattle2Patterns() {
     // 清空現有的模式
     ClearPatterns();
 
-    // 獲取Battle 2的預定義攻擊模式
-    // auto pattern1 = AttackPatternFactory::GetInstance().CreateBattle2Pattern();
-
     // 中央位置
     glm::vec2 centerPosition(0.0f, 0.0f);
 
     // 移動敵人到中心
     auto moveToCenter = [centerPosition](std::shared_ptr<Enemy> enemy) {
         enemy->SetPosition(centerPosition);
-        LOG_DEBUG("Enemy moved to center for Battle 3");
+        LOG_DEBUG("Enemy moved to center for Battle 2");
     };
 
     auto pattern2 = AttackPatternFactory::GetInstance().CreateCrossRotatingLaserPattern(
         centerPosition,   // 中心位置
-        1500.0f,           // 寬度
-        100.0f,         // 高度 -- 寬高以0度為準
+        1500.0f,          // 寬度
+        100.0f,          // 高度
         0.3f,            // 旋轉速度
         4.0f,            // 持續時間
         1.5f             // 倒數時間
@@ -66,18 +63,25 @@ void EnemyAttackController::InitBattle2Patterns() {
         1.5f    // 倒數時間
     );
 
+    glm::vec2 startPos(640.0f, -200.0f);
+    glm::vec2 endPos(-640.0f, -200.0f);
+    auto attacka = std::make_shared<CircleAttack>(startPos, 2.0f, 180.0f);
+    attacka->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attacka->SetMovementParams(glm::normalize(endPos - startPos), 100.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attacka, 0);
+
     auto pattern4 = AttackPatternFactory::GetInstance().CreateCrossRotatingLaserPattern(
         centerPosition,   // 中心位置
-        1500.0f,           // 寬度
-        100.0f,         // 高度 -- 寬高以0度為準
-        -0.2f,            // 旋轉速度
+        1500.0f,          // 寬度
+        100.0f,          // 高度
+        -0.2f,           // 旋轉速度
         4.0f,            // 持續時間
         3.0f             // 倒數時間
     );
 
     for (int i = 0; i < 3; i++) {
-        glm::vec2 startPos(640.0f, -300.0f + i * 300.0f);
-        glm::vec2 endPos(-640.0f, -300.0f + i * 300.0f);
+        startPos = glm::vec2(640.0f, -300.0f + i * 300.0f);
+        endPos = glm::vec2(-640.0f, -300.0f + i * 300.0f);
 
         auto attack = std::make_shared<CircleAttack>(startPos, 2.0f, 120.0f, i + 1);
         attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
@@ -87,8 +91,8 @@ void EnemyAttackController::InitBattle2Patterns() {
     }
 
     for (int i = 0; i < 8; i++) {
-        glm::vec2 startPos(-600.0f + i * 180.0f, 360.0f);
-        glm::vec2 endPos(-600.0f + i * 180.0f, -360.0f);
+        startPos = glm::vec2(-600.0f + i * 180.0f, 360.0f);
+        endPos = glm::vec2(-600.0f + i * 180.0f, -360.0f);
 
         auto attack = std::make_shared<CircleAttack>(startPos, 2.0f, 80.0f, i + 1);
         attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
@@ -97,9 +101,7 @@ void EnemyAttackController::InitBattle2Patterns() {
         pattern4->AddAttack(attack, 2);
     }
 
-
     // 添加到隊列
-    // AddPattern(pattern1);
     AddPattern(pattern2);
     AddPattern(pattern);
     AddPattern(pattern4);
@@ -182,14 +184,11 @@ void EnemyAttackController::Stop() {
     if (m_CurrentPattern) {
         m_CurrentPattern->Stop();
     }
-
-    LOG_DEBUG("Enemy attack controller stopped");
 }
 
 void EnemyAttackController::Reset() {
     Stop();
     ClearPatterns();
-    LOG_DEBUG("Enemy attack controller reset");
 }
 
 void EnemyAttackController::SwitchToNextPattern() {

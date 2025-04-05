@@ -7,6 +7,7 @@
 #include "Effect/EffectManager.hpp"
 #include "Effect/EffectFactory.hpp"
 #include "Attack/EnemyAttackController.hpp"
+#include "Attack/AttackManager.hpp"
 #include "Attack/CircleAttack.hpp"
 #include "Attack/RectangleAttack.hpp"
 
@@ -116,6 +117,9 @@ void App::Update() {
             m_EnemyAttackController->Start();
         }
     }
+
+    // 更新攻擊管理器 (新增)
+    AttackManager::GetInstance().Update(deltaTime, m_Rabbit);
 
     // 更新特效管理器
     Effect::EffectManager::GetInstance().Update(deltaTime);
