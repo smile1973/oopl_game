@@ -4,6 +4,8 @@
 #include "Util/Animation.hpp"
 #include "Effect/EffectManager.hpp"
 #include "Util/Color.hpp"
+#include "Object.hpp"
+
 
 class Skill {
 public:
@@ -59,6 +61,7 @@ private:
     float m_Cooldown = 2.0f;       // 冷卻時間（秒）
     float m_CurrentCooldown = 0.0f; // 目前冷卻計時器
     bool m_IsOnCooldown = false;    // 檢查技能是否處於冷卻狀態的
+
 };
 
 #endif //SKILL_HPP

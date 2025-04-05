@@ -38,6 +38,13 @@ public:
     virtual void Update();
 
     bool IsSkillOnCooldown(int skillId) const;
+    [[nodiscard]] float GetRemainingCooldown(int skillId) const {
+        auto it = m_Skills.find(skillId);
+        if (it != m_Skills.end()) {
+            return it->second->GetRemainingCooldown();
+        }
+        return 0.0f;
+    }
 
     virtual void MovePosition(const glm::vec2& Position, float totalTime = 0.0f);  //平移位置
     virtual void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置

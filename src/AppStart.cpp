@@ -120,6 +120,9 @@ void App::Start() {
     m_PressZtoJoin->SetVisible(true);
     m_Root.AddChild(m_PressZtoJoin);
 
+    m_SkillUI = std::make_shared<SkillUI>(m_Rabbit);
+    m_Root.AddChildren(m_SkillUI->GetChildren());
+
     m_CurrentState = State::UPDATE;
 
     LOG_INFO("Application started successfully");

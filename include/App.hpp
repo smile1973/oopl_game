@@ -8,6 +8,7 @@
 #include "Enemy.hpp"
 #include "PhaseManger.hpp" // 階段資源管理
 #include "PauseScreen.hpp"
+#include "SkillUI.hpp"
 #include "Effect/EffectManager.hpp"
 
 class App {
@@ -81,6 +82,7 @@ private:
     std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
     std::shared_ptr<PhaseManager> m_PRM;               // 階段資源管理器
     std::shared_ptr<PausedScreen> m_PausedOption;               // 階段資源管理器
+    std::shared_ptr<SkillUI> m_SkillUI;               // 階段資源管理器
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
