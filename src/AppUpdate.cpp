@@ -166,6 +166,7 @@ void App::Update() {
     // m_Paused_option->Update();
 
     m_Enemy_dummy->Update();
+    m_SkillUI->Update();
 
 
     // 測試
