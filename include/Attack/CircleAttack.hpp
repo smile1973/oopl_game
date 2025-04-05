@@ -37,16 +37,44 @@ public:
      */
     void SetColor(const Util::Color& color) { m_Color = color; }
 
+    /**
+     * @brief 設置移動參數
+     * @param direction 移動方向
+     * @param speed 移動速度
+     * @param distance 總移動距離
+     */
+    void SetMovementParams(const glm::vec2& direction, float speed, float distance) {
+        m_Direction = direction;
+        m_Speed = speed;
+        m_Distance = distance;
+        m_IsMoving = true;
+    }
+
 protected:
     // 實現基類要求的方法
     void CreateWarningEffect() override;
     void CreateAttackEffect() override;
     bool CheckCollisionInternal(const std::shared_ptr<Character>& character) override;
+    void SyncWithEffect() override;
+    void OnCountdownStart() override;
+    void OnAttackStart() override;
 
 private:
     float m_Radius;                // 圓形攻擊半徑
     Util::Color m_Color;           // 攻擊效果顏色
     bool m_UseGlowEffect = true;   // 是否使用發光效果
+
+    bool m_IsMoving = false;       // 是否啟用移動
+    glm::vec2 m_Direction = {1.0f, 0.0f}; // 移動方向
+    float m_Speed = 200.0f;        // 移動速度
+    float m_Distance = 800.0f;     // 移動距離
+
+    // 方向箭頭圖片
+    static std::shared_ptr<Util::Image> s_ArrowImage;
+    std::shared_ptr<Util::GameObject> m_DirectionIndicator;
+
+    void CreateDirectionIndicator();
+    float CalculateDirectionAngle() const;
 };
 
 #endif // CIRCLEATTACK_HPP

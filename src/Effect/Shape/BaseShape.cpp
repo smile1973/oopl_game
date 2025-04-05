@@ -10,7 +10,6 @@ namespace Effect {
 
         void BaseShape::Update(float deltaTime) {
             if (m_State == State::ACTIVE) {
-                // LOG_DEBUG("m_duration = {} ", m_Duration);
                 m_ElapsedTime += deltaTime;
                 if (m_ElapsedTime >= m_Duration) {
                     m_State = State::FINISHED;
@@ -24,8 +23,8 @@ namespace Effect {
             m_ZIndex = zIndex;
             m_State = State::ACTIVE;
 
-            LOG_DEBUG("BaseShape activated at position ({}, {}), z-index: {}",
-                      position.x, position.y, zIndex);
+            // LOG_DEBUG("BaseShape activated at position ({}, {}), z-index: {}",
+            //           position.x, position.y, zIndex);
         }
 
         void BaseShape::Reset() {

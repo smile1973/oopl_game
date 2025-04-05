@@ -4,8 +4,8 @@
 
 #include "Attack/AttackPattern.hpp"
 #include "Attack/CircleAttack.hpp"
-#include "Attack/RectangleAttack.hpp"
-#include "Attack/LaserAttack.hpp"
+#include "Attack/CornerBulletAttack.hpp"
+#include "Attack/RectangleAttack.hpp"  // 整合後不再需要單獨的 LaserAttack.hpp
 
 /**
  * @class AttackPatternFactory
@@ -81,7 +81,7 @@ public:
      */
     std::shared_ptr<AttackPattern> CreateLaserPattern(
         const glm::vec2& position,
-        LaserAttack::Direction direction,
+        RectangleAttack::Direction direction,  // 使用 RectangleAttack::Direction 替換 LaserAttack::Direction
         float width = 80.0f,
         float length = 2000.0f,
         float delay = 2.0f);
@@ -98,7 +98,7 @@ public:
      */
     std::shared_ptr<AttackPattern> CreateMultiLaserPattern(
         const std::vector<glm::vec2>& positions,
-        const std::vector<LaserAttack::Direction>& directions,
+        const std::vector<RectangleAttack::Direction>& directions,  // 使用 RectangleAttack::Direction
         float width = 80.0f,
         float length = 2000.0f,
         float delay = 2.0f,
@@ -121,6 +121,53 @@ public:
         int count = 8,
         float delay = 2.0f,
         float interval = 0.2f);
+
+    /**
+     * @brief 創建十字形旋轉雷射攻擊模式
+     * @param centerPosition 十字中心位置
+     * @param width 雷射寬度
+     * @param length 雷射長度
+     * @param rotationSpeed 旋轉速度（弧度/秒）
+     * @param duration 持續時間（秒）
+     * @param delay 倒數時間
+     * @return 配置好的攻擊模式
+     */
+    std::shared_ptr<AttackPattern> CreateCrossRotatingLaserPattern(
+        const glm::vec2& centerPosition,
+        float width = 80.0f,
+        float length = 2000.0f,
+        float rotationSpeed = 0.5f,
+        float duration = 10.0f,
+        float delay = 2.0f);
+
+    /**
+     * @brief 創建從左到右移動的圓形攻擊模式
+     * @param startPosition 起始位置（左側）
+     * @param endPosition 結束位置（右側）
+     * @param radius 圓形半徑
+     * @param speed 移動速度
+     * @param delay 倒數時間
+     * @return 配置好的攻擊模式
+     */
+    std::shared_ptr<AttackPattern> CreateMovingCirclePattern(
+        const glm::vec2& startPosition,
+        const glm::vec2& endPosition,
+        float radius = 100.0f,
+        float speed = 200.0f,
+        float delay = 2.0f);
+    /**
+     * @brief 創建從四個角落發射子彈的攻擊模式
+     * @param bulletCount 每個角落發射的子彈數量
+     * @param bulletSpeed 子彈移動速度
+     * @param bulletRadius 子彈半徑
+     * @param delay 倒數時間
+     * @return 配置好的攻擊模式
+     */
+    std::shared_ptr<AttackPattern> CreateCornerBulletPattern(
+        int bulletCount = 4,
+        float bulletSpeed = 350.0f,
+        float bulletRadius = 30.0f,
+        float delay = 2.0f);
 
     // BATTLE 1 特殊攻擊模式
     std::shared_ptr<AttackPattern> CreateBattle1Pattern();

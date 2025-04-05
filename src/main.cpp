@@ -4,7 +4,7 @@
 
 int main(int, char**) {
     auto context = Core::Context::GetInstance();
-    App app;
+    App& app = App::GetInstance();
 
     while (!context->GetExit()) {
         switch (app.GetCurrentState()) {

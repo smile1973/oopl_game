@@ -23,31 +23,21 @@ public:
     AttackPattern();
     virtual ~AttackPattern() = default;
 
-    // 添加攻擊
     void AddAttack(std::shared_ptr<Attack> attack, float startTime);
 
-    // 添加敵人移動
     void AddEnemyMovement(const EnemyMovement& movement, float startTime);
 
-    // 啟動攻擊模式
     void Start(std::shared_ptr<Enemy> enemy);
 
-    // 停止攻擊模式
     void Stop();
 
-    // 更新攻擊模式
     void Update(float deltaTime, std::shared_ptr<Character> player);
 
-    // 檢查是否完成
     bool IsFinished() const { return m_State == State::FINISHED; }
 
-    // 獲取當前狀態
     State GetState() const { return m_State; }
 
-    // 設置總持續時間
     void SetDuration(float duration) { m_TotalDuration = duration; }
-
-    // 獲取總持續時間
     float GetDuration() const { return m_TotalDuration; }
 
 private:

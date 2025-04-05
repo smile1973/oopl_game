@@ -32,7 +32,7 @@ void App::Update() {
     }
 
     // 角色移動
-    const float moveSpeed = 6.0f; // 調整移動速度
+    const float moveSpeed = 4.5f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
 
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
@@ -157,6 +157,32 @@ void App::Update() {
             m_EnemyAttackController->Start();
             LOG_DEBUG("Manual start Battle 2 attack patterns");
         }
+    }
+
+    // 測試矩形光束特效 - 按下 2 鍵
+    if (Util::Input::IsKeyDown(Util::Keycode::NUM_2)) {
+        auto cursorPos = Util::Input::GetCursorPosition();
+
+        // 獲取標準自動旋轉特效
+        auto effect1 = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
+        auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect1->GetBaseShape());
+        rectangleShape->SetRotation(0.0f);
+        effect1->SetDuration(10.0f);
+        effect1->Play(cursorPos, 20.0f);
+        LOG_DEBUG("Created standard auto-rotating RECT_BEAM effect at position: ({}, {})", cursorPos.x, cursorPos.y);
+
+        // 創建一個新的自定義光束特效 - 從工廠獲取類似的基本特效
+        auto effect2 = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
+        if (auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect2->GetBaseShape())) {
+            // 設置90度旋轉 (π/2 弧度)
+            rectangleShape->SetRotation(1.57f);
+            effect2->SetDuration(10.0f);
+            // 可選：調整旋轉速度
+            // rectangleShape->SetAutoRotation(true, 1.0f);  // 減慢旋轉速度
+        }
+
+        // 放置在與第一個光束有點偏移的位置
+        effect2->Play(cursorPos, 25.0f);
     }
 
     // 關卡跳轉測試

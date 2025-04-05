@@ -84,17 +84,14 @@ void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
         // 檢查是否到達攻擊開始時間
         if (!item.started && m_ElapsedTime >= item.startTime) {
             item.started = true;
+            item.attack->SetTargetCharacter(player);
             LOG_DEBUG("Starting attack at time {}", m_ElapsedTime);
         }
 
         // 更新已開始的攻擊
         if (item.started && !item.attack->IsFinished()) {
+            // 只需要更新攻擊，碰撞檢測將在 OnAttackUpdate 中進行
             item.attack->Update(deltaTime);
-
-            // 檢查攻擊是否命中玩家
-            if (item.attack->GetState() == Attack::State::ATTACKING) {
-                item.attack->CheckCollision(player);
-            }
         }
     }
 

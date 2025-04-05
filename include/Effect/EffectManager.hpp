@@ -38,6 +38,15 @@ namespace Effect {
 
         // 取得活躍特效數量
         size_t GetActiveEffectsCount() const { return m_ActiveEffects.size(); }
+        void ClearAllEffects() {
+            // 重置所有活躍特效
+            for (auto& effect : m_ActiveEffects) {
+                if (effect) {
+                    effect->Reset();
+                }
+            }
+            m_ActiveEffects.clear();
+        }
 
     private:
         EffectManager() : Util::GameObject(nullptr, 30.0f) {}

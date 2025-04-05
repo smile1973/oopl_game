@@ -51,6 +51,7 @@ void App::ValidTask() {
                 break;
             }
             LOG_DEBUG("--BATTLE_2--END");
+            Effect::EffectManager::GetInstance().ClearAllEffects();
             m_Phase = Phase::BATTLE_3;
             m_Rabbit->SetPosition({-400.0f, 160.0f});
             m_Enemy->SetPosition({197.5f, -3.5f});

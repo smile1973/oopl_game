@@ -17,8 +17,8 @@ Attack::Attack(const glm::vec2& position, float delay, int sequenceNumber)
     // 設置初始狀態為CREATED
     m_State = State::CREATED;
 
-    LOG_DEBUG("Attack created at position ({}, {}), delay: {}, sequence: {}",
-             position.x, position.y, delay, sequenceNumber);
+    // LOG_DEBUG("Attack created at position ({}, {}), delay: {}, sequence: {}",
+    //          position.x, position.y, delay, sequenceNumber);
 }
 
 // 主要更新函數 - 根據當前狀態調用相應的處理函數
@@ -68,21 +68,15 @@ void Attack::Update(float deltaTime) {
             break;
 
         case State::CREATED:
-            // 不應該執行到這裡，因為首次Update會切換狀態
-            LOG_ERROR("Attack in CREATED state during Update");
             break;
     }
 }
 
 // 繪製函數 - GameObject的虛函數
 void Attack::Draw() {
-    // 如果還在CREATED狀態，不執行任何繪製
     if (m_State == State::CREATED) {
         return;
     }
-
-    // 繪製由GameObject基類處理
-    // 特效和文字已經添加為子物件，會自動繪製
     Util::GameObject::Draw();
 }
 
@@ -150,15 +144,8 @@ void Attack::ChangeState(State newState) {
 
 // 警告階段開始
 void Attack::OnWarningStart() {
-    LOG_DEBUG("OnWarningStart called, creating warning effect");
-
-    // 創建警告特效 - 由子類實現
-    try {
-        CreateWarningEffect();
-        LOG_DEBUG("Warning effect created successfully");
-    } catch (const std::exception& e) {
-        LOG_ERROR("Error creating warning effect: {}", e.what());
-    }
+    // LOG_DEBUG("OnWarningStart called, creating warning effect");
+    CreateWarningEffect();
 
     // 創建序列號文字
     // if (m_SequenceNumber > 0) {
@@ -208,7 +195,6 @@ void Attack::OnCountdownStart() {
 
 // 倒數階段更新
 void Attack::OnCountdownUpdate(float deltaTime) {
-    // 預設實現暫時不做特殊處理
     (void)deltaTime;
 }
 
@@ -225,12 +211,12 @@ void Attack::OnAttackStart() {
 
     // 移除警告特效和時間條
     if (m_WarningEffect) {
-        LOG_DEBUG("Removing warning effect at attack start");
+        // LOG_DEBUG("Removing warning effect at attack start");
         m_WarningEffect->Reset();
     }
 
     if (m_TimeBarEffect) {
-        LOG_DEBUG("Removing time bar at attack start");
+        // LOG_DEBUG("Removing time bar at attack start");
         m_TimeBarEffect->Reset();
     }
 
@@ -242,10 +228,16 @@ void Attack::OnAttackStart() {
     }
 }
 
-// 攻擊階段更新
 void Attack::OnAttackUpdate(float deltaTime) {
-    // 預設實現暫時不做特殊處理
-    (void)deltaTime;
+    SyncWithEffect();
+    if (m_TargetCharacter) {
+        CheckCollision(m_TargetCharacter);
+    }
+
+    // 檢查特效是否已結束，但攻擊仍在持續中
+    if (m_AttackEffect && m_AttackEffect->IsFinished()) {
+        CreateAttackEffect();
+    }
 }
 
 // 完成階段開始
@@ -312,24 +304,18 @@ float Attack::CalculateProgress() const {
 
 // 碰撞檢測
 bool Attack::CheckCollision(const std::shared_ptr<Character>& character) {
-    // 只有在攻擊階段才檢查碰撞
-    if (m_State != State::ATTACKING || m_HasHitCharacter) return false;
+    // 只檢查攻擊階段
+    if (m_State != State::ATTACKING) return false;
 
-    // 使用子類別實現的碰撞檢測邏輯
+    // 如果角色處於無敵狀態，則不檢測碰撞
+    if (character->IsInvincible()) {
+        return false;
+    }
+
     if (CheckCollisionInternal(character)) {
-        m_HasHitCharacter = true;
-        OnHit(character);
+        character->TakeDamage(1);
         return true;
     }
 
     return false;
-}
-
-// 碰撞處理
-void Attack::OnHit(const std::shared_ptr<Character>& character) {
-    // 預設實現只記錄碰撞
-    LOG_DEBUG("Character hit by attack at position ({}, {})", m_Position.x, m_Position.y);
-
-    // 具體處理由子類別實現
-    (void)character;
 }

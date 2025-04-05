@@ -27,6 +27,10 @@ void App::Start() {
     glm::vec2 scale = {0.5f, 0.5f};
     m_Rabbit -> m_Transform.scale = scale;
 
+    std::vector<std::string> rabbitHurtImages;
+    rabbitHurtImages.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_gethit.png");
+    m_Rabbit -> AddHurtAnimation(rabbitHurtImages, 500);
+
     // 技能 Z 動畫
     std::vector<std::string> rabbitSkill1Images;
     rabbitSkill1Images.reserve(6);

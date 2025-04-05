@@ -4,82 +4,66 @@
 
 #include "Attack/Attack.hpp"
 
-/**
- * @class RectangleAttack
- * @brief 矩形攻擊實現，用於創建矩形的攻擊區域
- */
 class RectangleAttack : public Attack {
 public:
-    /**
-     * @brief 建構函數
-     * @param position 攻擊中心位置
-     * @param delay 警告倒數時間
-     * @param width 矩形寬度
-     * @param height 矩形高度
-     * @param rotation 矩形旋轉角度（弧度）
-     * @param sequenceNumber 攻擊序列編號
-     */
+    enum class Direction {
+        HORIZONTAL,  // 水平雷射
+        VERTICAL,    // 垂直雷射
+        DIAGONAL_TL_BR,  // 左上到右下對角線
+        DIAGONAL_TR_BL,  // 右上到左下對角線
+        CUSTOM
+    };
     RectangleAttack(const glm::vec2& position, float delay,
                    float width = 200.0f, float height = 100.0f,
                    float rotation = 0.0f, int sequenceNumber = 0);
 
-    /**
-     * @brief 設置矩形攻擊的尺寸
-     * @param width 寬度
-     * @param height 高度
-     */
-    void SetSize(float width, float height) {
-        m_Width = width;
-        m_Height = height;
-    }
+    RectangleAttack(const glm::vec2& position, float delay, Direction direction,
+            float width = 80.0f, float length = 2000.0f, int sequenceNumber = 0);
 
-    /**
-     * @brief 設置矩形攻擊的旋轉角度
-     * @param rotation 旋轉角度（弧度）
-     */
-    void SetRotation(float rotation) {
-        m_Rotation = rotation;
-    }
+    glm::vec2 GetSize() const { return {m_Width, m_Height}; }
+    void SetSize(float width, float height) { m_Width = width; m_Height = height;}
 
-    /**
-     * @brief 取得矩形攻擊的尺寸
-     * @return 尺寸向量，x=寬度，y=高度
-     */
-    glm::vec2 GetSize() const {
-        return {m_Width, m_Height};
-    }
+    float GetRotation() const { return m_Rotation; }
+    void SetRotation(float rotation);
 
-    /**
-     * @brief 取得矩形攻擊的旋轉角度
-     * @return 旋轉角度（弧度）
-     */
-    float GetRotation() const {
-        return m_Rotation;
-    }
+    void SetColor(const Util::Color& color) { m_Color = color; }
 
-    /**
-     * @brief 設置矩形攻擊的顏色
-     * @param color 顏色值
-     */
-    void SetColor(const Util::Color& color) {
-        m_Color = color;
+    void SetAutoRotation(bool enable, float speed = 0.5f) {
+        m_AutoRotate = enable;
+        m_RotationSpeed = speed;
     }
+    bool IsAutoRotating() const { return m_AutoRotate; }
+    float GetRotationSpeed() const { return m_RotationSpeed; }
 
 protected:
-    // 實現基類要求的方法
     void CreateWarningEffect() override;
     void CreateAttackEffect() override;
     bool CheckCollisionInternal(const std::shared_ptr<Character>& character) override;
+    void SyncWithEffect() override;
+    void OnCountdownStart() override;
+    void OnCountdownUpdate(float deltaTime) override;
+    void OnAttackStart() override;
 
 private:
+    [[nodiscard]] float CalculateRotationAngle() const;
+    [[nodiscard]] bool IsPointInPolygon(const glm::vec2& point, const glm::vec2* vertices, int vertexCount) const;
+    [[nodiscard]] bool IsPointInRectangle(const glm::vec2& point) const;
+
     float m_Width;                 // 矩形寬度
     float m_Height;                // 矩形高度
     float m_Rotation;              // 矩形旋轉角度（弧度）
     Util::Color m_Color;           // 攻擊效果顏色
     bool m_UseGlowEffect = true;   // 是否使用發光效果
+    Direction m_Direction;
 
-    // 輔助方法：檢查點是否在旋轉後的矩形內
-    bool IsPointInRectangle(const glm::vec2& point) const;
+    bool m_AutoRotate = false;       // 是否啟用自動旋轉
+    float m_RotationSpeed = 0.5f;    // 旋轉速度（弧度/秒）
+
+    static std::shared_ptr<Util::Image> s_ClockwiseImage;
+    static std::shared_ptr<Util::Image> s_CounterClockwiseImage;
+    std::shared_ptr<Util::GameObject> m_DirectionIndicator;
+
+    void CreateDirectionIndicator();
 };
 
 #endif // RECTANGLEATTACK_HPP

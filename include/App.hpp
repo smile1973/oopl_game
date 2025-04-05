@@ -18,19 +18,34 @@ public:
         UPDATE,
         END,
     };
+    static App& GetInstance() {
+        static App instance;
+        return instance;
+    }
+
+    // 禁止複製和賦值
+    App(const App&) = delete;
+    App& operator=(const App&) = delete;
 
     [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
 
     void Start();
-
     void Update();
-
     void End(); // NOLINT(readability-convert-member-functions-to-static)
+
+    void AddToRoot(const std::shared_ptr<Util::GameObject> &object) {
+        m_Root.AddChild(object);
+    }
+    void RemoveFromRoot(const std::shared_ptr<Util::GameObject> &object) {
+        m_Root.RemoveChild(object);
+    }
 
 private:
     // 執行有效的任務，內部函式
     void ValidTask();
 
+    App() : m_CurrentState(State::START),
+           m_Phase(Phase::START) {}
 
     //private:
     enum class Phase {
@@ -42,7 +57,7 @@ private:
         STORE,
     };
 
-
+    static App* s_Instance;
     State m_CurrentState = State::START;
     Phase m_Phase = Phase::START; // 當前階段
 

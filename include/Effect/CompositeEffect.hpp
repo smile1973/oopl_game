@@ -33,6 +33,13 @@ namespace Effect {
         void SetMovementModifier(const Modifier::MovementModifier& modifier) { m_MovementModifier = modifier; }
         void SetAnimationModifier(const Modifier::AnimationModifier& modifier) { m_AnimationModifier = modifier; }
 
+        void SetDuration(float duration) override {
+            m_Duration = duration;
+            if (m_BaseShape) {
+                m_BaseShape->SetDuration(duration);
+            }
+        }
+
         // 基礎形狀設置
         std::shared_ptr<Shape::BaseShape> GetBaseShape() { return m_BaseShape; }
 

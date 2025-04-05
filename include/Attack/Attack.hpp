@@ -1,4 +1,3 @@
-// include/Attack/Attack.hpp
 #ifndef ATTACK_HPP
 #define ATTACK_HPP
 
@@ -28,8 +27,8 @@ public:
     void Draw() override;
 
     // 狀態檢查
-    bool IsFinished() const { return m_State == State::FINISHED; }
-    State GetState() const { return m_State; }
+    [[nodiscard]] bool IsFinished() const { return m_State == State::FINISHED; }
+    [[nodiscard]] State GetState() const { return m_State; }
 
     // 碰撞檢測
     bool CheckCollision(const std::shared_ptr<Character>& character);
@@ -39,11 +38,19 @@ public:
     void SetDelay(float delay) { m_Delay = delay; }
     void SetSequenceNumber(int number);
 
-    // 取得攻擊參數
+    void SetTargetCharacter(std::shared_ptr<Character> target) { m_TargetCharacter = target; }
+
     int GetSequenceNumber() const { return m_SequenceNumber; }
     float GetDelay() const { return m_Delay; }
     float GetElapsedTime() const { return m_ElapsedTime; }
     const glm::vec2& GetAttackPosition() const { return m_Position; }
+
+    void SetAttackDuration(float duration) { m_AttackDuration = duration; }
+    float GetAttackDuration() const { return m_AttackDuration; }
+
+    // 獲取特效
+    [[nodiscard]] std::shared_ptr<Effect::CompositeEffect> GetWarningEffect() const { return m_WarningEffect; }
+    [[nodiscard]] std::shared_ptr<Effect::CompositeEffect> GetAttackEffect() const { return m_AttackEffect; }
 
 protected:
     // 各個階段處理的虛函數 - 子類別可以覆寫
@@ -63,9 +70,9 @@ protected:
 
     // 碰撞處理 - 必須由子類別實現
     virtual bool CheckCollisionInternal(const std::shared_ptr<Character>& character) = 0;
-    virtual void OnHit(const std::shared_ptr<Character>& character);
 
-protected:
+    virtual void SyncWithEffect() {}
+
     // 基本屬性
     State m_State = State::CREATED; // 改為CREATED作為初始狀態
     bool m_IsFirstUpdate = true;    // 標記第一次更新
@@ -73,8 +80,9 @@ protected:
     float m_Delay;
     float m_ElapsedTime = 0.0f;
     int m_SequenceNumber;
-    bool m_HasHitCharacter = false;
     float m_AttackDuration = 0.5f; // 攻擊效果持續時間
+
+    std::shared_ptr<Character> m_TargetCharacter = nullptr;
 
     // 視覺元素
     std::shared_ptr<Effect::CompositeEffect> m_WarningEffect;

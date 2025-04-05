@@ -34,7 +34,7 @@ namespace Effect {
         
         // 獲取特效持續時間
         float GetDuration() const { return m_Duration; }
-        void SetDuration(float duration) { m_Duration = duration; }
+        virtual void SetDuration(float duration) { m_Duration = duration; }
 
         float GetZIndex() const { return m_ZIndex; }
 

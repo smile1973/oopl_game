@@ -34,7 +34,7 @@ void Skill::Play(const glm::vec2& position) {
         auto effect = Effect::EffectManager::GetInstance().GetEffect(effectType);
         // LOG_DEBUG("get: {}", (effect ? "success" : "fail"));
         effect->SetDuration(static_cast<float>(m_Duration) / 300.0f);
-        effect->Play(position, 5.0f);
+        effect->Play(position, 45.0f);
         m_CurrentEffect = effect;
 
         LOG_DEBUG("Created effect for skill {}, position: ({}, {})",

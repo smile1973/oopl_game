@@ -9,18 +9,16 @@ namespace Effect {
 
         switch (type) {
             case EffectType::SKILL_Z: {
-                // Z技能：實心圓，內部半透明，邊緣加深，不會移動
                 auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 1.0f);
-                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.3f)); // 半透明白色
+                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.3f));
                 circleShape->SetSize({500, 500});
                 effect = std::make_shared<CompositeEffect>(circleShape);
                 effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
+                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.005f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
                 break;
             }
 
             case EffectType::SKILL_X: {
-                // X技能：空心圓，邊緣發光，有尾跡效果，會移動
                 auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 2.0f);
                 circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.1f));
                 circleShape->SetSize({150, 150});
@@ -34,7 +32,6 @@ namespace Effect {
             }
 
             case EffectType::SKILL_C: {
-                // C技能：實心橢圓，內部半透明，邊緣加深，不會移動
                 auto ellipseShape = std::make_shared<Shape::EllipseShape>(glm::vec2(0.4f, 0.05f), 1.0f);
                 ellipseShape->SetColor(Util::Color(1.0f, 1.0f, 1.0f, 0.05f));
                 ellipseShape->SetSize({700, 700});
@@ -45,7 +42,6 @@ namespace Effect {
             }
 
             case EffectType::SKILL_V: {
-                // V技能：實心圓，內部半透明，邊緣發光，有波紋效果，不會移動
                 auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 1.5f);
                 circleShape->SetColor(Util::Color(0.9f, 0.9f, 0.9f, 0.05f)); // 半透明藍色
 

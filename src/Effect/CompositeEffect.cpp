@@ -36,14 +36,6 @@ namespace Effect {
         // 先綁定程序，這樣才能設置 uniform
         program->Bind();
 
-        // 為了調試，檢查 EdgeModifier 的 uniform 是否能夠正常獲取
-        // int edgeTypeLocation = glGetUniformLocation(program->GetId(), "u_EdgeType");
-        // int edgeWidthLocation = glGetUniformLocation(program->GetId(), "u_EdgeWidth");
-        // int edgeColorLocation = glGetUniformLocation(program->GetId(), "u_EdgeColor");
-        //
-        // LOG_DEBUG("EdgeModifier uniform locations in program {}: edgeType={}, edgeWidth={}, edgeColor={}",
-        //           program->GetId(), edgeTypeLocation, edgeWidthLocation, edgeColorLocation);
-
         // 依次應用修飾器
         m_FillModifier.Apply(*program);
         m_EdgeModifier.Apply(*program);
@@ -92,7 +84,7 @@ namespace Effect {
 
         // Update time
         m_ElapsedTime += deltaTime;
-        if (m_ElapsedTime >= m_Duration && m_State == State::ACTIVE) {
+        if (m_ElapsedTime >= m_Duration) {
             m_State = State::FINISHED;
         }
     }
