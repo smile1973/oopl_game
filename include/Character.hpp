@@ -67,11 +67,8 @@ private:
 
 
     bool m_IsMoving = false;
-    // float m_Speed = 0.0f;
-    // float m_MaxDistance = 0.0f;
     float m_DistanceTraveled = 0.0f;
     float m_TotalTime = 0.0f;
-    // glm::vec2 m_Direction = glm::vec2(0.0f, 0.0f);
     glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
     glm::vec2 m_MoveSpeed = glm::vec2(0.0f, 0.0f);
 };

@@ -7,8 +7,8 @@
 
 class TextObject : public Util::GameObject {
 public:
-    explicit TextObject(const std::string& text) : GameObject(
-            std::make_unique<Util::Text>(GA_RESOURCE_DIR"/Font/Inkfree.ttf", 35,
+    explicit TextObject(const std::string& text, int size=35) : GameObject(
+            std::make_unique<Util::Text>(GA_RESOURCE_DIR"/Font/Inkfree.ttf", size,
                                          text, Util::Color::FromName(Util::Colors::WHITE)),
             100) {
         m_Transform.translation = {0.0, 0.0};

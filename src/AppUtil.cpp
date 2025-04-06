@@ -36,6 +36,7 @@ void App::GetReady() {
         m_IsReady = true;
     }
 
+    m_SkillUI->Update();
     m_Rabbit->Update();
     m_Enemy_dummy->Update();
     m_Onward->Update();
