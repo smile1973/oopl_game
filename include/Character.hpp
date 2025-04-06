@@ -22,16 +22,33 @@ public:
     [[nodiscard]] const std::vector<std::string>& GetImagePathSet() const { return m_ImagePathSet; }
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
-
+    // 檢測角色是否與另一個角色發生碰撞
     bool IfCollides(const std::shared_ptr<Character>& other, float Distance) const;
+    bool IfCirclesCollide(const std::shared_ptr<Character>& other, float Distance) const;
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
+    void SetInversion() { m_Transform.scale.x *= -1; } // 設定左右反轉角色
+
+    void TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies); // 朝向最近的敵人
 
     // 技能
     void AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
-                 int duration = 175);
-    void UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
-    void Update();
+                 int duration = 175, float Cooldown = 2.0f);
+    bool UseSkill(int skillId);  // 1=Z, 2=X, 3=C, 4=V
+    virtual void Update();
+
+    bool IsSkillOnCooldown(int skillId) const;
+    [[nodiscard]] float GetRemainingCooldown(int skillId) const {
+        auto it = m_Skills.find(skillId);
+        if (it != m_Skills.end()) {
+            return it->second->GetRemainingCooldown();
+        }
+        return 0.0f;
+    }
+
+    virtual void MovePosition(const glm::vec2& Position, float totalTime = 0.0f);  //平移位置
+    virtual void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
+    [[nodiscard]] virtual glm::vec2& GetTargetPosition() { return m_TargetPosition; }
 
     // 血量相關
     void TakeDamage(int damage = 1);
@@ -70,6 +87,13 @@ private:
     // 受傷動畫相關
     float m_HurtAnimationTimer = 0.0f;
     float m_HurtAnimationDuration = 0.5f; // 受傷動畫持續時間(秒)
+
+
+    bool m_IsMoving = false;
+    float m_DistanceTraveled = 0.0f;
+    float m_TotalTime = 0.0f;
+    glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
+    glm::vec2 m_MoveSpeed = glm::vec2(0.0f, 0.0f);
 };
 
 

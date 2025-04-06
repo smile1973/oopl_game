@@ -21,23 +21,31 @@ Character::Character(const std::vector<std::string>& ImagePathSet) {
 }
 
 void Character::AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
-                        int duration) {
+                        int duration, float Cooldown) {
     // 創建並儲存新技能
-    auto newSkill = std::make_shared<Skill>(skillId, skillImageSet, duration);
+    auto newSkill = std::make_shared<Skill>(skillId, skillImageSet, duration, Cooldown);
     m_Skills[skillId] = newSkill;
     LOG_DEBUG("Added skill with ID: " + std::to_string(skillId));
 }
 
-void Character::UseSkill(int skillId) {
-    // 技能可在任何狀態下使用，包括受傷狀態
-    // 檢查技能是否存在
-    auto it = m_Skills.find(skillId);
-    if (it != m_Skills.end()) {
-        LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
-        SwitchToSkill(skillId);
-    } else {
-        LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " not found!");
+bool Character::UseSkill(const int skillId) {
+    if (m_State == State::IDLE) {
+        // 檢查技能是否存在
+        auto it = m_Skills.find(skillId);
+        if (it != m_Skills.end()) {
+            // LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
+            // SwitchToSkill(skillId);
+            if (!it->second->IsOnCooldown()) {
+                LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
+                SwitchToSkill(skillId);
+                return true;
+            }
+            LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " is on cooldown! " + std::to_string(it->second->GetRemainingCooldown()));
+        } else {
+            LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " not found!");
+        }
     }
+    return false;
 }
 
 void Character::Update() {
@@ -58,6 +66,11 @@ void Character::Update() {
         // 更新技能
         m_CurrentSkill->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
 
+    // 更新技能
+    for (auto it = m_Skills.begin(); it != m_Skills.end(); ++it) {
+        it->second->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
+    }
+    if (m_State == State::USING_SKILL && m_CurrentSkill) {
         // 檢查技能是否結束
         if (m_CurrentSkill->IsEnded()) {
             SwitchToIdle();
@@ -70,6 +83,21 @@ void Character::Update() {
         // 如果受傷動畫結束，切回閒置狀態
         if (m_HurtAnimationTimer >= m_HurtAnimationDuration) {
             SwitchToIdle();
+        }
+    }
+
+    // 移動位置
+    if (m_IsMoving) {
+        // 計算移動距離
+        const float DeltaTimeMs = Util::Time::GetDeltaTimeMs();
+        m_TotalTime -= DeltaTimeMs;
+        // 更新位置
+        m_Transform.translation += m_MoveSpeed * DeltaTimeMs / 1000.0f;
+        if (m_TotalTime < 0.0f) {
+            m_IsMoving = false; // 停止移動
+            m_Transform.translation = m_TargetPosition;
+            m_TotalTime = 0;
+            LOG_DEBUG("Character move to {}", m_Transform.translation);
         }
     }
 }
@@ -107,15 +135,62 @@ void Character::SwitchToHurt() {
     m_HurtAnimation->Play();
 }
 
-bool Character::IfCollides(const std::shared_ptr<Character>& other, float Distance) const{
-    if (!other) return false;
-    // 取得當前角色和另一個角色的位置
-    glm::vec2 pos1 = this->GetPosition();
-    glm::vec2 pos2 = other->GetPosition();
-    float size = Distance;
-    // 簡單的 AABB (Axis-Aligned Bounding Box) 碰撞檢測
-    bool isColliding = (abs(pos1.x - pos2.x) < size) && (abs(pos1.y - pos2.y) < size);
-    return isColliding;
+
+void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies) {
+    if (m_Enemies.empty()) return;
+
+    float minDistance = std::numeric_limits<float>::max();
+    std::shared_ptr<Character> nearestEnemy = nullptr;
+    const glm::vec2 currentPosition = this->GetPosition();
+
+    for (const auto& enemy : m_Enemies) {
+        if (enemy->GetVisibility()) {
+            float distance = glm::distance(currentPosition, enemy->GetPosition());
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+    }
+
+    if (nearestEnemy) {
+        if (nearestEnemy->GetPosition().x > currentPosition.x) {
+            LOG_DEBUG("Towards the Right");
+            m_Transform.scale.x = 0.5f;
+        } else {
+            LOG_DEBUG("Towards the Left");
+            m_Transform.scale.x = -0.5f;
+        }
+    }
+}
+
+
+bool Character::IsSkillOnCooldown(int skillId) const {
+    auto it = m_Skills.find(skillId);
+    if (it != m_Skills.end()) {
+        return it->second->IsOnCooldown();
+    }
+    return false;
+}
+
+void Character::MovePosition(const glm::vec2& Position, const float totalTime) {
+    MoveToPosition(GetPosition() + Position, totalTime);
+}
+
+void Character::MoveToPosition(const glm::vec2& targetPosition, const float totalTime) {
+    if (totalTime <= 0.0f) {
+        m_Transform.translation = targetPosition;
+        return;
+    }
+
+    m_IsMoving = true;
+    m_TargetPosition = targetPosition;
+    // m_MaxDistance = glm::distance(this->GetPosition(), targetPosition);
+    // m_Direction = (targetPosition - this->GetPosition()) / m_MaxDistance;
+    // m_Speed = m_MaxDistance / totalTime;
+    m_MoveSpeed = (targetPosition - this->GetPosition()) / totalTime;
+    m_TotalTime = totalTime * 1000.0f; //(ms)
+    LOG_DEBUG("Move Character to {}", m_Transform.translation);
 }
 
 void Character::TakeDamage(int damage) {

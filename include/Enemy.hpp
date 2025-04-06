@@ -4,51 +4,57 @@
 #include "Character.hpp"
 #include "Util/Renderer.hpp"
 #include "Util/Time.hpp"
-#include "Util/Logger.hpp"
+#include "Util/Animation.hpp"
 
-#include <glm/glm.hpp>
-#include <iostream>
+#include <set>
 
 // Enemy 類別，繼承自 Character，代表遊戲中的敵人角色
 class Enemy : public Character {
 public:
-    // 構造函數，初始化敵人的血量與影像集
-    Enemy(float health, const std::vector<std::string>& ImageSet);
+    Enemy(std::string name, float health, const std::vector<std::string>& ImageSet);    // 構造函數，初始化敵人的血量與影像集
 
-    // 檢查敵人是否仍然存活
-    [[nodiscard]] bool IfAlive() const{return m_Health > 0.0f;};
+    [[nodiscard]] bool IfAlive() const{ return m_Health > 0.0f; }   // 檢查敵人是否仍然存活
 
-    // 讓敵人受到傷害，減少生命值
-    void TakeDamage(float damage);
+    void TakeDamage(float damage);  // 讓敵人受到傷害，減少生命值
 
-    // 更改敵人血量，默認原血量
-    void SetHealth(float Health =-1.0f);
+    void SetHealth(float Health = -1.0f);   // 更改敵人血量，默認原血量
 
-    void MovePosition(const glm::vec2& Position) { m_Transform.translation += Position; }
-    // void MovePosition(const glm::vec2& targetPosition, float totalTime=2.0f);
+    void MovePosition(const glm::vec2& Position, float totalTime = 0.0f);  //平移位置
+    void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
+    void ShakePosition(const glm::vec2& Position, float totalTime = 0.0f);
 
-    // 繪製敵人的血條
-    void DrawHealthBar(const glm::vec2& position) const;
+    [[nodiscard]] glm::vec2& GetTargetPosition() override { return m_TargetPosition; }
+
+    [[nodiscard]] std::string& GetName() { return m_Name; }
+
+
+    virtual void SetProgressIcon(const std::string &ImagePath) { m_Drawable = std::make_shared<Util::Image>(ImagePath); }
+
+    void Update() override;
+
+    static std::set<float> s_HealthBarYPositions;
+    void DrawHealthBar(const glm::vec2& position = glm::vec2 (0.9f, 0.9)) const;    // 繪製敵人的血條
 
 private:
-    // 初始化著色程序（Shader Program）
-    static void InitProgram();
 
-    // 初始化頂點陣列（Vertex Array Object）
-    static void InitVertexArray();
+    static void InitProgram();  // 初始化著色程序（Shader Program）
+    static void InitVertexArray();  // 初始化頂點陣列（Vertex Array Object）
+    void InitUniforms();    // 初始化 Uniform 變數（著色器中的全域變數）
 
-    // 初始化 Uniform 變數（著色器中的全域變數）
-    void InitUniforms();
+    static std::unique_ptr<Core::Program> s_Program;    // 靜態成員變數：共享的著色程序
+    static std::unique_ptr<Core::VertexArray> s_VertexArray;    // 靜態成員變數：共享的頂點數據
 
-    // 靜態成員變數：共享的著色程序
-    static std::unique_ptr<Core::Program> s_Program;
-
-    // 靜態成員變數：共享的頂點數據
-    static std::unique_ptr<Core::VertexArray> s_VertexArray;
-
-    // 敵人的當前血量與最大血量
+    std::string m_Name;
     float m_Health;
     float m_MaxHealth;
+
+    bool m_IsMoving = false;
+    float m_Speed = 0.0f;
+    float m_MaxDistance = 0.0f;
+    float m_DistanceTraveled = 0.0f;
+    float m_TotalTime = 0.0f;
+    glm::vec2 m_Direction = glm::vec2(0.0f, 0.0f);
+    glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
 
     // Uniform 變數位置（顏色與血條寬度）
     GLint m_ColorLocation;

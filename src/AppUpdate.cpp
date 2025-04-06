@@ -15,6 +15,20 @@ void App::Update() {
     // 獲取時間增量
     float deltaTime = Util::Time::GetDeltaTimeMs() / 1000.0f;
 
+    if (!m_IsReady) {
+        GetReady();
+        return;
+    }
+    if (m_PRM->GetCurrentMainPhase()==1) {
+        m_GetReady->SetVisible(false);
+        m_Enemy_dummy->SetVisible(false);
+    }
+    if (m_PausedOption->GetVisibility() == true) {
+        Pause();
+        return;
+    }
+
+
     // 處理空格鍵 - 測試特效
     if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
         auto cursorPos = Util::Input::GetCursorPosition();
@@ -33,7 +47,7 @@ void App::Update() {
     }
 
     // 角色移動
-    const float moveSpeed = 4.5f; // 調整移動速度
+    constexpr float moveSpeed = 6.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
 
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
@@ -55,15 +69,28 @@ void App::Update() {
         m_CurrentState = State::END;
     }
 
+    // 初始化敵人容器
+    std::vector<std::shared_ptr<Enemy>> m_Enemies;
+    m_Enemies.push_back(m_Enemy);
+    m_Enemies.push_back(m_Enemy_bird_valedictorian);
+    m_Enemies.push_back(m_Enemy_dragon_silver);
+    m_Enemies.push_back(m_Enemy_treasure);
+    std::vector<std::shared_ptr<Character>> m_enemies_characters;
+    for (const auto& enemy : m_Enemies) {
+        m_enemies_characters.push_back(enemy); // 隱式轉換 std::shared_ptr<Enemy> 到 std::shared_ptr<Character>
+    }
+
     // 技能Z
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             LOG_DEBUG("Z Key UP - Skill 1");
-            m_Rabbit->UseSkill(1);
-
-            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
-                m_Enemy->TakeDamage(5);
-                m_Enemy->MovePosition(glm::vec2(-10.0f,3.0f));
+            if (m_Rabbit->UseSkill(1)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCollides(enemy, 200)) {
+                        enemy->TakeDamage(10005);
+                    }
+                }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
         }
     }
@@ -73,7 +100,14 @@ void App::Update() {
     if (m_XKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
             LOG_DEBUG("X Key UP - Skill 2");
-            m_Rabbit->UseSkill(2);
+            if (m_Rabbit->UseSkill(2)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCollides(enemy, 200)) {
+                        enemy->TakeDamage(5);
+                    }
+                }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            }
         }
     }
     m_XKeyDown = Util::Input::IsKeyPressed(Util::Keycode::X);
@@ -82,7 +116,14 @@ void App::Update() {
     if (m_CKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::C)) {
             LOG_DEBUG("C Key UP - Skill 3");
-            m_Rabbit->UseSkill(3);
+            if (m_Rabbit->UseSkill(3)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCollides(enemy, 200)) {
+                        enemy->TakeDamage(25);
+                    }
+                }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            }
         }
     }
     m_CKeyDown = Util::Input::IsKeyPressed(Util::Keycode::C);
@@ -91,10 +132,13 @@ void App::Update() {
     if (m_VKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
             LOG_DEBUG("V Key UP - Skill 4");
-            m_Rabbit->UseSkill(4);
-
-            if (m_Rabbit->IfCollides(m_Enemy, 200)) {
-                m_Enemy->TakeDamage(15);
+            if (m_Rabbit->UseSkill(4)) {
+                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                    if (m_Rabbit->IfCollides(enemy, 200)) {
+                        enemy->TakeDamage(55);
+                    }
+                }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
         }
     }
@@ -122,18 +166,57 @@ void App::Update() {
     AttackManager::GetInstance().Update(deltaTime, m_Rabbit);
 
     // 更新特效管理器
-    Effect::EffectManager::GetInstance().Update(deltaTime);
+    Effect::EffectManager::GetInstance().Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
 
     // 更新兔子角色
     m_Rabbit->Update();
 
-    // 更新敵人血條
-    if (m_Enemy->GetVisibility()){
-        m_Enemy->DrawHealthBar(glm::vec2 (0.9f, 0.9));  // 繪製血條
+    // 更新敵人血條，是否允許前進
+    for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+        enemy->DrawHealthBar();
+    }
+    if (Enemy::s_HealthBarYPositions.empty()) {
+        m_Onward->SetVisible(true);
+    } else {
         m_Onward->SetVisible(false);
     } else {
         m_Onward->SetVisible(true);
+        Enemy::s_HealthBarYPositions.clear();
     }
+
+    // 關卡跳轉
+    // if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
+    //     ValidTask();
+    // }
+    ValidTask();
+
+    // 更新敵人角色
+    m_Enemy->Update();
+    m_PRM->Update();
+    // m_Paused_option->Update();
+
+    m_Enemy_dummy->Update();
+    m_SkillUI->Update();
+
+
+    // 測試
+    if (m_NKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
+            // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            // m_Enemy->MoveToPosition(glm::vec2(1.0f, 0.0f), 3.0f);
+            // m_Enemy->MovePosition(glm::vec2(-100.0f, 100.0f), 1.0f);
+            // for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+            //     if (m_Rabbit->IfCirclesCollide(enemy, 1000)) {
+            //         enemy->TakeDamage(1000);
+            //     }
+            // }
+            Pause();
+        }
+    }
+    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
+
+
+
 
     // 按I鍵測試多個敵人攻擊特效
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
@@ -161,6 +244,17 @@ void App::Update() {
             m_EnemyAttackController->Start();
             LOG_DEBUG("Manual start Battle 2 attack patterns");
         }
+    }
+    // 測試矩形雷射特效 - 按下 1 鍵
+    if (Util::Input::IsKeyDown(Util::Keycode::NUM_1)) {
+        auto cursorPos = Util::Input::GetCursorPosition();
+        auto effect = Effect::EffectManager::GetInstance().PlayEffect(
+            Effect::EffectType::RECT_LASER,
+            cursorPos,
+            20.0f, // z-index
+            2.0f   // 持續時間
+        );
+        LOG_DEBUG("Created RECT_LASER effect at position: ({}, {})", cursorPos.x, cursorPos.y);
     }
 
     // 測試矩形光束特效 - 按下 2 鍵

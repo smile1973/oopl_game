@@ -7,6 +7,8 @@
 #include "Character.hpp"
 #include "Enemy.hpp"
 #include "PhaseManger.hpp" // 階段資源管理
+#include "PauseScreen.hpp"
+#include "SkillUI.hpp"
 #include "Effect/EffectManager.hpp"
 #include "Attack/EnemyAttackController.hpp" // 敵人攻擊控制器
 #include "Attack/AttackManager.hpp" // 新增: 攻擊管理器
@@ -30,7 +32,9 @@ public:
     [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
 
     void Start();
+
     void Update();
+
     void End(); // NOLINT(readability-convert-member-functions-to-static)
 
     void AddToRoot(const std::shared_ptr<Util::GameObject> &object) {
@@ -41,8 +45,16 @@ public:
     }
 
 private:
+    void GetReady();
+    void Pause();
+
     // 執行有效的任務，內部函式
-    void ValidTask();
+    void ValidTask() const;
+    void LeavePhase() const;
+    void SetSubPhase() const;      // 設置關卡配置
+    void SetupStorePhase() const;      // 設置商店關卡配置
+    void SetupTreasurePhase() const;      // 設置寶箱關卡配置
+    void SetupBattlePhase() const;      // 設置戰鬥關卡配置
 
     App() : m_CurrentState(State::START),
            m_Phase(Phase::START) {}
@@ -55,17 +67,38 @@ private:
         BATTLE_3,
         BATTLE_4,
         STORE,
+    // 暫停指令
+    enum class PausedOption {
+        COUNTINUE,
+        RESTART,
+        MANAGE_PLAYER,
+        GAME_SETTING,
+        RETURN_TITLE_PAGE,
     };
 
     static App* s_Instance;
+
     State m_CurrentState = State::START;
-    Phase m_Phase = Phase::START; // 當前階段
+    PausedOption m_CurrenPausedOption = PausedOption::COUNTINUE;
+    // MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
+    // int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
+    // SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型
 
     Util::Renderer m_Root;
     std::shared_ptr<Character> m_Rabbit; // 定義兔子
     std::shared_ptr<Enemy> m_Enemy;   // 定義敵人
     std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器
     std::shared_ptr<EnemyAttackController> m_EnemyAttackController; // 敵人攻擊控制器
+    std::shared_ptr<Character> m_Rabbit;               // 定義兔子
+    std::shared_ptr<Enemy> m_Enemy_dummy;              // 定義敵人_假人
+    std::shared_ptr<Enemy> m_Enemy;                    // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_bird_valedictorian; // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_dragon_silver;      // 定義敵人
+    std::shared_ptr<Enemy> m_Enemy_treasure;           // 定義寶箱
+    std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
+    std::shared_ptr<PhaseManager> m_PRM;               // 階段資源管理器
+    std::shared_ptr<PausedScreen> m_PausedOption;               // 階段資源管理器
+    std::shared_ptr<SkillUI> m_SkillUI;               // 階段資源管理器
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
@@ -76,7 +109,13 @@ private:
 
     // 測試關卡切換
     bool m_NKeyDown = false;
+    bool m_UpKeyDown = false;
+    bool m_DownKeyDown = false;
     std::shared_ptr<Enemy> m_Onward;
+    std::shared_ptr<Enemy> m_GetReady;
+    std::shared_ptr<Enemy> m_PressZtoJoin;
+    bool m_IsReady = false;
+    int m_CurrentPausedOption = 0;
 };
 
 #endif

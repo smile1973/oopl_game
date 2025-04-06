@@ -4,17 +4,21 @@
 #include "Effect/EffectManager.hpp"
 #include "Effect/CompositeEffect.hpp"
 
-Skill::Skill(int skillId, const std::vector<std::string>& imageSet, int duration)
-        : m_ImagePathSet(imageSet), m_Duration(duration), m_SkillId(skillId){
+Skill::Skill(int skillId, const std::vector<std::string>& imageSet, int duration, float Cooldown)
+        : m_ImagePathSet(imageSet), m_Duration(duration), m_SkillId(skillId), m_Cooldown(Cooldown) {
 
     // 創建技能動畫
     m_Animation = std::make_shared<Util::Animation>(imageSet, true, duration, false, 0);
 }
 
 void Skill::Play(const glm::vec2& position) {
-    if (m_State == State::IDLE) {
+    if (m_State == State::IDLE && !m_IsOnCooldown) {
         LOG_DEBUG("Playing skill animation and effect");
         m_State = State::ACTIVE;
+
+        // 開始冷卻
+        m_IsOnCooldown = true;
+        m_CurrentCooldown = m_Cooldown;
 
         // 播放動畫
         if (m_Animation) {
@@ -39,6 +43,9 @@ void Skill::Play(const glm::vec2& position) {
 
         LOG_DEBUG("Created effect for skill {}, position: ({}, {})",
                   m_SkillId, position.x, position.y);
+    } else if (m_IsOnCooldown) {
+        LOG_DEBUG("Skill {} is on cooldown for {:.1f} seconds",
+                 m_SkillId, m_CurrentCooldown);
     }
 }
 
@@ -50,6 +57,16 @@ bool Skill::IsEnded() const {
 }
 
 void Skill::Update(float deltaTime) {
+    // 更新冷卻計時器
+    if (m_IsOnCooldown) {
+        m_CurrentCooldown -= deltaTime;
+        if (m_CurrentCooldown <= 0.0f) {
+            m_IsOnCooldown = false;
+            m_CurrentCooldown = 0.0f;
+            LOG_DEBUG("Skill {} cooldown finished", m_SkillId);
+        }
+        LOG_DEBUG("Skill {} cooldown still {}sec", m_SkillId, (m_CurrentCooldown));
+    }
     (void)deltaTime;
     // 如果技能處於活躍狀態
     if (m_State == State::ACTIVE) {

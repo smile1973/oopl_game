@@ -39,7 +39,7 @@ void App::Start() {
         rabbitSkill1Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill1_" + std::to_string(i+1) + ".png");
     }
     m_Rabbit->AddSkill(1, rabbitSkill1Images, 175);  // Z鍵技能，ID=1
-    m_Rabbit->AddSkill(3, rabbitSkill1Images, 175);   // C鍵技能，ID=3
+    m_Rabbit->AddSkill(3, rabbitSkill1Images, 175, 7.0f);   // C鍵技能，ID=3
 
     // 技能 X 動畫
     std::vector<std::string> rabbitSkill2Images;
@@ -55,18 +55,15 @@ void App::Start() {
     for (int i = 0; i < 4; ++i) {
         rabbitSkill4Images.emplace_back(GA_RESOURCE_DIR"/Image/Character/hb_rabbit_skill3_" + std::to_string(i+1) + ".png");
     }
-    m_Rabbit->AddSkill(4, rabbitSkill4Images, 175);  // V鍵技能，ID=4
+    m_Rabbit->AddSkill(4, rabbitSkill4Images, 175, 12.0f);  // V鍵技能，ID=4
 
-    m_Rabbit->SetPosition({-112.5f, -140.5f});
+    m_Rabbit->SetPosition({-600.5f, -140.5f});
     m_Rabbit->SetZIndex(50);
+    m_Rabbit->SetVisible(false);
     m_Root.AddChild(m_Rabbit);
 
     // 初始化敵人，設定圖片、位置與初始可見狀態
-    m_Enemy = std::make_shared<Enemy>(100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
-    m_Enemy->m_Transform.scale = glm::vec2 {0.5f, 0.5f};
-    m_Enemy->SetZIndex(5);
-    m_Enemy->SetPosition({197.5f, -3.5f});
-    m_Enemy->SetVisible(false);
+    m_Enemy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
     m_Root.AddChild(m_Enemy);
 
     // 初始化敵人攻擊控制器
@@ -74,16 +71,68 @@ void App::Start() {
 
     // m_Background = std::make_shared<BackgroundImage>();
     // m_Root.AddChild(m_Background);
+    m_Enemy_dummy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
+    m_Root.AddChild(m_Enemy_dummy);
+
+    // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> enemyImages;
+    enemyImages.reserve(7);
+    for (int i = 0; i < 7; ++i) {
+        enemyImages.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_valedictorian/hb_bird_valedictorian_idle_" + std::to_string(i+1) + ".png");
+    }
+    m_Enemy_bird_valedictorian = std::make_shared<Enemy>("bird_valedictorian",120, enemyImages);
+    m_Root.AddChild(m_Enemy_bird_valedictorian);
+
+    // 初始化敵人(DragonSilver)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> enemyImages2;
+    enemyImages2.reserve(7);
+    for (int i = 0; i < 7; ++i) {
+        enemyImages2.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_idle_" + std::to_string(i+1) + ".png");
+    }
+    m_Enemy_dragon_silver = std::make_shared<Enemy>("dragon_silver",120, enemyImages2);
+    m_Root.AddChild(m_Enemy_dragon_silver);
+
+    // 初始化敵人(Shopkeeper)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> ShopkeeperImages2;
+    ShopkeeperImages2.reserve(2);
+    for (int i = 0; i < 2; ++i) {
+        ShopkeeperImages2.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/shopkeeper/cat_shopkeeper_split_" + std::to_string(i+1) + ".png");
+    }
+    m_Enemy_shopkeeper = std::make_shared<Enemy>("shopkeeper",120, ShopkeeperImages2);
+    m_Enemy_shopkeeper->SetPosition({200.0f, -20.0f});
+    m_Enemy_shopkeeper->SetInversion();
+    m_Root.AddChild(m_Enemy_shopkeeper);
+
+    // 初始化寶箱(Treasure)，設定圖片、位置與初始可見狀態
+    m_Enemy_treasure = std::make_shared<Enemy>("treasure",30,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/treasure.png"});
+    m_Enemy_treasure->SetPosition({200.0f, -20.0f});
+    m_Enemy_treasure->SetInversion();
+    m_Root.AddChild(m_Enemy_treasure);
+
 
     m_PRM = std::make_shared<PhaseManager>();
     m_Root.AddChildren(m_PRM->GetChildren());
 
-    m_Onward = std::make_shared<Enemy>(100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
-    m_Onward->m_Transform.scale = glm::vec2 {0.5f, 0.5f};
-    m_Onward->SetZIndex(5);
-    m_Onward->SetPosition({420.0f, 180.0f});
-    m_Onward->SetVisible(true);
+    m_PausedOption = std::make_shared<PausedScreen>();
+    m_Root.AddChildren(m_PausedOption->GetChildren());
+
+    m_Onward = std::make_shared<Enemy>("Onward",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
+    m_Onward->SetPosition({500.0f, 160.0f});
     m_Root.AddChild(m_Onward);
+
+    m_GetReady = std::make_shared<Enemy>("GetReady",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/get_ready.png"});
+    m_GetReady->SetPosition({0.0f, 320.0f});
+    m_GetReady->SetVisible(true);
+    m_Root.AddChild(m_GetReady);
+
+    m_PressZtoJoin = std::make_shared<Enemy>("GetReady",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/press_Z_to_join.png"});
+    m_PressZtoJoin->SetPosition({0.0f, 260.0f});
+    m_PressZtoJoin -> m_Transform.scale =  {0.21f, 0.21f};
+    m_PressZtoJoin->SetVisible(true);
+    m_Root.AddChild(m_PressZtoJoin);
+
+    m_SkillUI = std::make_shared<SkillUI>(m_Rabbit);
+    m_Root.AddChildren(m_SkillUI->GetChildren());
 
     m_CurrentState = State::UPDATE;
 

@@ -1,4 +1,3 @@
-
 #ifndef BACKGROUND_IMAGE_HPP
 #define BACKGROUND_IMAGE_HPP
 
@@ -11,33 +10,31 @@
  */
 class BackgroundImage : public Util::GameObject {
 public:
-    /**
-     * @brief 背景圖片建構函式，預設為一般背景。
-     */
     BackgroundImage() : GameObject(
         std::make_unique<Util::Image>(GA_RESOURCE_DIR "/Image/Background/bg_black.png"), -10) {
     }
 
-    /**
-     * @brief 根據當前階段更換背景圖片。
-     * @param phase 當前遊戲階段。
-     */
-    void NextPhase(int phase) const{
+    void SetBackground(int mainPhase) const {
         auto temp = std::dynamic_pointer_cast<Util::Image>(m_Drawable);
-        temp->SetImage(ImagePath(phase));
+        temp->SetImage(ImagePath(mainPhase));
     }
 
 private:
     /**
-     * @brief 取得對應階段的背景圖片路徑。
-     * @param phase 當前遊戲階段。
+     * @brief 取得對應大關的背景圖片路徑。
+     * @param mainPhase 當前遊戲大關。
      * @return 對應的圖片路徑。
      */
-    static std::string ImagePath(int phase) {
-        return (phase == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
-                  (phase == 2) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" :
-                  (phase % 2 == 1) ? GA_RESOURCE_DIR "/Image/Background/bg.png" :
-                  (phase % 2 == 0) ? GA_RESOURCE_DIR "/Image/Background/bg_black.png" : GA_RESOURCE_DIR "/Image/Background/bg.png";
+    static std::string ImagePath(const int mainPhase) {
+        switch (mainPhase) {
+            case 1: return GA_RESOURCE_DIR "/Image/Background/bg_0.png";
+            case 2: return GA_RESOURCE_DIR "/Image/Background/bg_1.png";
+            case 3: return GA_RESOURCE_DIR "/Image/Background/bg_2.png";
+            case 4: return GA_RESOURCE_DIR "/Image/Background/bg_3.png";
+            case 5: return GA_RESOURCE_DIR "/Image/Background/bg_4.png";
+            case 6: return GA_RESOURCE_DIR "/Image/Background/bg_5.png";
+            default: return GA_RESOURCE_DIR "/Image/Background/bg_0.png";
+        }
     }
 };
 
