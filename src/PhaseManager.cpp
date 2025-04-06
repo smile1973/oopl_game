@@ -8,16 +8,19 @@
 /**
  * @brief 離開當前小關。
  */
-void PhaseManager::LeaveSubPhase() const {
-    if (m_ProgressBar->GetVisibility()) return;
+void PhaseManager::LeaveSubPhase() {
+    // if (m_ProgressBar->GetVisibility()) return;
+    if (m_IfLeaveSubPhase) return;
     UpdateProgressBar();
     m_ProgressBar->SetVisible(true);
+    m_IfLeaveSubPhase = true;
 }
 
 /**
  * @brief 進入下一個小關。
  */
 void PhaseManager::NextSubPhase() {
+    m_IfLeaveSubPhase = false;
     m_ProgressBar->SetVisible(false);
     UpdateSubPhaseType();
     if (m_MainPhase == 0) {
@@ -82,12 +85,16 @@ void PhaseManager::UpdateProgressBar() const {
     const int nextSubPhase = (m_SubPhase+1 > m_MaxSubPhase)? 0 : m_SubPhase+1;
     m_ProgressBar->SetProgressBar(nextSubPhase);
 }
+
 bool PhaseManager::IfProgressBarSet() const {
     const int nextSubPhase = (m_SubPhase+1 > m_MaxSubPhase)? 0 : m_SubPhase+1;
     return m_ProgressBar->IfSetComplete(nextSubPhase);
 }
+
 void PhaseManager::Update() const {
     m_MainStageTitle->Update();
     m_ProgressBar->Update();
-    if (m_MainStageTitle->GetPosition() == m_MainStageTitle->GetTargetPosition() ) m_MainStageTitle->SetVisible(false);
+    if (m_MainStageTitle->GetPosition() == m_MainStageTitle->GetTargetPosition()) {
+        m_MainStageTitle->SetVisible(false);
+    }
 }

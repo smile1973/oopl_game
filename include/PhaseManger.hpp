@@ -29,7 +29,7 @@ public:
         return children;
     }
 
-    void LeaveSubPhase() const;
+    void LeaveSubPhase();
 
     /**
      * @brief 進入下一小關。
@@ -90,6 +90,7 @@ private:
     static constexpr int m_MaxSubPhase  = 5; // 最大小關數量常數
     static constexpr int m_MaxMainPhase = 5; // 最大小關數量常數
     bool m_IfProgressBarSet = false;
+    bool m_IfLeaveSubPhase = false;
 
 
     /**

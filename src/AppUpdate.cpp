@@ -13,7 +13,7 @@
 
 void App::Update() {
     // 獲取時間增量
-    float deltaTime = Util::Time::GetDeltaTimeMs() / 1000.0f;
+    const float deltaTime = Util::Time::GetDeltaTimeMs() / 1000.0f;
 
     if (!m_IsReady) {
         GetReady();
@@ -166,19 +166,19 @@ void App::Update() {
     AttackManager::GetInstance().Update(deltaTime, m_Rabbit);
 
     // 更新特效管理器
-    Effect::EffectManager::GetInstance().Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
+    Effect::EffectManager::GetInstance().Update(deltaTime);
 
     // 更新兔子角色
     m_Rabbit->Update();
 
-    // 更新敵人血條，是否允許前進
+    // 更新敵人血條，是否允許(前進)
     for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
         enemy->DrawHealthBar();
     }
     if (Enemy::s_HealthBarYPositions.empty()) {
         m_Onward->SetVisible(true);
     } else {
-        m_Onward->SetVisible(true);
+        m_Onward->SetVisible(false);
         Enemy::s_HealthBarYPositions.clear();
     }
 
@@ -187,7 +187,6 @@ void App::Update() {
     // 更新敵人角色
     m_Enemy->Update();
     m_PRM->Update();
-    // m_Paused_option->Update();
 
     m_Enemy_dummy->Update();
     m_SkillUI->Update();
@@ -196,14 +195,6 @@ void App::Update() {
     // 測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
-            // m_Enemy->MoveToPosition(glm::vec2(1.0f, 0.0f), 3.0f);
-            // m_Enemy->MovePosition(glm::vec2(-100.0f, 100.0f), 1.0f);
-            // for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-            //     if (m_Rabbit->IfCirclesCollide(enemy, 1000)) {
-            //         enemy->TakeDamage(1000);
-            //     }
-            // }
             Pause();
         }
     }
@@ -275,17 +266,6 @@ void App::Update() {
 
         // 放置在與第一個光束有點偏移的位置
         effect2->Play(cursorPos, 25.0f);
-    }
-
-    // 關卡跳轉測試
-    if (m_NKeyDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            ValidTask();
-        }
-    }
-    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
-    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
-        ValidTask();
     }
 
     // 更新所有渲染對象

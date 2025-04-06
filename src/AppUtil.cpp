@@ -79,7 +79,7 @@ void App::Pause() {
 /**
  * @brief 驗證當前任務狀態，並切換至適當的階段。
  */
-void App::ValidTask() const {
+void App::ValidTask() {
     // 關卡跳轉
     if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
         m_PRM->LeaveSubPhase();
@@ -123,13 +123,13 @@ void App::SetSubPhase() const {
     int m_SubPhaseIndex = m_PRM->GetCurrentSubPhase();
 
     // 重置玩家位置
-    m_Rabbit->MoveToPosition({-400.0f, 160.0f}, 0.7);
+    m_Rabbit->MoveToPosition({-400.0f, 160.0f});
 
     // 根據小關索引設置固定的小關類型
     switch (m_SubPhaseIndex) {
         case 0:
             LOG_DEBUG("Next SubPhase: STORE");
-        SetupStorePhase();
+            SetupStorePhase();
         break;
         case 1:
             m_Enemy_shopkeeper->SetVisible(false);
@@ -141,11 +141,11 @@ void App::SetSubPhase() const {
         break;
         case 4:
             LOG_DEBUG("Next SubPhase: TREASURE");
-        SetupTreasurePhase();
+            SetupTreasurePhase();
         break;
         case 5:
             LOG_DEBUG("Next SubPhase: BOSS");
-        SetupBattlePhase();
+            SetupBattlePhase();
         break;
         default:
             LOG_ERROR("Wrong SubPhase Index: {}", m_SubPhaseIndex);
@@ -157,14 +157,15 @@ void App::SetSubPhase() const {
  * @brief 設置商店關卡配置。
  */
 void App::SetupStorePhase() const {
-    LOG_DEBUG("Setup Phase: STORE");
+    LOG_INFO("Setup Phase: STORE");
     m_Enemy_shopkeeper->SetVisible(true);
+    m_PRM->SetProgressBarVisible(true);
 }
 /**
  * @brief 設置寶箱關卡配置。
  */
 void App::SetupTreasurePhase() const {
-    LOG_DEBUG("Setup Phase: TREASURE");
+    LOG_INFO("Setup Phase: TREASURE");
     m_Enemy_treasure->SetVisible(true);
     m_Enemy_treasure->SetHealth();
 }
@@ -182,6 +183,30 @@ void App::SetupBattlePhase() const {
     m_Enemy->SetPosition({197.5f, -3.5f});
     m_Enemy->SetVisible(true);
     m_Enemy->SetHealth(baseHealth + 10.0f * SubPhaseIndex);
+
+    switch (SubPhaseIndex) {
+        case 1:
+            // 初始化並啟動Battle 1的攻擊模式
+                if (m_EnemyAttackController) {
+                    m_EnemyAttackController->Reset();
+                    m_EnemyAttackController->InitBattle1Patterns();
+                    m_EnemyAttackController->Start();
+                }
+        break;
+        case 2:
+            // 初始化並啟動Battle 2的攻擊模式
+                if (m_EnemyAttackController) {
+                    m_EnemyAttackController->Reset();
+                    m_EnemyAttackController->InitBattle2Patterns();
+                    m_EnemyAttackController->Start();
+                }
+        break;
+        default:
+            // 停止攻擊控制器(因為尚未實現BATTLE_3的攻擊模式)
+                if (m_EnemyAttackController) {
+                    m_EnemyAttackController->Reset();
+                }
+    }
 
     // 根據小關索引增加敵人數量和難度
     // if (SubPhaseIndex >= 2) {
@@ -213,29 +238,5 @@ void App::SetupBattlePhase() const {
     //
     //     LOG_DEBUG("The FINAL BATTLE level setting is completed");
     // }
-
-    switch (SubPhaseIndex) {
-        case 1:
-            // 初始化並啟動Battle 1的攻擊模式
-            if (m_EnemyAttackController) {
-                m_EnemyAttackController->Reset();
-                m_EnemyAttackController->InitBattle1Patterns();
-                m_EnemyAttackController->Start();
-            }
-        break;
-        case 2:
-            // 初始化並啟動Battle 2的攻擊模式
-            if (m_EnemyAttackController) {
-                m_EnemyAttackController->Reset();
-                m_EnemyAttackController->InitBattle2Patterns();
-                m_EnemyAttackController->Start();
-            }
-        break;
-        default:
-            // 停止攻擊控制器(因為尚未實現BATTLE_3的攻擊模式)
-            if (m_EnemyAttackController) {
-                m_EnemyAttackController->Reset();
-            }
-    }
     LOG_DEBUG("Set battle level:MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
 }

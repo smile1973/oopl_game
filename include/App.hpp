@@ -49,7 +49,7 @@ private:
     void Pause();
 
     // 執行有效的任務，內部函式
-    void ValidTask() const;
+    void ValidTask();
     void LeavePhase() const;
     void SetSubPhase() const;      // 設置關卡配置
     void SetupStorePhase() const;      // 設置商店關卡配置
@@ -60,7 +60,7 @@ private:
            m_Phase(Phase::START) {}
 
     //private:
-    enum class Phase { //(好像沒用到)
+    enum class Phase {
         START,
         BATTLE_1,
         BATTLE_2,
@@ -79,7 +79,7 @@ private:
     static App* s_Instance;
 
     State m_CurrentState = State::START;
-    PausedOption m_CurrenPausedOption = PausedOption::CONTINUE;
+    // PausedOption m_CurrenPausedOption = PausedOption::CONTINUE;
     // MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
     // int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
     // SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型

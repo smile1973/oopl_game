@@ -69,8 +69,8 @@ void App::Start() {
     // 初始化敵人攻擊控制器
     m_EnemyAttackController = std::make_shared<EnemyAttackController>(m_Enemy);
 
-    // m_Background = std::make_shared<BackgroundImage>();
-    // m_Root.AddChild(m_Background);
+
+
     m_Enemy_dummy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
     m_Root.AddChild(m_Enemy_dummy);
 
@@ -133,6 +133,7 @@ void App::Start() {
 
     m_SkillUI = std::make_shared<SkillUI>(m_Rabbit);
     m_Root.AddChildren(m_SkillUI->GetChildren());
+
 
     m_CurrentState = State::UPDATE;
 
