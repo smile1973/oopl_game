@@ -116,14 +116,24 @@ private:
     static std::string GetSubPhaseName(const int SubPhase) {
         switch (SubPhase) {
             case 0: return "STORE";
-            case 1:
-            case 2:
-            case 3: return "BATTLE";
+            case 1: return "BATTLE_1";
+            case 2: return "BATTLE_2";
+            case 3: return "BATTLE_3";
             case 4: return "TREASURE";
             case 5: return "BOSS";
             default: return "Error";
         }
     }
+
+    // enum class SubPhase {
+    //     STORE,
+    //     BATTLE_1,
+    //     BATTLE_2,
+    //     BATTLE_3,
+    //     TREASURE,
+    //     BOSS
+    // };
+    // SubPhase m_CurrentSubPhase = SubPhase::STORE;     // 當前小關類型
 };
 
 #endif // PHASE_MANAGER_HPP

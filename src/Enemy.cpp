@@ -1,8 +1,8 @@
 #include "Enemy.hpp"
 
-// 初始化靜態成員：著色程序和頂點數據
-std::unique_ptr<Core::Program> Enemy::s_Program = nullptr;
-std::unique_ptr<Core::VertexArray> Enemy::s_VertexArray = nullptr;
+// // 初始化靜態成員：著色程序和頂點數據
+// std::unique_ptr<Core::Program> Enemy::s_Program = nullptr;
+// std::unique_ptr<Core::VertexArray> Enemy::s_VertexArray = nullptr;
 
 // 構造函數，初始化敵人的生命值與繪製屬性
 Enemy::Enemy(std::string name, const float health, const std::vector<std::string>& ImageSet)
@@ -47,33 +47,6 @@ void Enemy::SetHealth(const float Health) {
     m_MaxHealth = (Health == -1.0f) ? m_MaxHealth : Health;
 }
 
-// 繪製敵人的血條
-void Enemy::DrawHealthBar(const glm::vec2& position) const {
-    if (!s_Program || !s_VertexArray) return;
-
-    // 啟用透明度混合，以確保血條能夠正確顯示
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    s_Program->Bind();
-
-    // 設定血條顏色為紅色
-    Util::Color m_Color = Util::Color(1.0, 0.1, 0.1, 0.4);
-    glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
-
-    // 根據當前生命值調整血條寬度
-    float currentWidth = m_Health / m_MaxHealth; // 0 ~ 1 縮放
-    glUniform1f(glGetUniformLocation(s_Program->GetId(), "u_Width"), currentWidth);
-    glUniform2f(glGetUniformLocation(s_Program->GetId(), "u_Position"), position.x, position.y);
-
-
-    s_Program->Validate(); // 確保著色程序運行正常
-
-    // 綁定並繪製血條
-    s_VertexArray->Bind();
-    s_VertexArray->DrawTriangles();
-    s_Program->Unbind();
-}
 void Enemy::MovePosition(const glm::vec2& Position, const float totalTime) {
     MoveToPosition(GetPosition() + Position, totalTime);
 }

@@ -33,9 +33,7 @@ void App::GetReady() {
         m_Onward->MoveToPosition(glm::vec2(500,160),1.3);
     }
 
-    if (m_Rabbit->GetPosition().x == -100) {
-        m_IsReady = true;
-    }
+    if (m_Rabbit->GetPosition().x == -100) m_IsReady = true;
 
     m_SkillUI->Update();
     m_Rabbit->Update();
@@ -62,6 +60,7 @@ void App::Pause() {
         m_PausedOption->Reset();
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER);
+
     if (m_UpKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::UP)) {
         m_PausedOption->Switch(true);
     }
@@ -90,24 +89,8 @@ void App::ValidTask() const {
     }
 }
 
-    switch (m_Phase) {
-        case Phase::START:
-            LOG_DEBUG("--START--");
-        m_Phase = Phase::BATTLE_1;
-        m_Rabbit->SetPosition({-400.0f, 160.0f});
-        m_Enemy->SetPosition({197.5f, -3.5f});
-        m_Enemy->SetVisible(true);
-        m_Enemy->SetHealth();
-        m_PRM->NextPhase();
-
-        // 初始化並啟動Battle 1的攻擊模式
-        if (m_EnemyAttackController) {
-            m_EnemyAttackController->Reset();
-            m_EnemyAttackController->InitBattle1Patterns();
-            m_EnemyAttackController->Start();
-        }
 /**
- * @brief 驗證當前任務狀態，並切換至適當的階段。
+ * @brief 離開當前的階段。其實沒啥用
  */
 void App::LeavePhase() const {
     int m_CurrentMainPhase = m_PRM->GetCurrentMainPhase();
@@ -121,29 +104,8 @@ void App::LeavePhase() const {
         break;
         case 1:
         case 3:
+            AttackManager::GetInstance().ClearAllAttacks(); // 清除所有攻擊
             LOG_DEBUG("--Battle is over--");
-        case Phase::BATTLE_1:
-            if (m_Enemy->IfAlive()) {
-                LOG_DEBUG("The enemy is alive");
-                break;
-            }
-        LOG_DEBUG("--BATTLE_1--END");
-        m_Phase = Phase::BATTLE_2;
-        m_Rabbit->SetPosition({-400.0f, 160.0f});
-        m_Enemy->SetPosition({197.5f, -3.5f});
-        m_Enemy->SetVisible(true);
-        m_Enemy->SetHealth();
-        m_PRM->NextPhase();
-
-        // 清除所有現有攻擊 (使用新的AttackManager)
-        AttackManager::GetInstance().ClearAllAttacks();
-
-        // 初始化並啟動Battle 2的攻擊模式
-        if (m_EnemyAttackController) {
-            m_EnemyAttackController->Reset();
-            m_EnemyAttackController->InitBattle2Patterns();
-            m_EnemyAttackController->Start();
-        }
         break;
         case 2:
             LOG_DEBUG("--Treasure opened--");
@@ -161,75 +123,29 @@ void App::SetSubPhase() const {
     int m_SubPhaseIndex = m_PRM->GetCurrentSubPhase();
 
     // 重置玩家位置
-    m_Rabbit->SetPosition({-400.0f, 160.0f});
+    m_Rabbit->MoveToPosition({-400.0f, 160.0f}, 0.7);
 
     // 根據小關索引設置固定的小關類型
     switch (m_SubPhaseIndex) {
         case 0:
             LOG_DEBUG("Next SubPhase: STORE");
-            SetupStorePhase();
+        SetupStorePhase();
         break;
         case 1:
             m_Enemy_shopkeeper->SetVisible(false);
-            [[fallthrough]];
+        [[fallthrough]];
         case 2:
         case 3:
             LOG_DEBUG("Next SubPhase: BATTLE {}", m_SubPhaseIndex);
-            SetupBattlePhase();
-        case Phase::BATTLE_2:
-            if (m_Enemy->IfAlive()) {
-                LOG_DEBUG("The enemy is alive");
-                break;
-            }
-        LOG_DEBUG("--BATTLE_2--END");
-        Effect::EffectManager::GetInstance().ClearAllEffects();
-        AttackManager::GetInstance().ClearAllAttacks(); // 清除所有攻擊
-        m_Phase = Phase::BATTLE_3;
-        m_Rabbit->SetPosition({-400.0f, 160.0f});
-        m_Enemy->SetPosition({197.5f, -3.5f});
-        m_Enemy->SetVisible(true);
-        m_Enemy->SetHealth(30.0f);
-        m_PRM->NextPhase();
-
-        // 停止攻擊控制器(因為尚未實現BATTLE_3的攻擊模式)
-        if (m_EnemyAttackController) {
-            m_EnemyAttackController->Reset();
-        }
+        SetupBattlePhase();
         break;
-        case Phase::BATTLE_3:
-            if (m_Enemy->IfAlive()) {
-                LOG_DEBUG("The enemy is alive");
-                break;
-            }
-        LOG_DEBUG("--BATTLE_3--END");
-        AttackManager::GetInstance().ClearAllAttacks(); // 清除所有攻擊
-        m_Phase = Phase::BATTLE_4;
-        m_Rabbit->SetPosition({-400.0f, 160.0f});
-        m_Enemy->SetPosition({197.5f, -3.5f});
-        m_Enemy->SetVisible(true);
-        m_Enemy->SetHealth(200.0f);
-        m_PRM->NextPhase();
         case 4:
             LOG_DEBUG("Next SubPhase: TREASURE");
-            SetupTreasurePhase();
+        SetupTreasurePhase();
         break;
         case 5:
             LOG_DEBUG("Next SubPhase: BOSS");
-            SetupBattlePhase();
-        break;
-        case Phase::BATTLE_4:
-            if (m_Enemy->IfAlive()) {
-                LOG_DEBUG("The enemy is alive");
-                break;
-            }
-        LOG_DEBUG("--BATTLE_4--END");
-        AttackManager::GetInstance().ClearAllAttacks(); // 清除所有攻擊
-        m_Phase = Phase::STORE;
-        m_Rabbit->SetPosition({-400.0f, 160.0f});
-        m_Enemy->SetPosition({197.5f, -3.5f});
-        m_Enemy->SetVisible(true);
-        m_Enemy->SetHealth(1000.0f);
-        m_PRM->NextPhase();
+        SetupBattlePhase();
         break;
         default:
             LOG_ERROR("Wrong SubPhase Index: {}", m_SubPhaseIndex);
@@ -256,7 +172,6 @@ void App::SetupTreasurePhase() const {
  * @brief 設置戰鬥關卡配置。
  */
 void App::SetupBattlePhase() const {
-    // m_Enemy_shopkeeper->SetVisible(false);
     int MainPhaseIndex = m_PRM->GetCurrentMainPhase();
     int SubPhaseIndex = m_PRM->GetCurrentSubPhase();
 
@@ -269,35 +184,58 @@ void App::SetupBattlePhase() const {
     m_Enemy->SetHealth(baseHealth + 10.0f * SubPhaseIndex);
 
     // 根據小關索引增加敵人數量和難度
-    if (SubPhaseIndex >= 2) {
-        m_Enemy_bird_valedictorian->SetPosition({-197.5f, -103.5f});
-        m_Enemy_bird_valedictorian->SetVisible(true);
-        m_Enemy_bird_valedictorian->SetHealth(baseHealth + 8.0f * SubPhaseIndex);
-    } else {
-        m_Enemy_bird_valedictorian->SetVisible(false);
+    // if (SubPhaseIndex >= 2) {
+    //     m_Enemy_bird_valedictorian->SetPosition({-197.5f, -103.5f});
+    //     m_Enemy_bird_valedictorian->SetVisible(true);
+    //     m_Enemy_bird_valedictorian->SetHealth(baseHealth + 8.0f * SubPhaseIndex);
+    // } else {
+    //     m_Enemy_bird_valedictorian->SetVisible(false);
+    // }
+    //
+    // if (SubPhaseIndex >= 3) {
+    //     m_Enemy_dragon_silver->SetPosition({0.0f, 100.0f});
+    //     m_Enemy_dragon_silver->SetVisible(true);
+    //     m_Enemy_dragon_silver->SetHealth(baseHealth * 1.2f + 12.0f * SubPhaseIndex);
+    // } else {
+    //     m_Enemy_dragon_silver->SetVisible(false);
+    // }
+    //
+    // // 在每個大關的最後一個戰鬥關卡設置更強的敵人
+    // if (SubPhaseIndex >= 4) {
+    //     // 增加敵人生命值
+    //     m_Enemy->SetHealth(baseHealth * 2.0f);
+    //     m_Enemy_bird_valedictorian->SetHealth(baseHealth * 1.8f);
+    //     m_Enemy_dragon_silver->SetHealth(baseHealth * 2.5f);
+    //
+    //     // 顯示所有敵人
+    //     m_Enemy_bird_valedictorian->SetVisible(true);
+    //     m_Enemy_dragon_silver->SetVisible(true);
+    //
+    //     LOG_DEBUG("The FINAL BATTLE level setting is completed");
+    // }
+
+    switch (SubPhaseIndex) {
+        case 1:
+            // 初始化並啟動Battle 1的攻擊模式
+            if (m_EnemyAttackController) {
+                m_EnemyAttackController->Reset();
+                m_EnemyAttackController->InitBattle1Patterns();
+                m_EnemyAttackController->Start();
+            }
+        break;
+        case 2:
+            // 初始化並啟動Battle 2的攻擊模式
+            if (m_EnemyAttackController) {
+                m_EnemyAttackController->Reset();
+                m_EnemyAttackController->InitBattle2Patterns();
+                m_EnemyAttackController->Start();
+            }
+        break;
+        default:
+            // 停止攻擊控制器(因為尚未實現BATTLE_3的攻擊模式)
+            if (m_EnemyAttackController) {
+                m_EnemyAttackController->Reset();
+            }
     }
-
-    if (SubPhaseIndex >= 3) {
-        m_Enemy_dragon_silver->SetPosition({0.0f, 100.0f});
-        m_Enemy_dragon_silver->SetVisible(true);
-        m_Enemy_dragon_silver->SetHealth(baseHealth * 1.2f + 12.0f * SubPhaseIndex);
-    } else {
-        m_Enemy_dragon_silver->SetVisible(false);
-    }
-
-    // 在每個大關的最後一個戰鬥關卡設置更強的敵人
-    if (SubPhaseIndex >= 4) {
-        // 增加敵人生命值
-        m_Enemy->SetHealth(baseHealth * 2.0f);
-        m_Enemy_bird_valedictorian->SetHealth(baseHealth * 1.8f);
-        m_Enemy_dragon_silver->SetHealth(baseHealth * 2.5f);
-
-        // 顯示所有敵人
-        m_Enemy_bird_valedictorian->SetVisible(true);
-        m_Enemy_dragon_silver->SetVisible(true);
-
-        LOG_DEBUG("The FINAL BATTLE level setting is completed");
-    }
-
     LOG_DEBUG("Set battle level:MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
 }

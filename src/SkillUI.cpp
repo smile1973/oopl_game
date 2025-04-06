@@ -20,7 +20,7 @@ SkillUI::SkillUI(const std::shared_ptr<Character>& character)
 
         m_CooldownTexts.emplace_back( std::make_shared<TextObject>(" ") );
         m_CooldownTexts[i] -> SetPosition(glm::vec2(baseX + i * spacing+5, baseY-5));
-        LOG_INFO("CooldownTexts: {} -- {}", i, m_CooldownTexts[i]->GetPosition());
+        // LOG_INFO("CooldownTexts: {} -- {}", i, m_CooldownTexts[i]->GetPosition());
     }
     m_SkillIcons[1] -> MovePosition(glm::vec2(0,1.5));
 
@@ -31,7 +31,7 @@ SkillUI::SkillUI(const std::shared_ptr<Character>& character)
         m_SkillIcons2[i] -> SetZIndex(80);
 
         m_CooldownTexts2.emplace_back( std::make_shared<TextObject>(" ", 18) );
-        LOG_INFO("CooldownTexts: {} -- {}", i, m_CooldownTexts[i]->GetPosition());
+        // LOG_INFO("CooldownTexts: {} -- {}", i, m_CooldownTexts[i]->GetPosition());
     }
 }
 
@@ -51,7 +51,7 @@ void SkillUI::Update() {
             ss << std::fixed << std::setprecision(0) << remainingCooldown;
             m_CooldownTexts[i]->SetText(ss.str());
             m_CooldownTexts2[i]->SetText(ss.str());
-            LOG_INFO("CooldownTexts: {} -- {}", i, ss.str());
+            // LOG_INFO("CooldownTexts: {} -- {}", i, ss.str());
         } else {
             m_CooldownTexts[i]->SetText(" "); // 冷卻完畢，清除文字
             m_CooldownTexts2[i]->SetText(" "); // 冷卻完畢，清除文字
@@ -72,7 +72,7 @@ void SkillUI::SetVisible(const bool visible) {
 
         m_SkillIcons2[i] -> SetVisible(visible);
         m_CooldownTexts2[i] -> SetVisible(visible);
-        LOG_INFO("SetVisible: {} -- {}", i, visible);
+        // LOG_INFO("SetVisible: {} -- {}", i, visible);
     }
 }
 
@@ -93,5 +93,5 @@ void SkillUI::IconsFollow() const {
     m_CooldownTexts2[1] -> SetPosition(glm::vec2(baseX2, baseY2-75));
     m_CooldownTexts2[2] -> SetPosition(glm::vec2(baseX2+75, baseY2));
     m_CooldownTexts2[3] -> SetPosition(glm::vec2(baseX2, baseY2+75));
-    LOG_INFO("SetPosition: {} -- {},{}", "SkillUI::Icons", baseX, baseY2);
+    // LOG_INFO("SetPosition: {} -- {},{}", "SkillUI::Icons", baseX, baseY2);
 }

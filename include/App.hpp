@@ -60,16 +60,16 @@ private:
            m_Phase(Phase::START) {}
 
     //private:
-    enum class Phase {
+    enum class Phase { //(好像沒用到)
         START,
         BATTLE_1,
         BATTLE_2,
         BATTLE_3,
-        BATTLE_4,
         STORE,
-    // 暫停指令
+    };
+    // 暫停指令(好像沒用到)
     enum class PausedOption {
-        COUNTINUE,
+        CONTINUE,
         RESTART,
         MANAGE_PLAYER,
         GAME_SETTING,
@@ -79,14 +79,12 @@ private:
     static App* s_Instance;
 
     State m_CurrentState = State::START;
-    PausedOption m_CurrenPausedOption = PausedOption::COUNTINUE;
+    PausedOption m_CurrenPausedOption = PausedOption::CONTINUE;
     // MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
     // int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
     // SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型
 
     Util::Renderer m_Root;
-    std::shared_ptr<Character> m_Rabbit; // 定義兔子
-    std::shared_ptr<Enemy> m_Enemy;   // 定義敵人
     std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器
     std::shared_ptr<EnemyAttackController> m_EnemyAttackController; // 敵人攻擊控制器
     std::shared_ptr<Character> m_Rabbit;               // 定義兔子
@@ -96,9 +94,8 @@ private:
     std::shared_ptr<Enemy> m_Enemy_dragon_silver;      // 定義敵人
     std::shared_ptr<Enemy> m_Enemy_treasure;           // 定義寶箱
     std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
-    std::shared_ptr<PhaseManager> m_PRM;               // 階段資源管理器
-    std::shared_ptr<PausedScreen> m_PausedOption;               // 階段資源管理器
-    std::shared_ptr<SkillUI> m_SkillUI;               // 階段資源管理器
+    std::shared_ptr<PausedScreen> m_PausedOption;      // 階段資源管理器
+    std::shared_ptr<SkillUI> m_SkillUI;                // 階段資源管理器
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
@@ -116,6 +113,7 @@ private:
     std::shared_ptr<Enemy> m_PressZtoJoin;
     bool m_IsReady = false;
     int m_CurrentPausedOption = 0;
+    Phase m_Phase;
 };
 
 #endif

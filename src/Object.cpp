@@ -30,7 +30,6 @@ void Object::Update() {
             m_IsMoving = false; // 停止移動
             m_Transform.translation = m_TargetPosition;
             m_TotalTime = 0;
-            LOG_DEBUG("Character move to {}", m_Transform.translation);
         }
     }
 }
@@ -51,5 +50,4 @@ void Object::MoveToPosition(const glm::vec2& targetPosition, const float totalTi
     m_TargetPosition = targetPosition;
     m_MoveSpeed = (targetPosition - this->GetPosition()) / totalTime;
     m_TotalTime = totalTime * 1000.0f; //(ms)
-    LOG_DEBUG("Move Character to {}", m_Transform.translation);
 }

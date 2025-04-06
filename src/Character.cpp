@@ -62,9 +62,9 @@ void Character::Update() {
     }
 
     // 基於當前狀態更新角色
-    if (m_State == State::USING_SKILL && m_CurrentSkill) {
-        // 更新技能
-        m_CurrentSkill->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
+    // if (m_State == State::USING_SKILL && m_CurrentSkill) {
+    //     // 更新技能
+    //     m_CurrentSkill->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
 
     // 更新技能
     for (auto it = m_Skills.begin(); it != m_Skills.end(); ++it) {

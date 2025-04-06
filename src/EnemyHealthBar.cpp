@@ -17,18 +17,19 @@ void Enemy::DrawHealthBar(const glm::vec2& position) const {
     // 設定血條顏色為紅色
     Util::Color m_Color = Util::Color(1.0, 0.1, 0.1, 0.4);
     glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
-    // glUniform4f(m_ColorLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+
     // 根據當前生命值調整血條寬度
     float currentWidth = m_Health / m_MaxHealth;
     glUniform1f(glGetUniformLocation(s_Program->GetId(), "u_Width"), currentWidth);
+
     // 檢查 Y 座標是否已經被使用
     float yPosition = position.y;
     while (s_HealthBarYPositions.find(yPosition) != s_HealthBarYPositions.end()) {
         yPosition -= 0.05f;
     }
     glUniform2f(glGetUniformLocation(s_Program->GetId(), "u_Position"), position.x, yPosition);
-    // 確保著色程序運行正常
-    s_Program->Validate();
+
+    s_Program->Validate(); // 確保著色程序運行正常
 
     // 綁定並繪製血條
     s_VertexArray->Bind();

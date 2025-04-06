@@ -178,16 +178,10 @@ void App::Update() {
     if (Enemy::s_HealthBarYPositions.empty()) {
         m_Onward->SetVisible(true);
     } else {
-        m_Onward->SetVisible(false);
-    } else {
         m_Onward->SetVisible(true);
         Enemy::s_HealthBarYPositions.clear();
     }
 
-    // 關卡跳轉
-    // if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
-    //     ValidTask();
-    // }
     ValidTask();
 
     // 更新敵人角色
