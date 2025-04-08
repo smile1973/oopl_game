@@ -190,6 +190,7 @@ void App::Update() {
 
     m_Enemy_dummy->Update();
     m_SkillUI->Update();
+    m_HealthBarUI->Update();
 
 
     // 測試

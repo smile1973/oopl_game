@@ -134,6 +134,9 @@ void App::Start() {
     m_SkillUI = std::make_shared<SkillUI>(m_Rabbit);
     m_Root.AddChildren(m_SkillUI->GetChildren());
 
+    m_HealthBarUI = std::make_shared<HealthBarUI>(m_Rabbit);
+    m_Root.AddChildren(m_HealthBarUI->GetChildren());
+
 
     m_CurrentState = State::UPDATE;
 

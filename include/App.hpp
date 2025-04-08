@@ -9,6 +9,7 @@
 #include "PhaseManger.hpp" // 階段資源管理
 #include "PauseScreen.hpp"
 #include "SkillUI.hpp"
+#include "HealthBarUI.hpp"
 #include "Effect/EffectManager.hpp"
 #include "Attack/EnemyAttackController.hpp" // 敵人攻擊控制器
 #include "Attack/AttackManager.hpp" // 新增: 攻擊管理器
@@ -94,8 +95,9 @@ private:
     std::shared_ptr<Enemy> m_Enemy_dragon_silver;      // 定義敵人
     std::shared_ptr<Enemy> m_Enemy_treasure;           // 定義寶箱
     std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
-    std::shared_ptr<PausedScreen> m_PausedOption;      // 階段資源管理器
-    std::shared_ptr<SkillUI> m_SkillUI;                // 階段資源管理器
+    std::shared_ptr<PausedScreen> m_PausedOption;      // 暫停
+    std::shared_ptr<SkillUI> m_SkillUI;                //
+    std::shared_ptr<HealthBarUI> m_HealthBarUI;            //
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
