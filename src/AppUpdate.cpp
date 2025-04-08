@@ -49,6 +49,11 @@ void App::Update() {
     // 角色移動
     constexpr float moveSpeed = 6.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
+    // 定義邊界
+    constexpr float minX = -550.0f;
+    constexpr float maxX = 550.0f;
+    constexpr float minY = -250.0f;
+    constexpr float maxY = 270.0f;
 
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
         rabbitPos.y += moveSpeed; // 向上移動
@@ -62,6 +67,9 @@ void App::Update() {
     if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
         rabbitPos.x += moveSpeed; // 向右移動
     }
+    // 限制兔子在邊界內
+    rabbitPos.x = std::max(minX, std::min(rabbitPos.x, maxX));
+    rabbitPos.y = std::max(minY, std::min(rabbitPos.y, maxY));
     m_Rabbit->SetPosition(rabbitPos); // 更新位置
 
     // 退出檢查
