@@ -49,6 +49,7 @@ public:
         m_Distance = distance;
         m_IsMoving = true;
     }
+    void CleanupVisuals() override;
 
 protected:
     // 實現基類要求的方法

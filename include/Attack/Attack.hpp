@@ -51,6 +51,8 @@ public:
     // 獲取特效
     [[nodiscard]] std::shared_ptr<Effect::CompositeEffect> GetWarningEffect() const { return m_WarningEffect; }
     [[nodiscard]] std::shared_ptr<Effect::CompositeEffect> GetAttackEffect() const { return m_AttackEffect; }
+    virtual void CleanupVisuals() {};
+
 
 protected:
     // 各個階段處理的虛函數 - 子類別可以覆寫

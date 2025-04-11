@@ -186,3 +186,11 @@ void CircleAttack::OnAttackStart() {
         LOG_DEBUG("Direction arrow removed from root");
     }
 }
+
+void CircleAttack::CleanupVisuals() {
+    Attack::CleanupVisuals();
+    if (m_DirectionIndicator) {
+        App::GetInstance().RemoveFromRoot(m_DirectionIndicator);
+        m_DirectionIndicator = nullptr;
+    }
+}

@@ -34,11 +34,11 @@ void EnemyAttackController::InitBattle2Patterns() {
     // 中央位置
     glm::vec2 centerPosition(0.0f, 0.0f);
 
-    // 移動敵人到中心
-    auto moveToCenter = [centerPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(centerPosition);
-        LOG_DEBUG("Enemy moved to center for Battle 2");
-    };
+    // // 移動敵人到中心
+    // auto moveToCenter = [centerPosition](std::shared_ptr<Enemy> enemy) {
+    //     enemy->SetPosition(centerPosition);
+    //     LOG_DEBUG("Enemy moved to center for Battle 2");
+    // };
 
     auto pattern2 = AttackPatternFactory::GetInstance().CreateCrossRotatingLaserPattern(
         centerPosition,   // 中心位置
@@ -48,7 +48,7 @@ void EnemyAttackController::InitBattle2Patterns() {
         4.0f,            // 持續時間
         1.5f             // 倒數時間
     );
-    pattern2->AddEnemyMovement(moveToCenter, 0.0f);
+    // pattern2->AddEnemyMovement(moveToCenter, 0.0f);
 
     auto attack = std::make_shared<CornerBulletAttack>(2.0, 3);
     attack->SetBulletSpeed(1000);

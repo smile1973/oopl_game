@@ -34,6 +34,7 @@ public:
     }
     bool IsAutoRotating() const { return m_AutoRotate; }
     float GetRotationSpeed() const { return m_RotationSpeed; }
+    void CleanupVisuals() override;
 
 protected:
     void CreateWarningEffect() override;
@@ -43,6 +44,7 @@ protected:
     void OnCountdownStart() override;
     void OnCountdownUpdate(float deltaTime) override;
     void OnAttackStart() override;
+
 
 private:
     [[nodiscard]] float CalculateRotationAngle() const;

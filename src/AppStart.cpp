@@ -64,14 +64,21 @@ void App::Start() {
 
     // 初始化敵人，設定圖片、位置與初始可見狀態
     m_Enemy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
+    m_Enemy->SetShowHealthRing(true);
+    m_Enemy->InitHealthRing();
     m_Root.AddChild(m_Enemy);
 
     // 初始化敵人攻擊控制器
     m_EnemyAttackController = std::make_shared<EnemyAttackController>(m_Enemy);
 
-
+    m_Overlay = std::make_shared<Util::GameObject>(
+    std::make_shared<Util::Image>(GA_RESOURCE_DIR "/Image/Background/overlay_black.png"), -9);
+    m_Overlay->SetVisible(false);
+    m_Root.AddChild(m_Overlay);
 
     m_Enemy_dummy = std::make_shared<Enemy>("dummy",100,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
+    m_Enemy_dummy->SetShowHealthRing(true);
+    m_Enemy_dummy->InitHealthRing();
     m_Root.AddChild(m_Enemy_dummy);
 
     // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態

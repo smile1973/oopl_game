@@ -75,6 +75,7 @@ void App::Update() {
     m_Enemies.push_back(m_Enemy_bird_valedictorian);
     m_Enemies.push_back(m_Enemy_dragon_silver);
     m_Enemies.push_back(m_Enemy_treasure);
+    m_Enemies.push_back(m_Enemy_dummy);
     std::vector<std::shared_ptr<Character>> m_enemies_characters;
     for (const auto& enemy : m_Enemies) {
         m_enemies_characters.push_back(enemy); // 隱式轉換 std::shared_ptr<Enemy> 到 std::shared_ptr<Character>

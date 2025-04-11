@@ -30,6 +30,7 @@ public:
     App& operator=(const App&) = delete;
 
     [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
+    std::shared_ptr<Util::GameObject> GetOverlay() const { return m_Overlay; }
 
     void Start();
 
@@ -96,6 +97,7 @@ private:
     std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
     std::shared_ptr<PausedScreen> m_PausedOption;      // 階段資源管理器
     std::shared_ptr<SkillUI> m_SkillUI;                // 階段資源管理器
+    std::shared_ptr<Util::GameObject> m_Overlay;
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;

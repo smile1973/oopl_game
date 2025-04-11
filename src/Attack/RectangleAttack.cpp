@@ -268,3 +268,11 @@ void RectangleAttack::OnCountdownUpdate(float deltaTime) {
         m_DirectionIndicator->m_Transform.rotation += deltaTime * m_RotationSpeed * -15.0f;
     }
 }
+
+void RectangleAttack::CleanupVisuals() {
+    Attack::CleanupVisuals();
+    if (m_DirectionIndicator) {
+        App::GetInstance().RemoveFromRoot(m_DirectionIndicator);
+        m_DirectionIndicator = nullptr;
+    }
+}

@@ -144,40 +144,11 @@ void Attack::ChangeState(State newState) {
 
 // 警告階段開始
 void Attack::OnWarningStart() {
-    // LOG_DEBUG("OnWarningStart called, creating warning effect");
     CreateWarningEffect();
-
-    // 創建序列號文字
-    // if (m_SequenceNumber > 0) {
-    //     // 創建序列號文字
-    //     try {
-    //         m_SequenceText = std::make_shared<Util::Text>(
-    //             GA_RESOURCE_DIR "Font/Inkfree.ttf", 48,
-    //             std::to_string(m_SequenceNumber),
-    //             Util::Color::FromName(Util::Colors::WHITE)
-    //         );
-    //
-    //         auto text = std::make_shared<Util::GameObject>(
-    //             m_SequenceText,
-    //             m_ZIndex + 0.3f,
-    //             glm::vec2(0, 0),
-    //             true
-    //             );
-    //         text->m_Transform.translation = m_Position;
-    //         // 將文字添加為子物件
-    //         m_SequenceTextObject = text;
-    //         AddChild(text);
-    //
-    //         LOG_DEBUG("Sequence text created: {}", m_SequenceNumber);
-    //     } catch (const std::exception& e) {
-    //         LOG_ERROR("Failed to create sequence text: {}", e.what());
-    //     }
-    // }
 }
 
 // 警告階段更新
 void Attack::OnWarningUpdate(float deltaTime) {
-    // 預設實現暫時不做特殊處理
     (void)deltaTime;
 }
 
@@ -200,23 +171,17 @@ void Attack::OnCountdownUpdate(float deltaTime) {
 
 // 攻擊階段開始
 void Attack::OnAttackStart() {
-    LOG_DEBUG("OnAttackStart called, creating attack effect");
-    // 創建攻擊特效
     try {
         CreateAttackEffect();
-        LOG_DEBUG("Attack effect created successfully");
     } catch (const std::exception& e) {
         LOG_ERROR("Error creating attack effect: {}", e.what());
     }
 
-    // 移除警告特效和時間條
     if (m_WarningEffect) {
-        // LOG_DEBUG("Removing warning effect at attack start");
         m_WarningEffect->Reset();
     }
 
     if (m_TimeBarEffect) {
-        // LOG_DEBUG("Removing time bar at attack start");
         m_TimeBarEffect->Reset();
     }
 
@@ -226,6 +191,7 @@ void Attack::OnAttackStart() {
         m_SequenceTextObject = nullptr;
         m_SequenceText = nullptr;
     }
+    CleanupVisuals();
 }
 
 void Attack::OnAttackUpdate(float deltaTime) {

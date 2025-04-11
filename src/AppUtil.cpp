@@ -48,7 +48,7 @@ void App::GetReady() {
 void App::Pause() {
     m_PausedOption->SetVisible(true);
     m_PRM->SetProgressBarVisible(true);
-    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER)) {
+    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::M)) {
         switch (m_PausedOption->GetCurrentOption()) {
             case 0:
                 m_PausedOption->SetVisible(false);
@@ -59,7 +59,7 @@ void App::Pause() {
         }
         m_PausedOption->Reset();
     }
-    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER);
+    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::M);
 
     if (m_UpKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::UP)) {
         m_PausedOption->Switch(true);
@@ -178,12 +178,11 @@ void App::SetupBattlePhase() const {
 
     // 根據大關和小關設置敵人難度
     const float baseHealth = 50.0f * (MainPhaseIndex + 1);
-
+    m_Overlay->SetVisible(true);
     // 設置基本敵人
     m_Enemy->SetPosition({197.5f, -3.5f});
     m_Enemy->SetVisible(true);
     m_Enemy->SetHealth(baseHealth + 10.0f * SubPhaseIndex);
-
     switch (SubPhaseIndex) {
         case 1:
             // 初始化並啟動Battle 1的攻擊模式
@@ -192,6 +191,7 @@ void App::SetupBattlePhase() const {
                     m_EnemyAttackController->InitBattle1Patterns();
                     m_EnemyAttackController->Start();
                 }
+
         break;
         case 2:
             // 初始化並啟動Battle 2的攻擊模式

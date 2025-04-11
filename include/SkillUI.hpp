@@ -38,7 +38,6 @@ public:
     }
 
     void SetVisible(bool visible) override;
-
     void IconsFollow() const;
 
 private:

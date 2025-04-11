@@ -35,6 +35,10 @@ public:
     static std::set<float> s_HealthBarYPositions;
     void DrawHealthBar(const glm::vec2& position = glm::vec2 (0.9f, 0.9)) const;    // 繪製敵人的血條
 
+    void InitHealthRing();
+    void UpdateHealthRing();
+    void SetShowHealthRing(bool show) { m_ShowHealthRing = show; }
+    bool GetShowHealthRing() const { return m_ShowHealthRing; }
 private:
 
     static void InitProgram();  // 初始化著色程序（Shader Program）
@@ -59,6 +63,12 @@ private:
     // Uniform 變數位置（顏色與血條寬度）
     GLint m_ColorLocation;
     GLint m_WidthLocation;
+
+    bool m_ShowHealthRing = false;  // 是否顯示血條環
+    std::shared_ptr<Util::GameObject> m_HealthRingBackground;  // 半透明背景
+    std::vector<std::shared_ptr<Util::GameObject>> m_HealthDots;  // 血條點
+    int m_TotalDots = 80;  // 環形血條上的點數量
+    float m_RingRadius = 150.0f;  // 環形半徑
 };
 
 #endif // ENEMY_HPP

@@ -40,6 +40,11 @@ void AttackManager::Update(float deltaTime, std::shared_ptr<Character> player) {
 }
 
 void AttackManager::ClearAllAttacks() {
+    for (auto& attack : m_ActiveAttacks) {
+        if (attack) {
+            // 通過基類接口清理視覺元素
+            attack->CleanupVisuals();
+        }
+    }
     m_ActiveAttacks.clear();
-    LOG_DEBUG("All attacks cleared from manager");
 }
