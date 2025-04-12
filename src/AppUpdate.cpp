@@ -92,6 +92,7 @@ void App::Update() {
         m_enemies_characters.push_back(enemy); // 隱式轉換 std::shared_ptr<Enemy> 到 std::shared_ptr<Character>
     }
 
+    const int rabbitLevel = m_Rabbit->GetLevel();
     // 技能Z
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
@@ -115,7 +116,7 @@ void App::Update() {
             if (m_Rabbit->UseSkill(2)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(5);
+                        enemy->TakeDamage(5*rabbitLevel);
                     }
                 }
                 m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
@@ -131,7 +132,7 @@ void App::Update() {
             if (m_Rabbit->UseSkill(3)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(25);
+                        enemy->TakeDamage(25*rabbitLevel);
                     }
                 }
                 m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
@@ -147,7 +148,7 @@ void App::Update() {
             if (m_Rabbit->UseSkill(4)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(55);
+                        enemy->TakeDamage(55*rabbitLevel);
                     }
                 }
                 m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
@@ -209,8 +210,9 @@ void App::Update() {
     // 測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            // Pause();
-            m_DefeatScreen->Get();
+            Pause();
+            LOG_DEBUG("--App::Pause--");
+            // m_DefeatScreen->Get();
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);

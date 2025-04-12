@@ -84,7 +84,6 @@ void DefeatScreen::Get() {
     m_IsGameStart = false;
     SetVisible(true);
     m_GameTime -> SetText(StringGameTime(m_GameTimer));
-    // m_GameTime -> SetText("StringGameTime(m_GameTimer)");
 }
 
 void DefeatScreen::Update(){

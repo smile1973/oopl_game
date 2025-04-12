@@ -86,6 +86,8 @@ void Character::Update() {
         }
     }
 
+    UpdateLevel();
+
     // 移動位置
     if (m_IsMoving) {
         // 計算移動距離
@@ -227,4 +229,12 @@ void Character::AddHurtAnimation(const std::vector<std::string>& hurtImageSet, i
     m_HurtAnimation = std::make_shared<Util::Animation>(hurtImageSet, true, duration, false, 0);
     m_HurtAnimationDuration = duration / 1000.0f; // 轉換為秒
     LOG_DEBUG("Added hurt animation with duration: {} ms", duration);
+}
+
+void Character::UpdateLevel() {
+    if (m_Experience >= 100) {
+        m_Experience -= 100;
+        m_Level++;
+        LOG_INFO("Character Level Up");
+    }
 }

@@ -152,6 +152,7 @@ void App::LeavePhase() const {
         case 1:
         case 3:
             AttackManager::GetInstance().ClearAllAttacks(); // 清除所有攻擊
+            m_Rabbit->AddExperience(130);
             LOG_DEBUG("--Battle is over--");
         break;
         case 2:

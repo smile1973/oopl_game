@@ -11,7 +11,7 @@ public:
         for (int i = 0; i < optionNames.size(); ++i) {
             m_Options.push_back(std::make_shared<Enemy>(optionNames[i],1,std::vector{ ImagePath(optionNames[i])}));
             m_Options[i] -> m_Transform.scale =  {1.05f, 1.05f};
-            m_Options[i] -> SetZIndex(200);
+            m_Options[i] -> SetZIndex(100);
         }
         m_Options[0] -> m_Transform.scale =  {1.2f, 1.2f};
         m_Options[0] -> SetPosition(m_BasePosition + glm::vec2{0,0});

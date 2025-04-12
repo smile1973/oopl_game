@@ -22,6 +22,11 @@ public:
     [[nodiscard]] const std::vector<std::string>& GetImagePathSet() const { return m_ImagePathSet; }
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
+    [[nodiscard]] int GetLevel() const { return m_Level; }
+
+    void UpdateLevel();
+    void AddExperience(const int experience){ m_Experience += experience; }
+
     // 檢測角色是否與另一個角色發生碰撞
     bool IfCollides(const std::shared_ptr<Character>& other, float Distance) const;
     bool IfCirclesCollide(const std::shared_ptr<Character>& other, float Distance) const;
@@ -88,12 +93,17 @@ private:
     float m_HurtAnimationTimer = 0.0f;
     float m_HurtAnimationDuration = 0.5f; // 受傷動畫持續時間(秒)
 
-
+    // 移動相關屬性
     bool m_IsMoving = false;
     float m_DistanceTraveled = 0.0f;
     float m_TotalTime = 0.0f;
     glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
     glm::vec2 m_MoveSpeed = glm::vec2(0.0f, 0.0f);
+
+    int m_Money = 0;
+    int m_Experience = 0;
+    int m_Level = 1;
+    // int m_AttackDamage = 0;
 };
 
 
