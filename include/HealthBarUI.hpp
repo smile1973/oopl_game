@@ -17,6 +17,7 @@ public:
     void Update();
 
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
+    [[nodiscard]] bool GetHealthBar() const { return m_RemainingHealthBar > 0; }
 
     [[nodiscard]] std::vector<std::shared_ptr<Util::GameObject>> GetChildren() const {
         std::vector<std::shared_ptr<Util::GameObject>> children;

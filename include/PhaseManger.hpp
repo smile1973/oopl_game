@@ -56,6 +56,8 @@ public:
 
     void Update() const;
 
+    void ReStart();
+
     /**
      * @brief 獲取當前大關索引。
      * @return 當前大關索引 (0-5)。

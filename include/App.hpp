@@ -8,6 +8,7 @@
 #include "Enemy.hpp"
 #include "PhaseManger.hpp" // 階段資源管理
 #include "PauseScreen.hpp"
+#include "DefeatScreen.hpp"
 #include "SkillUI.hpp"
 #include "HealthBarUI.hpp"
 #include "Effect/EffectManager.hpp"
@@ -48,6 +49,7 @@ public:
 private:
     void GetReady();
     void Pause();
+    void Defeat();
 
     // 執行有效的任務，內部函式
     void ValidTask();
@@ -96,6 +98,7 @@ private:
     std::shared_ptr<Enemy> m_Enemy_treasure;           // 定義寶箱
     std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
     std::shared_ptr<PausedScreen> m_PausedOption;      // 暫停
+    std::shared_ptr<DefeatScreen> m_DefeatScreen;      // 暫停
     std::shared_ptr<SkillUI> m_SkillUI;                //
     std::shared_ptr<HealthBarUI> m_HealthBarUI;            //
 
@@ -110,6 +113,8 @@ private:
     bool m_NKeyDown = false;
     bool m_UpKeyDown = false;
     bool m_DownKeyDown = false;
+    bool m_LeftKeyDown = false;
+    bool m_RightKeyDown = false;
     std::shared_ptr<Enemy> m_Onward;
     std::shared_ptr<Enemy> m_GetReady;
     std::shared_ptr<Enemy> m_PressZtoJoin;

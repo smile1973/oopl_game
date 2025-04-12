@@ -27,6 +27,10 @@ void App::Update() {
         Pause();
         return;
     }
+    if (m_DefeatScreen->GetVisibility() == true) {
+        Defeat();
+        return;
+    }
 
 
     // 處理空格鍵 - 測試特效
@@ -199,12 +203,14 @@ void App::Update() {
     m_Enemy_dummy->Update();
     m_SkillUI->Update();
     m_HealthBarUI->Update();
+    m_DefeatScreen->Update();
 
 
     // 測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            Pause();
+            // Pause();
+            m_DefeatScreen->Get();
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);

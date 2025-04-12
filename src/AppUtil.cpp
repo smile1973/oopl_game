@@ -41,6 +41,11 @@ void App::GetReady() {
     m_Enemy_dummy->Update();
     m_Onward->Update();
     m_Root.Update();
+
+    // if (m_NKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::N)) {
+    //         m_DefeatScreen->Get();
+    // }
+    // m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 }
 
 /**
@@ -78,6 +83,44 @@ void App::Pause() {
 }
 
 /**
+ * @brief 結算畫面。
+ */
+void App::Defeat(){
+    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER)) {
+        switch (m_DefeatScreen->GetCurrentOption()) {
+            case 0:
+                LOG_DEBUG("--App::Defeat Leave_Game--");
+                m_DefeatScreen->SetVisible(false);
+                m_CurrentState = State::END;
+            break;
+            case 1://未完成
+                LOG_DEBUG("--App::Defeat New_Game--");
+                // m_DefeatScreen->SetVisible(false);
+                // m_PRM->ReStart();
+                // m_IsReady = false;
+            break;
+            default:
+                LOG_ERROR("--App::Defeat Switch Default--");
+        }
+    }
+    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER);
+
+    if (m_LeftKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
+        m_DefeatScreen->Switch(true);
+    }
+    m_LeftKeyDown = Util::Input::IsKeyPressed(Util::Keycode::LEFT);
+
+    if (m_RightKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
+        m_DefeatScreen->Switch(false);
+    }
+    m_RightKeyDown = Util::Input::IsKeyPressed(Util::Keycode::RIGHT);
+
+    // m_PRM->Update();
+    m_DefeatScreen->Update();
+    m_Root.Update();
+}
+
+/**
  * @brief 驗證當前任務狀態，並切換至適當的階段。
  */
 void App::ValidTask() {
@@ -87,6 +130,9 @@ void App::ValidTask() {
         if (m_PRM->IfProgressBarSet()) {
             LeavePhase();
         }
+    }
+    if (!m_HealthBarUI->GetHealthBar()) {
+        m_DefeatScreen->Get();
     }
 }
 
@@ -120,6 +166,7 @@ void App::LeavePhase() const {
  * @brief 設定下一個小關。
  */
 void App::SetSubPhase() const {
+    if (m_PRM->GetCurrentMainPhase() == 0)m_DefeatScreen->Reset();
     m_PRM->NextSubPhase();
     int m_SubPhaseIndex = m_PRM->GetCurrentSubPhase();
 
