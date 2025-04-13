@@ -123,6 +123,10 @@ void App::Start() {
     m_PausedOption = std::make_shared<PausedScreen>();
     m_Root.AddChildren(m_PausedOption->GetChildren());
 
+    m_DefeatScreen = std::make_shared<DefeatScreen>(m_Rabbit);
+    m_Root.AddChildren(m_DefeatScreen->GetChildren());
+    m_DefeatScreen->SetVisible(false);
+
     m_Onward = std::make_shared<Enemy>("Onward",1,std::vector<std::string>{GA_RESOURCE_DIR"/Image/Background/onward.png"});
     m_Onward->SetPosition({500.0f, 160.0f});
     m_Root.AddChild(m_Onward);
@@ -140,6 +144,9 @@ void App::Start() {
 
     m_SkillUI = std::make_shared<SkillUI>(m_Rabbit);
     m_Root.AddChildren(m_SkillUI->GetChildren());
+
+    m_HealthBarUI = std::make_shared<HealthBarUI>(m_Rabbit);
+    m_Root.AddChildren(m_HealthBarUI->GetChildren());
 
 
     m_CurrentState = State::UPDATE;
