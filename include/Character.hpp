@@ -28,8 +28,11 @@ public:
     void AddExperience(const int experience){ m_Experience += experience; }
 
     // 檢測角色是否與另一個角色發生碰撞
-    bool IfCollides(const std::shared_ptr<Character>& other, float Distance) const;
-    bool IfCirclesCollide(const std::shared_ptr<Character>& other, float Distance) const;
+    bool IfCollide(const std::shared_ptr<Character>& other, float Distance) const;
+    bool IfCollideCircle(const std::shared_ptr<Character>& other, float Distance) const;
+    bool IfCollideSweptCircle(const std::shared_ptr<Character>& other) const;
+    bool IfCollideRectangle(const std::shared_ptr<Character>& other) const;
+    bool IfCollideEllipse(const std::shared_ptr<Character>& other) const;
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     void SetInversion() { m_Transform.scale.x *= -1; } // 設定左右反轉角色

@@ -125,7 +125,7 @@ void App::Defeat(){
  */
 void App::ValidTask() {
     // 關卡跳轉
-    if (m_Onward->GetVisibility() && m_Rabbit->IfCollides(m_Onward, 80)) {
+    if (m_Onward->GetVisibility() && m_Rabbit->IfCollide(m_Onward, 80)) {
         m_PRM->LeaveSubPhase();
         if (m_PRM->IfProgressBarSet()) {
             LeavePhase();

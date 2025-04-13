@@ -1,9 +1,6 @@
 #include "Enemy.hpp"
 #include "Attack/AttackManager.hpp"
 #include "App.hpp"
-// // 初始化靜態成員：著色程序和頂點數據
-// std::unique_ptr<Core::Program> Enemy::s_Program = nullptr;
-// std::unique_ptr<Core::VertexArray> Enemy::s_VertexArray = nullptr;
 
 // 構造函數，初始化敵人的生命值與繪製屬性
 Enemy::Enemy(std::string name, const float health, const std::vector<std::string>& ImageSet)
