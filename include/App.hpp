@@ -98,13 +98,11 @@ private:
     std::shared_ptr<Enemy> m_Enemy_dragon_silver;      // 定義敵人
     std::shared_ptr<Enemy> m_Enemy_treasure;           // 定義寶箱
     std::shared_ptr<Enemy> m_Enemy_shopkeeper;         // 定義商人
-    std::shared_ptr<PausedScreen> m_PausedOption;      // 階段資源管理器
-    std::shared_ptr<SkillUI> m_SkillUI;                // 階段資源管理器
+    std::shared_ptr<PausedScreen> m_PausedOption;      // 暫停畫面
+    std::shared_ptr<DefeatScreen> m_DefeatScreen;      // 結算畫面
+    std::shared_ptr<SkillUI> m_SkillUI;                // 角色技能UI
+    std::shared_ptr<HealthBarUI> m_HealthBarUI;        // 角色血條UI
     std::shared_ptr<Util::GameObject> m_Overlay;
-    std::shared_ptr<PausedScreen> m_PausedOption;      // 暫停
-    std::shared_ptr<DefeatScreen> m_DefeatScreen;      // 暫停
-    std::shared_ptr<SkillUI> m_SkillUI;                //
-    std::shared_ptr<HealthBarUI> m_HealthBarUI;            //
 
     bool m_EnterDown = false;
     bool m_ZKeyDown = false;
