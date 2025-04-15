@@ -9,6 +9,7 @@ CircleAttack::CircleAttack(const glm::vec2& position, float delay, float radius,
     : Attack(position, delay, sequenceNumber),
       m_Radius(radius),
       m_Color(Util::Color(1.0, 1.0, 1.0, 0.3)) {
+    m_AttackDuration = 0.5f;  // 默認0.5秒
 }
 
 void CircleAttack::CreateWarningEffect() {
@@ -51,8 +52,6 @@ void CircleAttack::CreateWarningEffect() {
 
 // 修改 CircleAttack.cpp 中的 CreateAttackEffect 方法來確保移動參數正確應用
 void CircleAttack::CreateAttackEffect() {
-    // LOG_DEBUG("CircleAttack::CreateAttackEffect called with isMoving: {}", m_IsMoving);
-
     try {
         // 獲取圓形攻擊特效
         auto circleEffect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::ENEMY_ATTACK_2);
@@ -73,7 +72,7 @@ void CircleAttack::CreateAttackEffect() {
 
         // 設置填充與邊緣效果
         circleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
-        circleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.005, Util::Color(1.0, 0.0, 0.0, 0.7)));
+        circleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.05, Util::Color(1.0, 0.0, 0.0, 0.7)));
 
         // 如果設置了移動，那麼添加移動修飾器
         if (m_IsMoving) {
@@ -91,9 +90,7 @@ void CircleAttack::CreateAttackEffect() {
                 true, m_Speed, m_Distance, m_Direction
             );
 
-            // 明確設置起始位置，確保從正確位置開始移動
             movementMod.SetStartPosition(m_Position);
-
             circleEffect->SetMovementModifier(movementMod);
         }
 
@@ -115,7 +112,7 @@ bool CircleAttack::CheckCollisionInternal(const std::shared_ptr<Character>& char
     float distance = glm::length(characterPos - m_Position);
 
     // 如果距離小於半徑，則判定為碰撞
-    return distance <= m_Radius;
+    return distance + 4.0f <= m_Radius;
 }
 
 void CircleAttack::SyncWithEffect() {
@@ -194,3 +191,4 @@ void CircleAttack::CleanupVisuals() {
         m_DirectionIndicator = nullptr;
     }
 }
+

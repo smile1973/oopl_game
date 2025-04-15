@@ -183,60 +183,13 @@ void App::SetupBattlePhase() const {
     m_Enemy->SetPosition({197.5f, -3.5f});
     m_Enemy->SetVisible(true);
     m_Enemy->SetHealth(baseHealth + 10.0f * SubPhaseIndex);
-    switch (SubPhaseIndex) {
-        case 1:
-            // 初始化並啟動Battle 1的攻擊模式
-                if (m_EnemyAttackController) {
-                    m_EnemyAttackController->Reset();
-                    m_EnemyAttackController->InitBattle1Patterns();
-                    m_EnemyAttackController->Start();
-                }
 
-        break;
-        case 2:
-            // 初始化並啟動Battle 2的攻擊模式
-                if (m_EnemyAttackController) {
-                    m_EnemyAttackController->Reset();
-                    m_EnemyAttackController->InitBattle2Patterns();
-                    m_EnemyAttackController->Start();
-                }
-        break;
-        default:
-            // 停止攻擊控制器(因為尚未實現BATTLE_3的攻擊模式)
-                if (m_EnemyAttackController) {
-                    m_EnemyAttackController->Reset();
-                }
+    // 設置敵人攻擊控制器
+    if (m_EnemyAttackController) {
+        m_EnemyAttackController->Reset();
+        m_EnemyAttackController->SetCurrentPhase(MainPhaseIndex, SubPhaseIndex);
+        m_EnemyAttackController->InitPatternsForCurrentPhase();
     }
 
-    // 根據小關索引增加敵人數量和難度
-    // if (SubPhaseIndex >= 2) {
-    //     m_Enemy_bird_valedictorian->SetPosition({-197.5f, -103.5f});
-    //     m_Enemy_bird_valedictorian->SetVisible(true);
-    //     m_Enemy_bird_valedictorian->SetHealth(baseHealth + 8.0f * SubPhaseIndex);
-    // } else {
-    //     m_Enemy_bird_valedictorian->SetVisible(false);
-    // }
-    //
-    // if (SubPhaseIndex >= 3) {
-    //     m_Enemy_dragon_silver->SetPosition({0.0f, 100.0f});
-    //     m_Enemy_dragon_silver->SetVisible(true);
-    //     m_Enemy_dragon_silver->SetHealth(baseHealth * 1.2f + 12.0f * SubPhaseIndex);
-    // } else {
-    //     m_Enemy_dragon_silver->SetVisible(false);
-    // }
-    //
-    // // 在每個大關的最後一個戰鬥關卡設置更強的敵人
-    // if (SubPhaseIndex >= 4) {
-    //     // 增加敵人生命值
-    //     m_Enemy->SetHealth(baseHealth * 2.0f);
-    //     m_Enemy_bird_valedictorian->SetHealth(baseHealth * 1.8f);
-    //     m_Enemy_dragon_silver->SetHealth(baseHealth * 2.5f);
-    //
-    //     // 顯示所有敵人
-    //     m_Enemy_bird_valedictorian->SetVisible(true);
-    //     m_Enemy_dragon_silver->SetVisible(true);
-    //
-    //     LOG_DEBUG("The FINAL BATTLE level setting is completed");
-    // }
-    LOG_DEBUG("Set battle level:MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
+    LOG_DEBUG("Set battle level: MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
 }

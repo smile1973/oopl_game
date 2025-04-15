@@ -8,105 +8,77 @@ EnemyAttackController::EnemyAttackController(std::shared_ptr<Enemy> enemy)
 }
 
 void EnemyAttackController::InitBattle1Patterns() {
-    // 清空現有的模式
     ClearPatterns();
-
-    // 獲取Battle 1的預定義攻擊模式
-    auto pattern1 = AttackPatternFactory::GetInstance().CreateBattle1Pattern();
-
-    // 再添加一個簡單的環形攻擊模式作為第二個模式
-    glm::vec2 centerPosition(0.0f, 0.0f);
-    auto pattern2 = AttackPatternFactory::GetInstance().CreateCircularPattern(
-        centerPosition, 200.0f, 80.0f, 6, 2.0f, 0.4f
-    );
-
-    // 添加到隊列
-    AddPattern(pattern1);
-    AddPattern(pattern2);
-
-    LOG_DEBUG("Battle 1 attack patterns initialized");
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle1Pattern();
+    AddPattern(pattern);
 }
 
 void EnemyAttackController::InitBattle2Patterns() {
-    // 清空現有的模式
     ClearPatterns();
-
-    // 中央位置
-    glm::vec2 centerPosition(0.0f, 0.0f);
-
-    // // 移動敵人到中心
-    // auto moveToCenter = [centerPosition](std::shared_ptr<Enemy> enemy) {
-    //     enemy->SetPosition(centerPosition);
-    //     LOG_DEBUG("Enemy moved to center for Battle 2");
-    // };
-
-    auto pattern2 = AttackPatternFactory::GetInstance().CreateCrossRotatingLaserPattern(
-        centerPosition,   // 中心位置
-        1500.0f,          // 寬度
-        100.0f,          // 高度
-        0.3f,            // 旋轉速度
-        4.0f,            // 持續時間
-        1.5f             // 倒數時間
-    );
-    // pattern2->AddEnemyMovement(moveToCenter, 0.0f);
-
-    auto attack = std::make_shared<CornerBulletAttack>(2.0, 3);
-    attack->SetBulletSpeed(1000);
-    attack->SetBulletRadius(35.f);
-    pattern2->AddAttack(attack, 4.0f);
-    pattern2->SetDuration(7.0f);
-
-    auto pattern = AttackPatternFactory::GetInstance().CreateCornerBulletPattern(
-        3,
-        600.0f, // 子彈速度
-        30.0f,  // 子彈半徑
-        1.5f    // 倒數時間
-    );
-
-    glm::vec2 startPos(640.0f, -200.0f);
-    glm::vec2 endPos(-640.0f, -200.0f);
-    auto attacka = std::make_shared<CircleAttack>(startPos, 2.0f, 180.0f);
-    attacka->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
-    attacka->SetMovementParams(glm::normalize(endPos - startPos), 100.0f, glm::length(endPos - startPos));
-    pattern->AddAttack(attacka, 0);
-
-    auto pattern4 = AttackPatternFactory::GetInstance().CreateCrossRotatingLaserPattern(
-        centerPosition,   // 中心位置
-        1500.0f,          // 寬度
-        100.0f,          // 高度
-        -0.2f,           // 旋轉速度
-        4.0f,            // 持續時間
-        3.0f             // 倒數時間
-    );
-
-    for (int i = 0; i < 3; i++) {
-        startPos = glm::vec2(640.0f, -300.0f + i * 300.0f);
-        endPos = glm::vec2(-640.0f, -300.0f + i * 300.0f);
-
-        auto attack = std::make_shared<CircleAttack>(startPos, 2.0f, 120.0f, i + 1);
-        attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
-        attack->SetMovementParams(glm::normalize(endPos - startPos), 450.0f, glm::length(endPos - startPos));
-
-        pattern4->AddAttack(attack, 0);
-    }
-
-    for (int i = 0; i < 8; i++) {
-        startPos = glm::vec2(-600.0f + i * 180.0f, 360.0f);
-        endPos = glm::vec2(-600.0f + i * 180.0f, -360.0f);
-
-        auto attack = std::make_shared<CircleAttack>(startPos, 2.0f, 80.0f, i + 1);
-        attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
-        attack->SetMovementParams(glm::normalize(endPos - startPos), 300.0f, glm::length(endPos - startPos));
-
-        pattern4->AddAttack(attack, 2);
-    }
-
-    // 添加到隊列
-    AddPattern(pattern2);
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle2Pattern();
     AddPattern(pattern);
-    AddPattern(pattern4);
-
-    LOG_DEBUG("Battle 2 attack patterns initialized");
+    //
+    // // 中央位置
+    // glm::vec2 centerPosition(0.0f, 0.0f);
+    //
+    // auto pattern2 = AttackPatternFactory::GetInstance().CreateCrossRotatingLaserPattern(
+    //     centerPosition,   // 中心位置
+    //     1500.0f,          // 寬度
+    //     100.0f,          // 高度
+    //     0.3f,            // 旋轉速度
+    //     4.0f,            // 持續時間
+    //     1.5f             // 倒數時間
+    // );
+    //
+    // auto pattern = AttackPatternFactory::GetInstance().CreateCornerBulletPattern(
+    //     3,
+    //     600.0f, // 子彈速度
+    //     35.0f,  // 子彈半徑
+    //     1.5f    // 倒數時間
+    // );
+    //
+    // glm::vec2 startPos(640.0f, -200.0f);
+    // glm::vec2 endPos(-640.0f, -200.0f);
+    // auto attacka = std::make_shared<CircleAttack>(startPos, 2.0f, 180.0f);
+    // attacka->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    // attacka->SetMovementParams(glm::normalize(endPos - startPos), 100.0f, glm::length(endPos - startPos));
+    // pattern->AddAttack(attacka, 0);
+    //
+    // auto pattern4 = AttackPatternFactory::GetInstance().CreateCrossRotatingLaserPattern(
+    //     centerPosition,   // 中心位置
+    //     1500.0f,          // 寬度
+    //     100.0f,          // 高度
+    //     -0.2f,           // 旋轉速度
+    //     4.0f,            // 持續時間
+    //     3.0f             // 倒數時間
+    // );
+    //
+    // for (int i = 0; i < 3; i++) {
+    //     startPos = glm::vec2(640.0f, -300.0f + i * 300.0f);
+    //     endPos = glm::vec2(-640.0f, -300.0f + i * 300.0f);
+    //
+    //     auto attack = std::make_shared<CircleAttack>(startPos, 2.0f, 120.0f, i + 1);
+    //     attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    //     attack->SetMovementParams(glm::normalize(endPos - startPos), 450.0f, glm::length(endPos - startPos));
+    //
+    //     pattern4->AddAttack(attack, 0);
+    // }
+    //
+    // for (int i = 0; i < 8; i++) {
+    //     startPos = glm::vec2(-600.0f + i * 180.0f, 360.0f);
+    //     endPos = glm::vec2(-600.0f + i * 180.0f, -360.0f);
+    //
+    //     auto attack = std::make_shared<CircleAttack>(startPos, 2.0f, 80.0f, i + 1);
+    //     attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    //     attack->SetMovementParams(glm::normalize(endPos - startPos), 300.0f, glm::length(endPos - startPos));
+    //
+    //     pattern4->AddAttack(attack, 2);
+    // }
+    //
+    // // 添加到隊列
+    // AddPattern(pattern2);
+    // AddPattern(pattern);
+    // AddPattern(pattern4);
 }
 
 void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> player) {
@@ -140,6 +112,14 @@ void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> p
     } else {
         // 沒有當前模式，檢查隊列
         SwitchToNextPattern();
+
+        // 如果切換後仍然沒有模式，且隊列為空，表示所有模式已完成
+        if (!m_CurrentPattern && m_PatternQueue.empty() && !m_IsInCooldown) {
+            // 自動重新初始化當前階段的攻擊模式
+            InitPatternsForCurrentPhase();
+            LOG_DEBUG("Automatically reinitialized patterns for Phase {}-{}",
+                     m_CurrentMainPhase, m_CurrentSubPhase);
+        }
     }
 }
 
@@ -207,4 +187,20 @@ void EnemyAttackController::SwitchToNextPattern() {
         m_CurrentPattern->Start(m_Enemy);
         LOG_DEBUG("Switched to next attack pattern");
     }
+}
+
+void EnemyAttackController::InitPatternsForCurrentPhase() {
+    // 清空現有的模式
+    ClearPatterns();
+
+    // 根據主階段和子階段選擇攻擊模式
+    if (m_CurrentMainPhase == 1 || m_CurrentMainPhase == 2) { // 第一大關
+        if (m_CurrentSubPhase == 1) InitBattle1Patterns();
+        if (m_CurrentSubPhase == 2) InitBattle2Patterns();
+        if (m_CurrentSubPhase == 3) InitBattle1Patterns();
+        if (m_CurrentSubPhase == 5) InitBattle2Patterns();
+    } else { // 其他大關
+        InitBattle1Patterns();
+    }
+    Start();
 }

@@ -155,6 +155,21 @@ public:
         float radius = 100.0f,
         float speed = 200.0f,
         float delay = 2.0f);
+
+    // /**
+    //  * @brief 創建從四個角落發射移動圓形子彈的攻擊模式
+    //  * @param bulletCount 每個角落發射的子彈數量
+    //  * @param bulletRadius 子彈半徑
+    //  * @param bulletSpeed 子彈移動速度
+    //  * @param delay 倒數時間
+    //  * @return 配置好的攻擊模式
+    //  */
+    // std::shared_ptr<AttackPattern> CreateCornerBulletPattern(
+    //     int bulletCount = 3,
+    //     float bulletRadius = 30.0f,
+    //     float bulletSpeed = 350.0f,
+    //     float delay = 2.0f);
+
     /**
      * @brief 創建從四個角落發射子彈的攻擊模式
      * @param bulletCount 每個角落發射的子彈數量
@@ -170,7 +185,7 @@ public:
         float delay = 2.0f);
 
     // BATTLE 1 特殊攻擊模式
-    std::shared_ptr<AttackPattern> CreateBattle1Pattern();
+    static std::shared_ptr<AttackPattern> CreateBattle1Pattern();
 
     // BATTLE 2 特殊攻擊模式
     std::shared_ptr<AttackPattern> CreateBattle2Pattern();

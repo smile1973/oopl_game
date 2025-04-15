@@ -72,6 +72,18 @@ public:
      */
     void Reset();
 
+    void SetCurrentPhase(int mainPhase, int subPhase) {
+        m_CurrentMainPhase = mainPhase;
+        m_CurrentSubPhase = subPhase;
+    }
+
+    // 根據當前階段初始化攻擊模式
+    void InitPatternsForCurrentPhase();
+
+    // 獲取當前階段
+    int GetCurrentMainPhase() const { return m_CurrentMainPhase; }
+    int GetCurrentSubPhase() const { return m_CurrentSubPhase; }
+
 private:
     // 切換到下一個攻擊模式
     void SwitchToNextPattern();
@@ -83,6 +95,8 @@ private:
     float m_ElapsedCooldownTime = 0.0f;  // 當前已過的冷卻時間
     bool m_IsInCooldown = false;        // 是否處於冷卻狀態
     bool m_IsActive = false;            // 控制器是否處於活動狀態
+    int m_CurrentMainPhase = 1;
+    int m_CurrentSubPhase = 1;
 };
 
 #endif // ENEMYATTACKCONTROLLER_HPP

@@ -14,16 +14,9 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateSingleCirclePattern(
     float delay) {
 
     auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建單個圓形攻擊
     auto attack = std::make_shared<CircleAttack>(position, delay, radius);
-
-    // 將攻擊添加到模式中
     pattern->AddAttack(attack, 0.0f);
-
-    // 設置模式總持續時間
     pattern->SetDuration(delay + 1.0f);
-
     return pattern;
 }
 
@@ -163,11 +156,11 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCircularPattern(
     // 創建多圓攻擊模式
     auto pattern = CreateMultiCirclePattern(positions, attackRadius, delay, interval);
 
-    // 添加移動敵人到中心位置的命令
-    pattern->AddEnemyMovement([centerPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(centerPosition);
-        LOG_DEBUG("Enemy moved to center position: ({}, {})", centerPosition.x, centerPosition.y);
-    }, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](std::shared_ptr<Enemy> enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+        LOG_DEBUG("Enemy moving to center position: ({}, {}), duration: {}",
+                 centerPosition.x, centerPosition.y, totalTime);
+    }, 0.0f, 1.5f);  // 設置開始時間為0，持續時間為1.5秒
 
     return pattern;
 }
@@ -180,10 +173,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCrossRotatingLaserPat
     float rotationSpeed,
     float duration,
     float delay) {
-
     auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建兩個矩形攻擊（一個水平，一個垂直）組成十字形
     auto horizontalAttack = std::make_shared<RectangleAttack>(
         centerPosition, delay, width, height, 0.0f, 1
     );
@@ -192,27 +182,15 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCrossRotatingLaserPat
         centerPosition, delay, width, height, 1.57f, 2  // 1.57 rad ≈ 90度
     );
 
-    // 設置自動旋轉和攻擊持續時間
     horizontalAttack->SetAutoRotation(true, rotationSpeed);
     horizontalAttack->SetAttackDuration(duration);
-
     verticalAttack->SetAutoRotation(true, rotationSpeed);
     verticalAttack->SetAttackDuration(duration);
-
-    LOG_DEBUG("Created cross rotating laser attacks with duration: {}, rotationSpeed: {}",
-              duration, rotationSpeed);
-
-    // 將攻擊添加到模式中
     pattern->AddAttack(horizontalAttack, 0.0f);
     pattern->AddAttack(verticalAttack, 0.0f);
-
-    // 設置模式總持續時間
     pattern->SetDuration(delay + duration + 1.0f);
-
     return pattern;
 }
-
-// 修改 AttackPatternFactory.cpp 中的 CreateMovingCirclePattern 方法
 
 std::shared_ptr<AttackPattern> AttackPatternFactory::CreateMovingCirclePattern(
     const glm::vec2& startPosition,
@@ -222,31 +200,17 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateMovingCirclePattern(
     float delay) {
 
     auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建圓形攻擊
     auto circleAttack = std::make_shared<CircleAttack>(startPosition, delay, radius, 1);
 
-    // 計算移動方向和距離
     glm::vec2 direction = endPosition - startPosition;
     float distance = glm::length(direction);
     direction = glm::normalize(direction);
 
-    // 計算持續時間（基於距離和速度）
     float moveDuration = distance / speed;
-
-    // 設置移動特效參數
     circleAttack->SetColor(Util::Color::FromRGB(255, 100, 0, 200));
-
-    // 保存攻擊方向和速度供特效創建時使用
     circleAttack->SetMovementParams(direction, speed, distance);
-
-    // 明確設置攻擊持續時間，確保足夠長
     circleAttack->SetAttackDuration(moveDuration + 0.5f);  // 加一點緩衝時間
-
-    // 加入攻擊模式
     pattern->AddAttack(circleAttack, 0.0f);
-
-    // 設置模式總持續時間
     pattern->SetDuration(delay + moveDuration + 1.0f);
 
     LOG_DEBUG("Created moving circle attack from ({}, {}) to ({}, {}), speed: {}, duration: {}",
@@ -267,146 +231,197 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCornerBulletPattern(
     // 創建角落子彈攻擊
     auto attack = std::make_shared<CornerBulletAttack>(delay, bulletCount);
     attack->SetBulletSpeed(bulletSpeed);
-    attack->SetBulletRadius(bulletRadius);
+    attack->SetRadius(bulletRadius);
 
-    // 將攻擊添加到模式中
     pattern->AddAttack(attack, 0.0f);
-
-    // 設置模式總持續時間
     pattern->SetDuration(delay + 3.0f);  // 給予足夠時間讓子彈飛行
-
     return pattern;
 }
 
-
-// BATTLE 1 特殊攻擊模式 - 簡單的圓形和矩形攻擊組合
 std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
     auto pattern = std::make_shared<AttackPattern>();
 
-    // 開場設置 - 敵人移動到場地中央
-    glm::vec2 centerPosition(0.0f, 50.0f);
-    pattern->AddEnemyMovement([centerPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(centerPosition);
-        LOG_DEBUG("Enemy moved to center for Battle 1");
-    }, 0.0f);
+    glm::vec2 centerPosition(200.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.5f);  // 設置開始時間為0，持續時間為1.5秒
 
-    // 第一波攻擊：單個大圓形攻擊
-    auto attack1 = std::make_shared<CircleAttack>(centerPosition, 3.0f, 200.0f, 1);
-    attack1->SetColor(Util::Color::FromRGB(255, 50, 50, 180));
-    pattern->AddAttack(attack1, 1.0f);
+    glm::vec2 startPos(680.0f, 0.0f);
+    glm::vec2 endPos(-680.0f, 0.0f);
+    auto attacka1 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attacka1->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+    attacka1->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attacka1, 0);
 
-    // 第二波攻擊：三個水平排列的小圓形攻擊
-    std::vector<glm::vec2> positions = {
-        {centerPosition.x - 250.0f, centerPosition.y},
-        {centerPosition.x, centerPosition.y},
-        {centerPosition.x + 250.0f, centerPosition.y}
-    };
+    startPos = glm::vec2(0.0f, 360.0f);
+    endPos = glm::vec2(0.0f, -360.0f);
+    auto attacka2 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attacka2->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attacka2->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attacka2, 0);
 
-    float startTime = 5.0f;
-    for (int i = 0; i < positions.size(); ++i) {
-        auto attack = std::make_shared<CircleAttack>(positions[i], 2.0f, 120.0f, i + 2);
-        attack->SetColor(Util::Color::FromRGB(0, 150, 255, 150));
-        pattern->AddAttack(attack, startTime);
-        startTime += 0.5f;
+    for (int i = 0; i < 10; i++) {
+        startPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, 360.0f);
+        endPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, -360.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack1->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack2 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack2->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack2->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 1.0);
+        pattern->AddAttack(attack2, 2.0);
+        pattern->AddAttack(attack3, 3.0);
     }
 
-    // 第三波攻擊：中央大矩形攻擊
-    auto attack2 = std::make_shared<RectangleAttack>(
-        centerPosition, 2.5f, 2000.0f, 160.0f, 1.57f, 5
-    );
-    attack2->SetColor(Util::Color::FromRGB(255, 150, 0, 180));
-    pattern->AddAttack(attack2, 8.5f);
+    startPos = glm::vec2(-680.0f, 160.0f);
+    endPos = glm::vec2(680.0f, 160.0f);
+    auto attackb1 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attackb1->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attackb1->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attackb1, 5.0);
 
-    // 敵人移動到場地右側
-    glm::vec2 rightPosition(200.0f, 50.0f);
-    pattern->AddEnemyMovement([rightPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(rightPosition);
-        LOG_DEBUG("Enemy moved to right side");
-    }, 11.0f);
+    startPos = glm::vec2(200.0f, 360.0f);
+    endPos = glm::vec2(200.0f, -360.0f);
+    auto attackb2 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attackb2->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attackb2->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attackb2, 5.0);
 
-    // 設置模式總持續時間
-    pattern->SetDuration(15.0f);
+    for (int i = 0; i < 10; i++) {
+        startPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, -360.0f);
+        endPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, 360.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack1->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack2 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack2->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack2->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 6.0);
+        pattern->AddAttack(attack2, 7.0);
+        pattern->AddAttack(attack3, 8.0);
+    }
 
+    glm::vec2 upPosition(200.0f, 100.0f);
+    pattern->AddEnemyMovement([upPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(upPosition, totalTime);
+    }, 9.5f, 1.5f);  // 設置開始時間為0，持續時間為1.5秒
+
+    startPos = glm::vec2(680.0f, 0.0f);
+    endPos = glm::vec2(-680.0f, 0.0f);
+    auto attackc1 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attackc1->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attackc1->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attackc1, 11.0);
+
+    startPos = glm::vec2(0.0f, 360.0f);
+    endPos = glm::vec2(0.0f, -360.0f);
+    auto attackc2 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attackc2->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attackc2->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attackc2, 11.0);
+
+    for (int i = 0; i < 10; i++) {
+        startPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, 360.0f);
+        endPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, -360.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack1->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack2 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack2->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack2->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 12.0);
+        pattern->AddAttack(attack2, 13.0);
+        pattern->AddAttack(attack3, 14.0);
+    }
+
+    startPos = glm::vec2(-680.0f, 0.0f);
+    endPos = glm::vec2(680.0f, 0.0f);
+    auto attackd1 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attackd1->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attackd1->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attackd1, 16.0);
+
+    startPos = glm::vec2(-200.0f, 360.0f);
+    endPos = glm::vec2(-200.0f, -360.0f);
+    auto attackd2 = std::make_shared<CircleAttack>(startPos, 2.0f, 200.0f);
+    attackd2->SetColor(Util::Color(1.0, 0.4, 0.4, 0.5));
+    attackd2->SetMovementParams(glm::normalize(endPos - startPos), 160.0f, glm::length(endPos - startPos));
+    pattern->AddAttack(attackd2, 16.0);
+
+    for (int i = 0; i < 10; i++) {
+        startPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, -360.0f);
+        endPos = glm::vec2(-620.0f + static_cast<float>(i) * 128.0f, 360.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack1->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack2 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack2->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack2->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
+        attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
+        attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 17.0);
+        pattern->AddAttack(attack2, 18.0);
+        pattern->AddAttack(attack3, 19.0);
+    }
+
+    pattern->SetDuration(22.0f);
     return pattern;
 }
 
-// BATTLE 2 特殊攻擊模式 - 雷射和環形攻擊組合
 std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle2Pattern() {
     auto pattern = std::make_shared<AttackPattern>();
-
-    // 開場設置 - 敵人移動到場地中央偏上位置
-    glm::vec2 topPosition(0.0f, 150.0f);
-    pattern->AddEnemyMovement([topPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(topPosition);
-        LOG_DEBUG("Enemy moved to top for Battle 2");
-    }, 0.0f);
-
-    // 第一波攻擊：從上到下的雷射掃射
-    std::vector<glm::vec2> laserPositions = {
-        {-400.0f, topPosition.y},
-        {-200.0f, topPosition.y},
-        {0.0f, topPosition.y},
-        {200.0f, topPosition.y},
-        {400.0f, topPosition.y}
-    };
-
-
-    float startTime = 1.0f;
-    for (int i = 0; i < laserPositions.size(); ++i) {
-        auto attack = std::make_shared<RectangleAttack>(
-            laserPositions[i], 1.0f, RectangleAttack::Direction::VERTICAL, 1000.0f, 60.0f, i + 1
-        );
-        pattern->AddAttack(attack, startTime);
-        startTime += 0.5f;
-    }
-
-    // 敵人移動到場地中央
     glm::vec2 centerPosition(0.0f, 0.0f);
-    pattern->AddEnemyMovement([centerPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(centerPosition);
-        LOG_DEBUG("Enemy moved to center");
-    }, 6.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);  // 設置開始時間為0，持續時間為1.5秒
 
-    // 第二波攻擊：環形圓形攻擊
-    std::vector<glm::vec2> circlePositions = CalculateCircularPositions(centerPosition, 250.0f, 8);
+    float delay = 1.5f;
+    auto cornerbulletAttack = std::make_shared<CornerBulletAttack>(delay, 3);
+    cornerbulletAttack->SetBulletSpeed(900.0f);
+    cornerbulletAttack->SetRadius(35.0f);
+    pattern->AddAttack(cornerbulletAttack, 1.0f);
 
-    startTime = 8.0f;
-    for (int i = 0; i < circlePositions.size(); ++i) {
-        auto attack = std::make_shared<CircleAttack>(
-            circlePositions[i], 2.0f, 200.0f, i + 6
-        );
-        attack->SetColor(Util::Color::FromRGB(200, 0, 200, 180));
-        pattern->AddAttack(attack, startTime);
-        startTime += 0.3f;
-    }
-
-    // 第三波攻擊：十字形雷射組合
-    auto attackH = std::make_shared<RectangleAttack>(
-        centerPosition, 3.0f, RectangleAttack::Direction::HORIZONTAL, 2000.0f, 100.0f, 14
+    float duration = 3.0f;
+    auto rotateAttack = std::make_shared<RectangleAttack>(
+        centerPosition, delay, 1500.0f, 100.0f, 2.0f, 1
     );
-    pattern->AddAttack(attackH, 12.0f);
-    auto attackV = std::make_shared<RectangleAttack>(
-        centerPosition, 3.0f, RectangleAttack::Direction::VERTICAL, 2000.0f, 100.0f, 15
-    );
-    pattern->AddAttack(attackV, 12.0f);
-    auto attack1 = std::make_shared<RectangleAttack>(
-        centerPosition, 3.0f, RectangleAttack::Direction::DIAGONAL_TL_BR, 2000.0f, 100.0f, 16
-    );
-    pattern->AddAttack(attack1, 12.0f);
-    auto attack4 = std::make_shared<RectangleAttack>(
-        centerPosition, 3.0f, RectangleAttack::Direction::DIAGONAL_TR_BL, 2000.0f, 100.0f, 17
-    );
-    pattern->AddAttack(attack4, 12.0f);
+    float rotationSpeed = 0.35f;
+    rotateAttack->SetAutoRotation(true, rotationSpeed);
+    rotateAttack->SetAttackDuration(duration);
+    pattern->AddAttack(rotateAttack, 3.5f);
+    auto circleAttack = std::make_shared<CircleAttack>(centerPosition, delay, 250.0f, 1);
+    circleAttack->SetColor(Util::Color(1.0, 0.0, 0.3, 0.4));
+    circleAttack->SetAttackDuration(duration);
+    pattern->AddAttack(circleAttack, 3.5f);
 
-    // 敵人移動回原位
-    glm::vec2 finalPosition(200.0f, 0.0f);
-    pattern->AddEnemyMovement([finalPosition](std::shared_ptr<Enemy> enemy) {
-        enemy->SetPosition(finalPosition);
-        LOG_DEBUG("Enemy moved to final position");
-    }, 16.0f);
 
-    // 設置模式總持續時間
-    pattern->SetDuration(20.0f);
+    auto cornerbulletAttack2 = std::make_shared<CornerBulletAttack>(delay, 3);
+    cornerbulletAttack2->SetBulletSpeed(900.0f);
+    cornerbulletAttack2->SetRadius(35.0f);
+    pattern->AddAttack(cornerbulletAttack2, 9.0f);
+    rotationSpeed = -0.35f;
+    auto rotateAttack2 = std::make_shared<RectangleAttack>(
+        centerPosition, delay, 1500.0f, 100.0f, -2.0f, 1
+    );
+    rotateAttack2->SetAutoRotation(true, rotationSpeed);
+    rotateAttack2->SetAttackDuration(duration);
+    pattern->AddAttack(rotateAttack2, 11.5f);
+    auto circleAttack2 = std::make_shared<CircleAttack>(centerPosition, delay, 250.0f, 1);
+    circleAttack2->SetColor(Util::Color(1.0, 0.0, 0.3, 0.4));
+    circleAttack2->SetAttackDuration(duration);
+    pattern->AddAttack(circleAttack2, 11.5f);
 
+    pattern->SetDuration(16.0f);
     return pattern;
 }

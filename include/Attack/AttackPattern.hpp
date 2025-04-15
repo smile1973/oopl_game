@@ -17,7 +17,7 @@ public:
     };
 
     // 敵人移動指令類型
-    using EnemyMovement = std::function<void(std::shared_ptr<Enemy>)>;
+    using EnemyMovement = std::function<void(std::shared_ptr<Enemy>, float totalTime)>;
 
     // 建構函數
     AttackPattern();
@@ -25,7 +25,7 @@ public:
 
     void AddAttack(std::shared_ptr<Attack> attack, float startTime);
 
-    void AddEnemyMovement(const EnemyMovement& movement, float startTime);
+    void AddEnemyMovement(const EnemyMovement& movement, float startTime, float duration = 1.0f);
 
     void Start(std::shared_ptr<Enemy> enemy);
 
@@ -53,6 +53,7 @@ private:
         EnemyMovement movement;
         float startTime;
         bool executed = false;
+        float duration = 0.0f;  // 添加移動持續時間
     };
 
     // 成員變數
@@ -63,6 +64,7 @@ private:
     std::vector<AttackItem> m_Attacks;
     std::vector<MovementItem> m_Movements;
     std::shared_ptr<Enemy> m_Enemy;
+
 };
 
 #endif //ATTACKPATTERN_HPP

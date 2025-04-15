@@ -148,19 +148,6 @@ void App::Update() {
     // 更新攻擊控制器 (如果處於活動狀態)
     if (m_EnemyAttackController && m_Enemy->GetVisibility()) {
         m_EnemyAttackController->Update(deltaTime, m_Rabbit);
-
-        // 檢查是否所有攻擊模式都已完成，如果是則循環
-        if (m_EnemyAttackController->IsAllPatternsCompleted()) {
-            // 根據當前關卡重新初始化攻擊模式
-            if (m_Phase == Phase::BATTLE_1) {
-                m_EnemyAttackController->InitBattle1Patterns();
-            } else if (m_Phase == Phase::BATTLE_2) {
-                m_EnemyAttackController->InitBattle2Patterns();
-            }
-
-            // 重新啟動攻擊控制器
-            m_EnemyAttackController->Start();
-        }
     }
 
     // 更新攻擊管理器 (新增)

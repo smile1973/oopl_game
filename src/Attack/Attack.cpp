@@ -56,7 +56,6 @@ void Attack::Update(float deltaTime) {
 
         case State::ATTACKING:
             OnAttackUpdate(deltaTime);
-
             // 攻擊階段結束後，轉換到完成階段
             if (m_ElapsedTime >= m_AttackDuration) {
                 ChangeState(State::FINISHED);
@@ -154,14 +153,7 @@ void Attack::OnWarningUpdate(float deltaTime) {
 
 // 倒數階段開始
 void Attack::OnCountdownStart() {
-    LOG_DEBUG("OnCountdownStart called, creating time bar");
-    // 創建時間條
-    try {
-        CreateTimeBar();
-        LOG_DEBUG("Time bar created successfully");
-    } catch (const std::exception& e) {
-        LOG_ERROR("Error creating time bar: {}", e.what());
-    }
+    CreateTimeBar();
 }
 
 // 倒數階段更新
@@ -171,11 +163,7 @@ void Attack::OnCountdownUpdate(float deltaTime) {
 
 // 攻擊階段開始
 void Attack::OnAttackStart() {
-    try {
-        CreateAttackEffect();
-    } catch (const std::exception& e) {
-        LOG_ERROR("Error creating attack effect: {}", e.what());
-    }
+    CreateAttackEffect();
 
     if (m_WarningEffect) {
         m_WarningEffect->Reset();
@@ -200,7 +188,6 @@ void Attack::OnAttackUpdate(float deltaTime) {
         CheckCollision(m_TargetCharacter);
     }
 
-    // 檢查特效是否已結束，但攻擊仍在持續中
     if (m_AttackEffect && m_AttackEffect->IsFinished()) {
         CreateAttackEffect();
     }

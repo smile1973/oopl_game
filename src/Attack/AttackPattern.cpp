@@ -22,15 +22,21 @@ void AttackPattern::AddAttack(std::shared_ptr<Attack> attack, float startTime) {
     }
 }
 
-void AttackPattern::AddEnemyMovement(const EnemyMovement& movement, float startTime) {
-    // 新增敵人移動到列表中
-    m_Movements.push_back({movement, startTime, false});
+void AttackPattern::AddEnemyMovement(const EnemyMovement& movement, float startTime, float duration) {
+    // 新增敵人移動到列表中，加入持續時間
+    m_Movements.push_back({movement, startTime, false, duration});
 
     // 根據開始時間排序
     std::sort(m_Movements.begin(), m_Movements.end(),
               [](const MovementItem& a, const MovementItem& b) {
                   return a.startTime < b.startTime;
               });
+
+    // 更新總持續時間（考慮移動的持續時間）
+    float movementEndTime = startTime + duration;
+    if (movementEndTime > m_TotalDuration) {
+        m_TotalDuration = movementEndTime;
+    }
 }
 
 void AttackPattern::Start(std::shared_ptr<Enemy> enemy) {
@@ -100,10 +106,11 @@ void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
         if (!item.executed && m_ElapsedTime >= item.startTime) {
             item.executed = true;
 
-            // 執行移動函數
+            // 執行移動函數，傳入持續時間參數
             if (m_Enemy) {
-                item.movement(m_Enemy);
-                LOG_DEBUG("Executing enemy movement at time {}", m_ElapsedTime);
+                item.movement(m_Enemy, item.duration);
+                LOG_DEBUG("Executing enemy movement at time {}, duration: {}",
+                         m_ElapsedTime, item.duration);
             }
         }
     }

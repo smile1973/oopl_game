@@ -50,6 +50,7 @@ public:
         m_IsMoving = true;
     }
     void CleanupVisuals() override;
+    void SetAttackDuration(float duration) { m_AttackDuration = duration; }
 
 protected:
     // 實現基類要求的方法
