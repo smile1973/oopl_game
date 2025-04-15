@@ -23,15 +23,9 @@ public:
      */
     explicit EnemyAttackController(std::shared_ptr<Enemy> enemy);
 
-    /**
-     * @brief 初始化Battle 1的攻擊模式序列
-     */
     void InitBattle1Patterns();
-
-    /**
-     * @brief 初始化Battle 2的攻擊模式序列
-     */
     void InitBattle2Patterns();
+    void InitBattle3Patterns();
 
     /**
      * @brief 更新控制器和當前執行的攻擊模式

@@ -1,4 +1,3 @@
-// src/Attack/AttackPatternFactory.cpp
 #include "Attack/AttackPatternFactory.hpp"
 #include "Util/Logger.hpp"
 #include <cmath>
@@ -165,7 +164,6 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCircularPattern(
     return pattern;
 }
 
-// 在 AttackPatternFactory.cpp 中修正 CreateCrossRotatingLaserPattern 方法實現
 std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCrossRotatingLaserPattern(
     const glm::vec2& centerPosition,
     float width,
@@ -212,10 +210,6 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateMovingCirclePattern(
     circleAttack->SetAttackDuration(moveDuration + 0.5f);  // 加一點緩衝時間
     pattern->AddAttack(circleAttack, 0.0f);
     pattern->SetDuration(delay + moveDuration + 1.0f);
-
-    LOG_DEBUG("Created moving circle attack from ({}, {}) to ({}, {}), speed: {}, duration: {}",
-              startPosition.x, startPosition.y, endPosition.x, endPosition.y,
-              speed, moveDuration);
 
     return pattern;
 }
@@ -423,5 +417,68 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle2Pattern() {
     pattern->AddAttack(circleAttack2, 11.5f);
 
     pattern->SetDuration(16.0f);
+    return pattern;
+}
+
+std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle3Pattern() {
+    auto pattern = std::make_shared<AttackPattern>();
+    glm::vec2 centerPosition(0.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);
+
+    float delay = 2.0f;
+    glm::vec2 startPos;
+    glm::vec2 endPos;
+    for (int i = 0; i < 11; i++) {
+        startPos = glm::vec2(620.0f, 340.0f - static_cast<float>(i) * 30.0f);
+        endPos = glm::vec2(-620.0f, 340.0f - static_cast<float>(i) * 30.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
+        attack1->SetColor(Util::Color(0.0, 1.0, 1.0, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack2 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
+        attack2->SetColor(Util::Color(0.0, 0.0, 1.0, 0.4));
+        attack2->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
+        attack3->SetColor(Util::Color(0.0, 0.0, 1.0, 0.4));
+        attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 1.0);
+        pattern->AddAttack(attack2, 2.0);
+        pattern->AddAttack(attack3, 5.0);
+    }
+    for (int i = 0; i < 11; i++) {
+        startPos = glm::vec2(-620.0f, -340.0f + static_cast<float>(i) * 30.0f);
+        endPos = glm::vec2(620.0f, -340.0f + static_cast<float>(i) * 30.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
+        attack1->SetColor(Util::Color(0.0, 1.0, 1.0, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack2 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
+        attack2->SetColor(Util::Color(0.0, 0.0, 1.0, 0.4));
+        attack2->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
+        attack3->SetColor(Util::Color(0.0, 0.0, 1.0, 0.4));
+        attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 3.0);
+        pattern->AddAttack(attack2, 4.0);
+        pattern->AddAttack(attack3, 6.0);
+    }
+
+    for (int i = 0; i < 3; i++) {
+        startPos = glm::vec2(-600.0f + static_cast<float>(i) * 600.0f, 360.0f);
+        endPos = glm::vec2(-600.0f + static_cast<float>(i) * 600.0f, -360.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, delay, 230.0f, i + 1);
+        attack1->SetColor(Util::Color(1.0, 0.0, 0.3, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 220.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 3.0);
+    }
+    for (int i = 0; i < 2; i++) {
+        startPos = glm::vec2(-300.0f + static_cast<float>(i) * 600.0f, 360.0f);
+        endPos = glm::vec2(-300.0f + static_cast<float>(i) * 600.0f, -360.0f);
+        auto attack1 = std::make_shared<CircleAttack>(startPos, delay, 230.0f, i + 1);
+        attack1->SetColor(Util::Color(1.0, 0.0, 0.3, 0.4));
+        attack1->SetMovementParams(glm::normalize(endPos - startPos), 220.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack1, 6.0);
+    }
+    pattern->SetDuration(7.0f);
     return pattern;
 }

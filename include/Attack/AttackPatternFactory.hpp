@@ -185,10 +185,9 @@ public:
         float delay = 2.0f);
 
     // BATTLE 1 特殊攻擊模式
-    static std::shared_ptr<AttackPattern> CreateBattle1Pattern();
-
-    // BATTLE 2 特殊攻擊模式
+    std::shared_ptr<AttackPattern> CreateBattle1Pattern();
     std::shared_ptr<AttackPattern> CreateBattle2Pattern();
+    std::shared_ptr<AttackPattern> CreateBattle3Pattern();
 
 private:
     // 私有構造函數防止外部創建實例

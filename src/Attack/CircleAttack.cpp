@@ -111,8 +111,7 @@ bool CircleAttack::CheckCollisionInternal(const std::shared_ptr<Character>& char
     glm::vec2 characterPos = character->GetPosition();
     float distance = glm::length(characterPos - m_Position);
 
-    // 如果距離小於半徑，則判定為碰撞
-    return distance + 4.0f <= m_Radius;
+    return distance + 7.0f <= m_Radius;
 }
 
 void CircleAttack::SyncWithEffect() {
@@ -131,10 +130,6 @@ void CircleAttack::SyncWithEffect() {
 
 float CircleAttack::CalculateDirectionAngle() const {
     float angle = atan2(m_Direction.y, m_Direction.x);
-
-    LOG_DEBUG("Direction vector: ({}, {}), calculated angle: {:.2f} radians",
-             m_Direction.x, m_Direction.y, angle);
-
     return angle;
 }
 
