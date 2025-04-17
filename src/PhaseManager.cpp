@@ -98,3 +98,10 @@ void PhaseManager::Update() const {
         m_MainStageTitle->SetVisible(false);
     }
 }
+
+void PhaseManager::ReStart() {
+    m_MainPhase = -1;
+    m_SubPhase = 0;
+    m_SubPhaseType = 0;
+    m_Background->SetBackground(m_MainPhase);
+}

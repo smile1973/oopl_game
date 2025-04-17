@@ -12,7 +12,10 @@ public:
                                          text, Util::Color::FromName(Util::Colors::WHITE)),
             100) {
         m_Transform.translation = {0.0, 0.0};
+        // m_Text = text;
+        // m_Size = size;
     }
+
     TextObject(const TextObject&) = delete;
     TextObject(TextObject&&) = delete;
     TextObject& operator=(const TextObject&) = delete;
@@ -20,16 +23,21 @@ public:
 
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
+    // [[nodiscard]] std::string& GetText() { return m_Text; }
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     void SetInversion() { m_Transform.scale.x *= -1; }
 
-    void SetText(const std::string& text) const {
+    void SetText(const std::string& text) {
         const auto temp = std::dynamic_pointer_cast<Util::Text>(m_Drawable);
         temp->SetText(text);
+        // m_Text = text;
     }
 
 private:
+    // std::string m_Text = " ";
+    // int m_Size = 0;
+
     inline static std::string append_string_views(std::string_view sv1, std::string_view sv2) {
         return std::string(sv1) + "\n" + std::string(sv2);
     }

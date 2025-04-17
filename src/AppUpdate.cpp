@@ -27,11 +27,20 @@ void App::Update() {
         Pause();
         return;
     }
+    if (m_DefeatScreen->GetVisibility() == true) {
+        Defeat();
+        return;
+    }
 
 
     // 角色移動
     constexpr float moveSpeed = 6.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
+    // 定義邊界
+    constexpr float minX = -550.0f;
+    constexpr float maxX = 550.0f;
+    constexpr float minY = -250.0f;
+    constexpr float maxY = 270.0f;
 
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
         rabbitPos.y += moveSpeed; // 向上移動
@@ -45,7 +54,11 @@ void App::Update() {
     if (Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
         rabbitPos.x += moveSpeed; // 向右移動
     }
+    // 限制兔子在邊界內
+    rabbitPos.x = std::max(minX, std::min(rabbitPos.x, maxX));
+    rabbitPos.y = std::max(minY, std::min(rabbitPos.y, maxY));
     m_Rabbit->SetPosition(rabbitPos); // 更新位置
+    // LOG_ERROR("{},{}",rabbitPos.x,rabbitPos.y);
 
     // 退出
     if (Util::Input::IsKeyPressed(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
@@ -64,17 +77,18 @@ void App::Update() {
         m_enemies_characters.push_back(enemy); // 隱式轉換 std::shared_ptr<Enemy> 到 std::shared_ptr<Character>
     }
 
+    const int rabbitLevel = m_Rabbit->GetLevel();
     // 技能Z
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             LOG_DEBUG("Z Key UP - Skill 1");
             if (m_Rabbit->UseSkill(1)) {
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                    if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(10005);
+                    if (m_Rabbit->IfCollideCircle(enemy, 200)) {
+                        enemy->TakeDamage(1);
                     }
                 }
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
         }
     }
@@ -85,12 +99,12 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
             LOG_DEBUG("X Key UP - Skill 2");
             if (m_Rabbit->UseSkill(2)) {
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                    if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(5);
+                    if (m_Rabbit->IfCollideSweptCircle(enemy)) {
+                        enemy->TakeDamage(5*rabbitLevel);
                     }
                 }
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
         }
     }
@@ -101,12 +115,12 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::C)) {
             LOG_DEBUG("C Key UP - Skill 3");
             if (m_Rabbit->UseSkill(3)) {
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                    if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(25);
+                    if (m_Rabbit->IfCollideEllipse(enemy)) {
+                        enemy->TakeDamage(5*rabbitLevel);
                     }
                 }
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
         }
     }
@@ -117,12 +131,12 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
             LOG_DEBUG("V Key UP - Skill 4");
             if (m_Rabbit->UseSkill(4)) {
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                    if (m_Rabbit->IfCollides(enemy, 200)) {
-                        enemy->TakeDamage(55);
+                    if (m_Rabbit->IfCollideCircle(enemy, 200)) {
+                        enemy->TakeDamage(55*rabbitLevel);
                     }
                 }
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
             }
         }
     }
@@ -161,12 +175,16 @@ void App::Update() {
 
     m_Enemy_dummy->Update();
     m_SkillUI->Update();
+    m_HealthBarUI->Update();
+    m_DefeatScreen->Update();
 
 
     // 測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
             Pause();
+            LOG_DEBUG("--App::Pause--");
+            // m_DefeatScreen->Get();
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);

@@ -19,6 +19,7 @@ public:
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     void SetInversion() { m_Transform.scale.x *= -1; } // 設定左右反轉角色
     void SetImage(const std::string& ImagePath); // 設定角色圖片
+    void SetScale(float x = 1, float y = 1) { m_Transform.scale = {x, y}; }
 
 
     // 技能

@@ -20,6 +20,7 @@ SkillUI::SkillUI(const std::shared_ptr<Character>& character)
 
         m_CooldownTexts.emplace_back( std::make_shared<TextObject>(" ") );
         m_CooldownTexts[i] -> SetPosition(glm::vec2(baseX + i * spacing+5, baseY-5));
+        m_CooldownTexts[i] -> SetZIndex(81);
         // LOG_INFO("CooldownTexts: {} -- {}", i, m_CooldownTexts[i]->GetPosition());
     }
     m_SkillIcons[1] -> MovePosition(glm::vec2(0,1.5));
@@ -31,6 +32,7 @@ SkillUI::SkillUI(const std::shared_ptr<Character>& character)
         m_SkillIcons2[i] -> SetZIndex(80);
 
         m_CooldownTexts2.emplace_back( std::make_shared<TextObject>(" ", 18) );
+        m_CooldownTexts2[i] -> SetZIndex(81);
         // LOG_INFO("CooldownTexts: {} -- {}", i, m_CooldownTexts[i]->GetPosition());
     }
 }
