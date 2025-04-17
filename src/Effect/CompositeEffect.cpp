@@ -13,8 +13,6 @@ namespace Effect {
 
     void CompositeEffect::Draw(const Core::Matrices& data) {
         if (m_State != State::ACTIVE || !m_BaseShape) return;
-
-        // First get program ID
         Core::Program* program = nullptr;
 
         if (auto circleShape = dynamic_cast<Shape::CircleShape*>(m_BaseShape.get())) {

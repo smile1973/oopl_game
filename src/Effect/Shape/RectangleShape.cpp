@@ -84,9 +84,6 @@ namespace Effect {
             // Set time for animation
             glUniform1f(m_TimeLocation, m_ElapsedTime);
 
-            // 重要：不要在這裡設置修飾器的默認值，因為這可能會覆蓋 CompositeEffect 中的設置
-            // 只有在確定修飾器未設置時才應用默認值 (讓修飾器自己來設置)
-
             // Validate shader program (檢查著色器是否一切正常)
             s_Program->Validate();
 

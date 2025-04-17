@@ -39,41 +39,26 @@ void AttackPattern::AddEnemyMovement(const EnemyMovement& movement, float startT
     }
 }
 
-void AttackPattern::Start(std::shared_ptr<Enemy> enemy) {
-    if (m_State != State::IDLE) {
-        LOG_DEBUG("Attack pattern already running or finished");
-        return;
-    }
+void AttackPattern::Start(std::shared_ptr<Enemy> &enemy) {
+    if (m_State != State::IDLE) return;
 
     m_Enemy = enemy;
     m_State = State::RUNNING;
     m_ElapsedTime = 0.0f;
 
     // 重置所有攻擊和移動的狀態
-    for (auto& item : m_Attacks) {
-        item.started = false;
-    }
-
-    for (auto& item : m_Movements) {
-        item.executed = false;
-    }
-
-    LOG_DEBUG("Attack pattern started");
+    for (auto& item : m_Attacks) {item.started = false;}
+    for (auto& item : m_Movements) {item.executed = false;}
 }
 
 void AttackPattern::Stop() {
-    if (m_State != State::RUNNING) {
-        return;
-    }
+    if (m_State != State::RUNNING) return;
 
     m_State = State::FINISHED;
-    LOG_DEBUG("Attack pattern stopped");
 }
 
 void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
-    if (m_State != State::RUNNING) {
-        return;
-    }
+    if (m_State != State::RUNNING) return;
 
     // 更新經過的時間
     m_ElapsedTime += deltaTime;
@@ -85,7 +70,7 @@ void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
         return;
     }
 
-    // 更新攻擊 - 只負責初始化和啟動攻擊，不再更新攻擊邏輯
+    // 更新攻擊 - 只負責初始化和啟動攻擊，不更新攻擊邏輯
     for (auto& item : m_Attacks) {
         // 檢查是否到達攻擊開始時間
         if (!item.started && m_ElapsedTime >= item.startTime) {

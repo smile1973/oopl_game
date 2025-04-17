@@ -49,13 +49,11 @@ namespace Effect {
             LOG_DEBUG("Created new effect, type: {}", static_cast<int>(type));
         }
 
-        // Add to active effects list
         m_ActiveEffects.push_back(effect);
         return effect;
     }
 
     void EffectManager::Draw() {
-        // This method is called by GameObject's Draw method
         for (auto& effect : m_ActiveEffects) {
             if (effect->IsActive()) {
                 // Get transformation matrix
@@ -64,8 +62,6 @@ namespace Effect {
                     effect->GetSize(),
                     effect->GetBaseShape()->GetZIndex()
                 );
-
-                // Draw effect
                 effect->Draw(data);
             }
         }
@@ -90,7 +86,6 @@ namespace Effect {
     }
 
     void EffectManager::Update(float deltaTime) {
-        // Update all active effects
         for (auto it = m_ActiveEffects.begin(); it != m_ActiveEffects.end();) {
             auto effect = *it;
             effect->Update(deltaTime);

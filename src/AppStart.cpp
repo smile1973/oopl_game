@@ -10,15 +10,12 @@ void App::Start() {
 
     // 初始化特效管理器（預先創建10個每種類型的特效）
     Effect::EffectManager::GetInstance().Initialize(10);
-
-    // 問題:用Z之前 X V不能正常顯示(未解決)
     auto zEffect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::SKILL_Z);
     zEffect->Play({-9999, -9999}, -100);
 
     // 將特效管理器添加到渲染樹
     m_Root.AddChild(std::shared_ptr<Util::GameObject>(&Effect::EffectManager::GetInstance(), [](Util::GameObject*){}));
 
-    // 兔子閒置動畫
     std::vector<std::string> rabbitImages;
     rabbitImages.reserve(2);
     for (int i = 0; i < 2; ++i) {

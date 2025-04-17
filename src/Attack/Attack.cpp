@@ -35,9 +35,7 @@ void Attack::Update(float deltaTime) {
     switch (m_State) {
         case State::WARNING:
             OnWarningUpdate(deltaTime);
-
-            // 警告階段結束時，轉換到倒數階段
-            if (m_ElapsedTime >= 0.5f) { // 警告顯示0.5秒後開始倒數
+            if (m_ElapsedTime >= 0.5f) {
                 ChangeState(State::COUNTDOWN);
             }
             break;
@@ -45,10 +43,7 @@ void Attack::Update(float deltaTime) {
         case State::COUNTDOWN:
             OnCountdownUpdate(deltaTime);
 
-            // 更新時間條
             UpdateTimeBar(CalculateProgress());
-
-            // 倒數結束後，轉換到攻擊階段
             if (m_ElapsedTime >= m_Delay) {
                 ChangeState(State::ATTACKING);
             }
@@ -56,7 +51,6 @@ void Attack::Update(float deltaTime) {
 
         case State::ATTACKING:
             OnAttackUpdate(deltaTime);
-            // 攻擊階段結束後，轉換到完成階段
             if (m_ElapsedTime >= m_AttackDuration) {
                 ChangeState(State::FINISHED);
             }
@@ -133,7 +127,6 @@ void Attack::ChangeState(State newState) {
             break;
 
         case State::CREATED:
-            // 不應該手動轉換為CREATED狀態
             LOG_ERROR("Attempt to change attack state to CREATED");
             break;
     }
@@ -171,13 +164,6 @@ void Attack::OnAttackStart() {
 
     if (m_TimeBarEffect) {
         m_TimeBarEffect->Reset();
-    }
-
-    // 移除序列號文字
-    if (m_SequenceTextObject) {
-        RemoveChild(m_SequenceTextObject);
-        m_SequenceTextObject = nullptr;
-        m_SequenceText = nullptr;
     }
     CleanupVisuals();
 }

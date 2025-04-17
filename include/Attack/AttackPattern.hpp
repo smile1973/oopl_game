@@ -27,7 +27,7 @@ public:
 
     void AddEnemyMovement(const EnemyMovement& movement, float startTime, float duration = 1.0f);
 
-    void Start(std::shared_ptr<Enemy> enemy);
+    void Start(std::shared_ptr<Enemy> &enemy);
 
     void Stop();
 

@@ -47,9 +47,6 @@ void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> p
 
         // 檢查當前模式是否已完成
         if (m_CurrentPattern->IsFinished()) {
-            LOG_DEBUG("Attack pattern completed");
-
-            // 開始冷卻
             m_IsInCooldown = true;
             m_ElapsedCooldownTime = 0.0f;
         }
@@ -57,12 +54,9 @@ void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> p
         // 沒有當前模式，檢查隊列
         SwitchToNextPattern();
 
-        // 如果切換後仍然沒有模式，且隊列為空，表示所有模式已完成
         if (!m_CurrentPattern && m_PatternQueue.empty() && !m_IsInCooldown) {
             // 自動重新初始化當前階段的攻擊模式
             InitPatternsForCurrentPhase();
-            LOG_DEBUG("Automatically reinitialized patterns for Phase {}-{}",
-                     m_CurrentMainPhase, m_CurrentSubPhase);
         }
     }
 }
