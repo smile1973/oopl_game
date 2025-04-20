@@ -86,7 +86,7 @@ void App::Pause() {
  * @brief 結算畫面。
  */
 void App::Defeat(){
-    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER)) {
+    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::N)) {
         switch (m_DefeatScreen->GetCurrentOption()) {
             case 0:
                 LOG_DEBUG("--App::Defeat Leave_Game--");
@@ -103,7 +103,7 @@ void App::Defeat(){
                 LOG_ERROR("--App::Defeat Switch Default--");
         }
     }
-    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::KP_ENTER);
+    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
     if (m_LeftKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
         m_DefeatScreen->Switch(true);
@@ -115,7 +115,6 @@ void App::Defeat(){
     }
     m_RightKeyDown = Util::Input::IsKeyPressed(Util::Keycode::RIGHT);
 
-    // m_PRM->Update();
     m_DefeatScreen->Update();
     m_Root.Update();
 }

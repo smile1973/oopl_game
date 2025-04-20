@@ -11,7 +11,7 @@ Skill::Skill(int skillId, const std::vector<std::string>& imageSet, int duration
     m_Animation = std::make_shared<Util::Animation>(imageSet, true, duration, false, 0);
 }
 
-void Skill::Play(const glm::vec2& position) {
+void Skill::Play(const glm::vec2& position, float direction) {
     if (m_State == State::IDLE && !m_IsOnCooldown) {
         LOG_DEBUG("Playing skill animation and effect");
         m_State = State::ACTIVE;
@@ -38,11 +38,9 @@ void Skill::Play(const glm::vec2& position) {
         auto effect = Effect::EffectManager::GetInstance().GetEffect(effectType);
         // LOG_DEBUG("get: {}", (effect ? "success" : "fail"));
         effect->SetDuration(static_cast<float>(m_Duration) / 300.0f);
+        if (m_SkillId == 2) effect->SetDirection(direction);
         effect->Play(position, 45.0f);
         m_CurrentEffect = effect;
-
-        LOG_DEBUG("Created effect for skill {}, position: ({}, {})",
-                  m_SkillId, position.x, position.y);
     } else if (m_IsOnCooldown) {
         LOG_DEBUG("Skill {} is on cooldown for {:.1f} seconds",
                  m_SkillId, m_CurrentCooldown);

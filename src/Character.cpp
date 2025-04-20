@@ -28,7 +28,7 @@ void Character::AddSkill(int skillId, const std::vector<std::string>& skillImage
     LOG_DEBUG("Added skill with ID: " + std::to_string(skillId));
 }
 
-bool Character::UseSkill(const int skillId) {
+bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Character>>& m_Enemies) {
     if (m_State == State::IDLE) {
         // 檢查技能是否存在
         auto it = m_Skills.find(skillId);
@@ -37,6 +37,7 @@ bool Character::UseSkill(const int skillId) {
             // SwitchToSkill(skillId);
             if (!it->second->IsOnCooldown()) {
                 LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
+                TowardNearestEnemy(m_Enemies);
                 SwitchToSkill(skillId);
                 return true;
             }
@@ -124,7 +125,7 @@ void Character::SwitchToSkill(int skillId) {
         m_CurrentSkill = it->second;
 
         // 播放技能動畫和效果 傳遞位置
-        m_CurrentSkill->Play(m_Transform.translation);
+        m_CurrentSkill->Play(m_Transform.translation, m_Transform.scale.x > 0.0f ? 1.0f : -1.0f);
         m_Drawable = m_CurrentSkill->GetAnimation();
     }
 }

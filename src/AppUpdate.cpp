@@ -82,11 +82,11 @@ void App::Update() {
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
             LOG_DEBUG("Z Key UP - Skill 1");
-            if (m_Rabbit->UseSkill(1)) {
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            if (m_Rabbit->UseSkill(1, m_enemies_characters)) {
+                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
-                        enemy->TakeDamage(1);
+                        enemy->TakeDamage(40);
                     }
                 }
             }
@@ -98,8 +98,8 @@ void App::Update() {
     if (m_XKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
             LOG_DEBUG("X Key UP - Skill 2");
-            if (m_Rabbit->UseSkill(2)) {
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            if (m_Rabbit->UseSkill(2, m_enemies_characters)) {
+                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideSweptCircle(enemy)) {
                         enemy->TakeDamage(5*rabbitLevel);
@@ -114,8 +114,8 @@ void App::Update() {
     if (m_CKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::C)) {
             LOG_DEBUG("C Key UP - Skill 3");
-            if (m_Rabbit->UseSkill(3)) {
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            if (m_Rabbit->UseSkill(3, m_enemies_characters)) {
+                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideEllipse(enemy)) {
                         enemy->TakeDamage(5*rabbitLevel);
@@ -130,8 +130,8 @@ void App::Update() {
     if (m_VKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
             LOG_DEBUG("V Key UP - Skill 4");
-            if (m_Rabbit->UseSkill(4)) {
-                m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
+            if (m_Rabbit->UseSkill(4, m_enemies_characters)) {
+                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
                         enemy->TakeDamage(55*rabbitLevel);
@@ -188,19 +188,8 @@ void App::Update() {
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
+    
 
-
-
-
-    // // 按I鍵測試多個敵人攻擊特效
-    // if (Util::Input::IsKeyDown(Util::Keycode::I)) {
-    //     for (int i = 0; i < 3; ++i) {
-    //         auto eff = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::ENEMY_ATTACK_1);
-    //         eff->SetMovementModifier(Effect::Modifier::MovementModifier(true, 250.0f, 1200.0f, {0.0f, -1.0f}));
-    //         eff->SetDuration(5.0f);
-    //         eff->Play({-500 + (500 * i), 500}, 30.0f);
-    //     }
-    // }
     //
     // // 按B鍵手動啟動Battle 1攻擊模式
     // if (Util::Input::IsKeyDown(Util::Keycode::B)) {

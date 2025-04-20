@@ -95,11 +95,13 @@ namespace Effect {
         m_State = State::ACTIVE;
 
         // Sync position to base shape
+
         m_BaseShape->Play(position, zIndex);
 
         // Reset movement modifier and set start position
         if (m_MovementModifier.IsMoving()) {
             m_MovementModifier.Reset();
+            m_MovementModifier.SetSpeed(m_MovementModifier.GetSpeed() * m_direction);
             m_MovementModifier.SetStartPosition(position);
         }
     }

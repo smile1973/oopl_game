@@ -13,9 +13,6 @@ CircleAttack::CircleAttack(const glm::vec2& position, float delay, float radius,
 }
 
 void CircleAttack::CreateWarningEffect() {
-    // LOG_DEBUG("CircleAttack::CreateWarningEffect called for position ({}, {}), radius: {}",
-    //          m_Position.x, m_Position.y, m_Radius);
-
     try {
         // 獲取圓形警告特效
         auto warningEffect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::ENEMY_ATTACK_2);
@@ -41,7 +38,7 @@ void CircleAttack::CreateWarningEffect() {
 
         // 設置持續時間和播放特效
         warningEffect->SetDuration(m_Delay + 1.0f);
-        warningEffect->Play(m_Position, m_ZIndex - 0.1f);
+        warningEffect->Play(m_Position, m_ZIndex - 2.0f);
 
         m_WarningEffect = warningEffect;
         // LOG_DEBUG("Circle warning effect created and played");
@@ -96,7 +93,7 @@ void CircleAttack::CreateAttackEffect() {
 
         // 設置持續時間和播放特效
         circleEffect->SetDuration(m_AttackDuration);
-        circleEffect->Play(m_Position, m_ZIndex + 0.2f);
+        circleEffect->Play(m_Position, z_ind);
 
         // LOG_DEBUG("Circle attack effect created at ({}, {}) with duration: {}",
         //           m_Position.x, m_Position.y, m_AttackDuration);

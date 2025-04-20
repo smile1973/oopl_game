@@ -51,6 +51,7 @@ public:
     }
     void CleanupVisuals() override;
     void SetAttackDuration(float duration) { m_AttackDuration = duration; }
+    void SetZ(float zInd) { z_ind = zInd; }
 
 protected:
     // 實現基類要求的方法
@@ -70,6 +71,7 @@ private:
     glm::vec2 m_Direction = {1.0f, 0.0f}; // 移動方向
     float m_Speed = 200.0f;        // 移動速度
     float m_Distance = 800.0f;     // 移動距離
+    float z_ind = 10.0f;
 
     // 方向箭頭圖片
     static std::shared_ptr<Util::Image> s_ArrowImage;
@@ -77,6 +79,7 @@ private:
 
     void CreateDirectionIndicator();
     float CalculateDirectionAngle() const;
+
 };
 
 #endif // CIRCLEATTACK_HPP

@@ -42,6 +42,8 @@ namespace Effect {
 
         // 基礎形狀設置
         std::shared_ptr<Shape::BaseShape> GetBaseShape() { return m_BaseShape; }
+        void SetDirection(float direction) { m_direction = direction; }
+        float GetDirection() { return m_direction; }
 
     private:
         std::shared_ptr<Shape::BaseShape> m_BaseShape;
@@ -49,6 +51,7 @@ namespace Effect {
         Modifier::EdgeModifier m_EdgeModifier;
         Modifier::MovementModifier m_MovementModifier;
         Modifier::AnimationModifier m_AnimationModifier;
+        float m_direction = 1.0f;
     };
 
 } // namespace Effect

@@ -21,7 +21,7 @@ public:
     std::shared_ptr<Util::Animation> GetAnimation() const { return m_Animation; }
 
     // 播放技能動畫和效果
-    void Play(const glm::vec2& position);
+    void Play(const glm::vec2& position, float direction);
 
     // 檢查動畫是否已結束
     bool IsEnded() const;

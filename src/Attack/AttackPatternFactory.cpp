@@ -266,6 +266,9 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
         auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
         attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
         attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        attack1->SetZ(20.0f);
+        attack2->SetZ(20.0f);
+        attack3->SetZ(20.0f);
         pattern->AddAttack(attack1, 1.0);
         pattern->AddAttack(attack2, 2.0);
         pattern->AddAttack(attack3, 3.0);
@@ -297,6 +300,9 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
         auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
         attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
         attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        attack1->SetZ(20.0f);
+        attack2->SetZ(20.0f);
+        attack3->SetZ(20.0f);
         pattern->AddAttack(attack1, 6.0);
         pattern->AddAttack(attack2, 7.0);
         pattern->AddAttack(attack3, 8.0);
@@ -333,6 +339,9 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
         auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
         attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
         attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        attack1->SetZ(20.0f);
+        attack2->SetZ(20.0f);
+        attack3->SetZ(20.0f);
         pattern->AddAttack(attack1, 12.0);
         pattern->AddAttack(attack2, 13.0);
         pattern->AddAttack(attack3, 14.0);
@@ -364,6 +373,9 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
         auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 32.0f, i + 1);
         attack3->SetColor(Util::Color(0.0, 1.0, 0.3, 0.4));
         attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        attack1->SetZ(20.0f);
+        attack2->SetZ(20.0f);
+        attack3->SetZ(20.0f);
         pattern->AddAttack(attack1, 17.0);
         pattern->AddAttack(attack2, 18.0);
         pattern->AddAttack(attack3, 19.0);
@@ -440,6 +452,9 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle3Pattern() {
         attack2->SetColor(Util::Color(0.0, 0.0, 1.0, 0.4));
         attack2->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
         auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
+        attack1->SetZ(20.0f);
+        attack2->SetZ(20.0f);
+        attack3->SetZ(20.0f);
         attack3->SetColor(Util::Color(0.0, 0.0, 1.0, 0.4));
         attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
         pattern->AddAttack(attack1, 1.0);
@@ -458,6 +473,9 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle3Pattern() {
         auto attack3 = std::make_shared<CircleAttack>(startPos, 1.0f, 20.0f, i + 1);
         attack3->SetColor(Util::Color(0.0, 0.0, 1.0, 0.4));
         attack3->SetMovementParams(glm::normalize(endPos - startPos), 350.0f, glm::length(endPos - startPos));
+        attack1->SetZ(20.0f);
+        attack2->SetZ(20.0f);
+        attack3->SetZ(20.0f);
         pattern->AddAttack(attack1, 3.0);
         pattern->AddAttack(attack2, 4.0);
         pattern->AddAttack(attack3, 6.0);
