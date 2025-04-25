@@ -120,7 +120,7 @@ void App::Update() {
             if (m_Rabbit->UseSkill(3, m_enemies_characters)) {
                 // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                    if (m_Rabbit->IfCollideEllipse(enemy)) {
+                    if (m_Rabbit->IfCollideEllipse(enemy) || true) {
                         enemy->TakeDamage(5*rabbitLevel);
                         enemy->TakeDamage(m_Rabbit->IsSkillXUes() ? 1000 : 0);
                     }
