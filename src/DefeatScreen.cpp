@@ -84,6 +84,7 @@ void DefeatScreen::Get() {
     m_IsGameStart = false;
     SetVisible(true);
     m_GameTime -> SetText(StringGameTime(m_GameTimer));
+    m_Level -> SetText(std::to_string(m_Character->GetLevel()));
 }
 
 void DefeatScreen::Update(){

@@ -23,6 +23,8 @@ public:
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
     [[nodiscard]] int GetLevel() const { return m_Level; }
+    [[nodiscard]] int GetMoney() const { return m_Money; }
+    [[nodiscard]] int GetExperience() const { return m_Experience; }
 
     void UpdateLevel();
     void AddExperience(const int experience){ m_Experience += experience; }

@@ -238,6 +238,6 @@ void Character::UpdateLevel() {
     if (m_Experience >= 100) {
         m_Experience -= 100;
         m_Level++;
-        LOG_INFO("Character Level Up");
+        LOG_INFO("Character Level Up {}  --Exp: {}", m_Level, m_Experience);
     }
 }

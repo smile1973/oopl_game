@@ -7,7 +7,7 @@
 SkillUI::SkillUI(const std::shared_ptr<Character>& character)
     : m_Character(character) {
 
-    constexpr float baseX = -75.0f;
+    constexpr float baseX = -125.0f;
     constexpr float baseY = -250.0f;
 
     for (int i = 0; i < NUM_SKILLS; ++i) {

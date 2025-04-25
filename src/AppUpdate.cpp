@@ -182,15 +182,17 @@ void App::Update() {
     m_Enemy_dummy->Update();
     m_SkillUI->Update();
     m_HealthBarUI->Update();
+    m_LevelUI->Update();
     m_DefeatScreen->Update();
 
 
     // 測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            Pause();
-            LOG_DEBUG("--App::Pause--");
+            // Pause();
+            // LOG_DEBUG("--App::Pause--");
             // m_DefeatScreen->Get();
+            m_Rabbit->AddExperience(10);
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
