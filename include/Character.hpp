@@ -44,6 +44,8 @@ public:
                  int duration = 175, float Cooldown = 2.0f);
     bool UseSkill(int skillId, const std::vector<std::shared_ptr<Character>>& m_Enemies);  // 1=Z, 2=X, 3=C, 4=V
     virtual void Update();
+    void UpdateSkillXUes(const int skillId) { m_IsSkillXUes = skillId==2 ? true : false; }
+    [[nodiscard]] bool IsSkillXUes() const { return m_IsSkillXUes; }
 
     bool IsSkillOnCooldown(int skillId) const;
     [[nodiscard]] float GetRemainingCooldown(int skillId) const {
@@ -80,6 +82,7 @@ private:
 
     // 存所有技能
     std::unordered_map<int, std::shared_ptr<Skill>> m_Skills;
+    bool m_IsSkillXUes = false;
 
     State m_State = State::IDLE;
     int m_CurrentSkillId = -1;

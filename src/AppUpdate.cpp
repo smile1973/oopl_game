@@ -86,9 +86,11 @@ void App::Update() {
                 // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
-                        enemy->TakeDamage(40);
+                        enemy->TakeDamage(10);
+                        enemy->TakeDamage(m_Rabbit->IsSkillXUes() ? 1000 : 0);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(1);
             }
         }
     }
@@ -105,6 +107,7 @@ void App::Update() {
                         enemy->TakeDamage(5*rabbitLevel);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(2);
             }
         }
     }
@@ -119,8 +122,10 @@ void App::Update() {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideEllipse(enemy)) {
                         enemy->TakeDamage(5*rabbitLevel);
+                        enemy->TakeDamage(m_Rabbit->IsSkillXUes() ? 1000 : 0);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(3);
             }
         }
     }
@@ -137,6 +142,7 @@ void App::Update() {
                         enemy->TakeDamage(55*rabbitLevel);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(4);
             }
         }
     }

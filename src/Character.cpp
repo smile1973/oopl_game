@@ -39,6 +39,8 @@ bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Ch
                 LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
                 TowardNearestEnemy(m_Enemies);
                 SwitchToSkill(skillId);
+                // m_IsSkillXUes = skillId==2 ? true : false;
+                // LOG_ERROR("m_IsSkillXUes   " + std::to_string(m_IsSkillXUes) );
                 return true;
             }
             LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " is on cooldown! " + std::to_string(it->second->GetRemainingCooldown()));
