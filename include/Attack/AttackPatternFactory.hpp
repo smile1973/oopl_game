@@ -184,10 +184,39 @@ public:
         float bulletRadius = 30.0f,
         float delay = 2.0f);
 
-    // BATTLE 1 特殊攻擊模式
+    void AddCircleAttackRow(
+        std::shared_ptr<AttackPattern> pattern,
+        const glm::vec2& startPos,
+        bool isHorizontal,
+        int count,
+        float zindex,
+        float spacing,
+        float radius,
+        const Util::Color& color,
+        const glm::vec2& moveDirection,
+        float moveSpeed,
+        float moveDistance,
+        float delay,
+        float startTime,
+        float timeInterval);
+
+    void AddCrossLaserAttack(
+        std::shared_ptr<AttackPattern> pattern,
+        const glm::vec2& centerPosition,
+        float width,
+        float length,
+        const Util::Color& color,
+        float delay,
+        float startTime,
+        float duration = 0.5f,
+        int sequenceNumber = 1);
+
     std::shared_ptr<AttackPattern> CreateBattle1Pattern();
     std::shared_ptr<AttackPattern> CreateBattle2Pattern();
     std::shared_ptr<AttackPattern> CreateBattle3Pattern();
+    std::shared_ptr<AttackPattern> CreateBattle4Pattern();
+    std::shared_ptr<AttackPattern> CreateBattle5Pattern();
+    std::shared_ptr<AttackPattern> CreateBattle6Pattern();
 
 private:
     // 私有構造函數防止外部創建實例

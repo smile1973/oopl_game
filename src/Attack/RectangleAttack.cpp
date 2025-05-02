@@ -78,7 +78,7 @@ void RectangleAttack::CreateWarningEffect() {
         ));
 
         warningEffect->SetDuration(m_Delay + 1.0f);  // 確保持續足夠長的時間
-        warningEffect->Play(m_Position, m_ZIndex + 0.1f);
+        warningEffect->Play(m_Position, z_ind);
 
         m_WarningEffect = warningEffect;
         // LOG_DEBUG("Rectangle warning effect created and played");
@@ -104,13 +104,13 @@ void RectangleAttack::CreateAttackEffect() {
 
             rectangleShape->SetAutoRotation(m_AutoRotate, m_RotationSpeed);
 
-            rectangleShape->SetSize({maxDimension, maxDimension});
+            rectangleShape->SetSize({maxDimension * 1.2f, maxDimension * 1.2f});
             rectangleShape->SetColor(Util::Color(0.9, 0.7, 0.3, 0.4));
         }
 
         // 設置填充與邊緣效果
         rectangleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
-        rectangleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.001, Util::Color(0.9, 0.1, 0.1, 0.7)));
+        // rectangleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.001, Util::Color(0.9, 0.1, 0.1, 0.7)));
 
         // 關閉任何動畫
         rectangleEffect->SetAnimationModifier(Effect::Modifier::AnimationModifier(
@@ -123,7 +123,7 @@ void RectangleAttack::CreateAttackEffect() {
         float effectDuration = m_AttackDuration * 1.5f;
         rectangleEffect->SetDuration(effectDuration);
 
-        rectangleEffect->Play(m_Position, m_ZIndex - 2.0f);
+        rectangleEffect->Play(m_Position, z_ind + 1.0f);
         m_AttackEffect = rectangleEffect;
     } catch (const std::exception& e) {
         LOG_ERROR("Exception in CreateAttackEffect: {}", e.what());
@@ -153,8 +153,8 @@ bool RectangleAttack::CheckCollisionInternal(const std::shared_ptr<Character>& c
 
 bool RectangleAttack::IsPointInRectangle(const glm::vec2& circleCenter) const {
     // 計算矩形四個角在旋轉後的世界座標
-    float halfWidth = m_Width / 2.0f;
-    float halfHeight = m_Height / 2.0f;
+    float halfWidth = (m_Width * 1.2f) / 2.0f;
+    float halfHeight = (m_Height * 1.2f) / 2.0f;
 
     // 未旋轉時的四個角（相對於矩形中心）
     glm::vec2 corners[4] = {
@@ -228,7 +228,7 @@ void RectangleAttack::CreateDirectionIndicator() {
     // 創建顯示圖片的遊戲物件
     m_DirectionIndicator = std::make_shared<Util::GameObject>(
         directionImage,        // 使用選擇的圖片
-        m_ZIndex + 0.5f,       // 確保在攻擊和時間條之上
+        m_ZIndex + 1.0f,       // 確保在攻擊和時間條之上
         m_Position,
         true                   // 可見
     );

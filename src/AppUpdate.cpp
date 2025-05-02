@@ -34,7 +34,7 @@ void App::Update() {
 
 
     // 角色移動
-    constexpr float moveSpeed = 6.0f; // 調整移動速度
+    constexpr float moveSpeed = 5.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
     // 定義邊界
     constexpr float minX = -550.0f;

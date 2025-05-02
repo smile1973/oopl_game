@@ -35,7 +35,7 @@ public:
     bool IsAutoRotating() const { return m_AutoRotate; }
     float GetRotationSpeed() const { return m_RotationSpeed; }
     void CleanupVisuals() override;
-
+    void SetZ(float zInd) { z_ind = zInd; }
 protected:
     void CreateWarningEffect() override;
     void CreateAttackEffect() override;
@@ -44,7 +44,6 @@ protected:
     void OnCountdownStart() override;
     void OnCountdownUpdate(float deltaTime) override;
     void OnAttackStart() override;
-
 
 private:
     [[nodiscard]] float CalculateRotationAngle() const;
@@ -66,6 +65,7 @@ private:
     std::shared_ptr<Util::GameObject> m_DirectionIndicator;
 
     void CreateDirectionIndicator();
+    float z_ind = 10.0f;
 };
 
 #endif // RECTANGLEATTACK_HPP
