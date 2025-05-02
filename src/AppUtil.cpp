@@ -27,6 +27,7 @@ void App::GetReady() {
     if (m_Rabbit->GetPosition().x == -200) {
         m_Rabbit->MoveToPosition(glm::vec2(-100,0),1.3);
 
+        m_Enemy_dummy->SetHealth();
         m_Enemy_dummy->SetVisible(true);
         m_Enemy_dummy->MoveToPosition(glm::vec2(100,0),1.3);
         m_Onward->SetVisible(true);
@@ -38,6 +39,7 @@ void App::GetReady() {
     m_SkillUI->Update();
     m_LevelUI->Update();
     m_HealthBarUI->Update();
+
     m_Rabbit->Update();
     m_Enemy_dummy->Update();
     m_Onward->Update();
@@ -62,9 +64,16 @@ void App::Pause() {
                 m_PRM->SetProgressBarVisible(false);
                 LOG_DEBUG("--App::Pause Continue--");
             break;
-            default: ;
+            case 1: //未完成
+                LOG_DEBUG("--App::Pause Restart_Game--");
+                m_PausedOption->SetVisible(false);
+                m_PRM->SetProgressBarVisible(false);
+                RestartGame();
+            break;
+            default:
+                LOG_ERROR("--App::Pause Switch Default--");
         }
-        m_PausedOption->Reset();
+        // m_PausedOption->Reset();
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::M);
 
@@ -94,11 +103,10 @@ void App::Defeat(){
                 m_DefeatScreen->SetVisible(false);
                 m_CurrentState = State::END;
             break;
-            case 1://未完成
+            case 1:
                 LOG_DEBUG("--App::Defeat New_Game--");
-                // m_DefeatScreen->SetVisible(false);
-                // m_PRM->ReStart();
-                // m_IsReady = false;
+                m_HealthBarUI->Reset();
+                RestartGame();
             break;
             default:
                 LOG_ERROR("--App::Defeat Switch Default--");
@@ -241,4 +249,60 @@ void App::SetupBattlePhase() const {
     }
 
     LOG_DEBUG("Set battle level: MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
+}
+
+/**
+* @brief 重新開始遊戲的實現
+*/
+void App::RestartGame() {
+    LOG_INFO("Restarting game...");
+
+    // 1. 重置遊戲狀態
+    m_IsReady = false;
+
+    // 2. 重置玩家角色
+    m_Rabbit->SetVisible(false);
+    m_Rabbit->Reset(); // 假設Character類中有此方法，如果沒有需要添加
+
+    // 3. 重置敵人
+    m_Enemy->Reset();
+    m_Enemy_dummy->Reset();
+    m_Enemy_bird_valedictorian->Reset();
+    m_Enemy_dragon_silver->Reset();
+
+    m_Enemy_shopkeeper->SetVisible(false);
+    m_Enemy_treasure->SetVisible(false);
+
+    // 4. 清除所有攻擊和特效
+    AttackManager::GetInstance().ClearAllAttacks();
+    Effect::EffectManager::GetInstance().ClearAllEffects(); // 假設有此方法，如果沒有需要添加
+
+    // 5. 重置階段管理器
+    m_PRM->ReStart(); // 已存在的方法，重置所有階段
+
+    // 6. 重置UI元素
+    m_GetReady->SetVisible(true);
+    m_PressZtoJoin->SetVisible(true);
+    m_Onward->SetPosition({500.0f, 160.0f});
+    m_Onward->SetVisible(false);
+    m_Overlay->SetVisible(false);
+    // m_HealthBarUI->Reset();
+
+    // 7. 隱藏結算畫面
+    m_DefeatScreen->SetVisible(false);
+    m_DefeatScreen->Reset();
+
+    // 8. 重置鍵盤狀態追蹤變量
+    m_ZKeyDown = false;
+    m_XKeyDown = false;
+    m_CKeyDown = false;
+    m_VKeyDown = false;
+    m_NKeyDown = false;
+    m_EnterDown = false;
+    m_UpKeyDown = false;
+    m_DownKeyDown = false;
+    m_LeftKeyDown = false;
+    m_RightKeyDown = false;
+
+    LOG_INFO("Game restart completed. Waiting for player to press Z to join.");
 }

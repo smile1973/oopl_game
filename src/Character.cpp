@@ -254,3 +254,33 @@ void Character::UpdateLevel() {
         LOG_INFO("Character Level Up {}  --Exp: {}", m_Level, m_Experience);
     }
 }
+
+
+void Character::Reset() {
+    m_IsSkillXUes = false;
+    m_IsSkillCUes = false;
+
+    m_CurrentSkillId = -1;
+
+    // 血量相關屬性
+    m_Health = m_MaxHealth;       // 最大血量
+    m_Invincible = false; // 是否處於無敵狀態
+    m_InvincibleTimer = 0.0f; // 無敵時間計時器
+    m_InvincibleDuration = 1.5f; // 無敵時間(秒)
+
+    // 受傷動畫相關
+    m_HurtAnimationTimer = 0.0f;
+    m_HurtAnimationDuration = 0.5f; // 受傷動畫持續時間(秒)
+
+    // 移動相關屬性
+    m_IsMoving = false;
+    m_DistanceTraveled = 0.0f;
+    m_TotalTime = 0.0f;
+    m_TargetPosition = glm::vec2(0.0f, 0.0f);
+    m_MoveSpeed = glm::vec2(0.0f, 0.0f);
+
+    m_Money = 0;
+    m_Experience = 0;
+    m_Level = 1;
+    SwitchToIdle();
+}

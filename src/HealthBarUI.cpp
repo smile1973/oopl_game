@@ -54,3 +54,10 @@ void HealthBarUI::SetPosition(const glm::vec2& position) const {
         m_HealthBars[i]->SetPosition(position + glm::vec2(spacing*(i-1), 0));
     }
 }
+
+void HealthBarUI::Reset() {
+    m_Health = 100;
+    m_RemainingHealthBar = 3;
+
+    m_Visible = false;
+}

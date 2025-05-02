@@ -60,6 +60,7 @@ private:
     void SetupStorePhase() const;      // 設置商店關卡配置
     void SetupTreasurePhase() const;      // 設置寶箱關卡配置
     void SetupBattlePhase() const;      // 設置戰鬥關卡配置
+    void RestartGame();
 
     App() : m_CurrentState(State::START),
            m_Phase(Phase::START) {}

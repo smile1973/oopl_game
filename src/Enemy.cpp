@@ -25,7 +25,7 @@ Enemy::Enemy(std::string name, const float health, const std::vector<std::string
 
 // 讓敵人受到傷害，減少生命值
 void Enemy::TakeDamage(float damage) {
-    if (! this->GetVisibility()) return;
+    if (! this->GetVisibility() || m_Health == 0.0f) return;
     m_Health = std::max(0.0f, m_Health - damage);
     LOG_DEBUG("{} took {:.1f} damage, remaining health: {:.1f}", m_Name, damage, m_Health);
 
@@ -166,4 +166,28 @@ void Enemy::UpdateHealthRing() {
             m_HealthDots[i]->SetVisible(i < visibleDots);
         }
     }
+}
+
+void Enemy::Reset() {
+    TakeDamage(m_MaxHealth);
+    if (m_ShowHealthRing) UpdateHealthRing();
+    // m_Health = m_MaxHealth;
+    //
+    // m_IsMoving = false;
+    // m_Speed = 0.0f;
+    // m_MaxDistance = 0.0f;
+    // m_DistanceTraveled = 0.0f;
+    // m_TotalTime = 0.0f;
+    // m_Direction = glm::vec2(0.0f, 0.0f);
+    // m_TargetPosition = glm::vec2(0.0f, 0.0f);
+    //
+    // m_ShowHealthRing = false;  // 是否顯示血條環
+    // m_TotalDots = 80;  // 環形血條上的點數量
+    // m_RingRadius = 150.0f;  // 環形半徑
+    //
+    // SetVisible(false);
+    //
+    // if (m_ShowHealthRing) {
+    //     UpdateHealthRing();
+    // }
 }

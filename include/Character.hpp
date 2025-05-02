@@ -46,6 +46,7 @@ public:
                  int duration = 175, float Cooldown = 2.0f);
     bool UseSkill(int skillId, const std::vector<std::shared_ptr<Character>>& m_Enemies);  // 1=Z, 2=X, 3=C, 4=V
     virtual void Update();
+    virtual void Reset();
     void UpdateSkillXUes(const int skillId) { m_IsSkillXUes = skillId==2 ? true : false; }
     [[nodiscard]] bool IsSkillXUes() const { return m_IsSkillXUes; }
 
@@ -112,7 +113,6 @@ private:
     int m_Money = 0;
     int m_Experience = 0;
     int m_Level = 1;
-    // int m_AttackDamage = 0;
 };
 
 

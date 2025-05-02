@@ -52,6 +52,9 @@ public:
     void Reset() {
         m_CurrentOption = 4;
         Switch(false);
+        for (const auto& option : m_Options) {
+            option->m_Transform.scale =  {1.05f, 1.05f};
+        }
     }
 
     void Update() const {

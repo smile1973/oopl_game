@@ -31,6 +31,7 @@ public:
     virtual void SetProgressIcon(const std::string &ImagePath) { m_Drawable = std::make_shared<Util::Image>(ImagePath); }
 
     void Update() override;
+    void Reset() override;
 
     static std::set<float> s_HealthBarYPositions;
     void DrawHealthBar(const glm::vec2& position = glm::vec2 (0.9f, 0.9)) const;    // 繪製敵人的血條

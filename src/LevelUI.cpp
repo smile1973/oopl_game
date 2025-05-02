@@ -17,20 +17,20 @@ LevelUI::LevelUI(const std::shared_ptr<Character>& character)
     m_BaseIcon = std::make_shared<Object>(GA_RESOURCE_DIR "/Image/UI/level_UI.png");
     m_BaseIcon -> SetPosition(glm::vec2(baseX, baseY));
     m_BaseIcon -> SetScale(0.9,0.9);
-    m_BaseIcon -> SetZIndex(90);
+    m_BaseIcon -> SetZIndex(80);
 
     m_ExperienceBar = std::make_shared<Object>(GA_RESOURCE_DIR "/Image/UI/experience_bar.png");
     m_ExperienceBar -> SetPosition(glm::vec2(baseX-20, baseY-13));
     m_ExperienceBar -> SetScale(0.9,0.9);
-    m_ExperienceBar -> SetZIndex(92);
+    m_ExperienceBar -> SetZIndex(82);
 
     m_Level = std::make_shared<TextObject>("LL", 15);
     m_Level -> SetPosition(glm::vec2(baseX+24, baseY-15));
-    m_Level -> SetZIndex(100);
+    m_Level -> SetZIndex(83);
 
     m_Money = std::make_shared<TextObject>("M", 15);
     m_Money -> SetPosition(glm::vec2(baseX+40, baseY+8));
-    m_Money -> SetZIndex(100);
+    m_Money -> SetZIndex(83);
 
     LevelUI::SetVisible(false);
 }

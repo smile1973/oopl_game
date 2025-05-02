@@ -15,6 +15,7 @@ public:
 
     // 更新函式，用於刷新血條顯示
     void Update();
+    void Reset();
 
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
     [[nodiscard]] bool GetHealthBar() const { return m_RemainingHealthBar > 0; }

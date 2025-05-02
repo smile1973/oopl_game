@@ -189,10 +189,10 @@ void App::Update() {
     // 測試
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            // Pause();
+            Pause();
             // LOG_DEBUG("--App::Pause--");
             // m_DefeatScreen->Get();
-            m_Rabbit->AddExperience(10);
+            // m_Rabbit->AddExperience(10);
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
