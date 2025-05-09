@@ -130,6 +130,6 @@ void DefeatScreen::AddPassedLevel(const int mainPhase) {
         }
     }
     oss << "]";
-    LOG_ERROR("DefeatScreen::AddPassedLevel--PassedLevels: {}", oss.str());
+    LOG_INFO("DefeatScreen::AddPassedLevel--PassedLevels: {}", oss.str());
 }
 

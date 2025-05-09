@@ -62,7 +62,7 @@ void PhaseManager::NextMainPhase() {
     m_SubPhase = 0;
 
     if (m_MainPhase > m_MaxMainPhase) {
-        m_MainPhase = 0;
+        m_MainPhase = 1;
         std::cout << "\nClear All Phase\n" << std::endl;
     }
     std::cout << "\nPhaseManager::NextMainPhase" << std::endl;
