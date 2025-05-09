@@ -9,13 +9,13 @@ EnemyAttackController::EnemyAttackController(std::shared_ptr<Enemy> enemy)
 
 void EnemyAttackController::InitBattle1Patterns() {
     ClearPatterns();
-    auto pattern = AttackPatternFactory::GetInstance().CreateBattle4Pattern();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle8Pattern();
     AddPattern(pattern);
 }
 
 void EnemyAttackController::InitBattle2Patterns() {
     ClearPatterns();
-    auto pattern = AttackPatternFactory::GetInstance().CreateBattle6Pattern();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle7Pattern();
     AddPattern(pattern);
 }
 

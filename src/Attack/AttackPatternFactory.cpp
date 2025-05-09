@@ -1,6 +1,10 @@
 #include "Attack/AttackPatternFactory.hpp"
 #include "Util/Logger.hpp"
 #include <cmath>
+#include <random>
+
+std::random_device rd;
+std::mt19937 gen(rd());
 
 AttackPatternFactory& AttackPatternFactory::GetInstance() {
     static AttackPatternFactory instance;
@@ -79,42 +83,6 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateLaserPattern(
 
     // 設置模式總持續時間
     pattern->SetDuration(delay + 1.0f);
-
-    return pattern;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateMultiLaserPattern(
-    const std::vector<glm::vec2>& positions,
-    const std::vector<RectangleAttack::Direction>& directions,
-    float width,
-    float length,
-    float delay,
-    float interval) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建多個雷射攻擊
-    float startTime = 0.0f;
-    int sequenceNumber = 1;
-
-    // 確保方向和位置數組長度相同，如果方向數組較短，循環使用
-    size_t directionCount = directions.size();
-
-    for (size_t i = 0; i < positions.size(); ++i) {
-        const auto& position = positions[i];
-        const auto& direction = directions[i % directionCount]; // 循環使用方向
-
-        // 使用整合後的RectangleAttack創建雷射
-        auto attack = std::make_shared<RectangleAttack>(
-            position, delay, direction, width, length, sequenceNumber++
-        );
-
-        pattern->AddAttack(attack, startTime);
-        startTime += interval;
-    }
-
-    // 設置模式總持續時間
-    pattern->SetDuration(startTime + delay + 1.0f);
 
     return pattern;
 }
@@ -654,16 +622,14 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle4Pattern() {
         );
     }
 
-    centerPosition = {300.0f, 0.0f};
-    auto rotateAttack3 = std::make_shared<RectangleAttack>(
-        centerPosition, delay, 2500.0f, 150.0f, 0.0f, 1
-    );
-    rotationSpeed = 0.35f;
-    rotateAttack3->SetAutoRotation(true, rotationSpeed);
-    rotateAttack3->SetAttackDuration(duration);
-    pattern->AddAttack(rotateAttack3, 0.0f);
-
-
+    // centerPosition = {300.0f, 0.0f};
+    // auto rotateAttack3 = std::make_shared<RectangleAttack>(
+    //     centerPosition, delay, 2500.0f, 150.0f, 0.0f, 1
+    // );
+    // rotationSpeed = 0.35f;
+    // rotateAttack3->SetAutoRotation(true, rotationSpeed);
+    // rotateAttack3->SetAttackDuration(duration);
+    // pattern->AddAttack(rotateAttack3, 0.0f);
     pattern->SetDuration(23.0f);
     return pattern;
 }
@@ -865,3 +831,135 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle6Pattern() {
     return pattern;
 }
 
+std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle7Pattern() {
+    auto pattern = std::make_shared<AttackPattern>();
+    glm::vec2 centerPosition(0.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);
+
+    glm::vec2 startPos(340.0f, 0.0f);
+    glm::vec2 endPos(-680.0f, 0.0f);
+    for (int wave = 0; wave < 6; wave++) {
+        auto attack = std::make_shared<CircleAttack>(startPos, 4.0f, 110.0f);
+        attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+        attack->SetMovementParams(glm::normalize(endPos - startPos), 600.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack, 1.0f + static_cast<float>(wave) * 4.0f);
+    }
+    startPos = {-340.0f, 0.0f};
+    endPos = {680.0f, 0.0f};
+    for (int wave = 0; wave < 6; wave++) {
+        auto attack = std::make_shared<CircleAttack>(startPos, 4.0f, 110.0f);
+        attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+        attack->SetMovementParams(glm::normalize(endPos - startPos), 600.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack, 1.0f + static_cast<float>(wave) * 4.0f);
+    }
+    std::vector<glm::vec2> up = {{680.0f, 180.0f}, {-340.0f, 180.0f}, {-680.0f, 180.0f}, {340.0f, 180.0f}};
+    std::vector<glm::vec2> down = {{680.0f, -180.0f}, {-340.0f, -180.0f}, {-680.0f, -180.0f}, {340.0f, -180.0f}};
+    for (int wave = 0; wave < 6; wave++) {
+        if (wave == 0 || wave == 2 || wave == 3) {
+            auto attacka = std::make_shared<CircleAttack>(up[3], 4.0f, 110.0f);
+            auto attackb = std::make_shared<CircleAttack>(up[1], 4.0f, 110.0f);
+            attacka->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+            attacka->SetMovementParams(glm::normalize(up[2] - up[3]), 600.0f, glm::length(up[2] - up[3]));
+            attackb->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+            attackb->SetMovementParams(glm::normalize(up[0] - up[1]), 600.0f, glm::length(up[2] - up[3]));
+            pattern->AddAttack(attacka, 1.0f + static_cast<float>(wave) * 4.0f);
+            pattern->AddAttack(attackb, 1.0f + static_cast<float>(wave) * 4.0f);
+        }else {
+            auto attacka = std::make_shared<CircleAttack>(down[3], 4.0f, 110.0f);
+            auto attackb = std::make_shared<CircleAttack>(down[1], 4.0f, 110.0f);
+            attacka->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+            attacka->SetMovementParams(glm::normalize(down[2] - down[3]), 600.0f, glm::length(down[2] - down[3]));
+            attackb->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+            attackb->SetMovementParams(glm::normalize(down[0] - down[1]), 600.0f, glm::length(down[2] - down[3]));
+            pattern->AddAttack(attacka, 1.0f + static_cast<float>(wave) * 4.0f);
+            pattern->AddAttack(attackb, 1.0f + static_cast<float>(wave) * 4.0f);
+        }
+    }
+    startPos = {250.0f, 400.0f};
+    endPos = {250.0f, -400.0f};
+    for (int wave = 0; wave < 3; wave++) {
+        auto attack = std::make_shared<CircleAttack>(startPos, 3.0f, 280.0f);
+        attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+        attack->SetMovementParams(glm::normalize(endPos - startPos), 200.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack, 1.0f + static_cast<float>(wave) * 8.0f);
+    }
+    startPos = {-250.0f, 400.0f};
+    endPos = {-250.0f, -400.0f};
+    for (int wave = 0; wave < 3; wave++) {
+        auto attack = std::make_shared<CircleAttack>(startPos, 3.0f, 280.0f);
+        attack->SetColor(Util::Color(1.0, 0.4, 0.4, 0.7));
+        attack->SetMovementParams(glm::normalize(endPos - startPos), 200.0f, glm::length(endPos - startPos));
+        pattern->AddAttack(attack, 5.0f + static_cast<float>(wave) * 8.0f);
+    }
+    pattern->SetDuration(21.0f);
+    return pattern;
+}
+
+std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle8Pattern() {
+    auto pattern = std::make_shared<AttackPattern>();
+    glm::vec2 centerPosition(0.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);
+
+    float duration = 33.0f;
+    std::vector<glm::vec2> pos = {{-500.0, 0.0}, {500.0, 0.0}};
+    auto laserattack1 = std::make_shared<RectangleAttack>(
+        pos[0], 2.0, 500.0f, 720.0f, 0.0f, 1
+    );
+    laserattack1->SetAutoRotation(false);
+    laserattack1->SetAttackDuration(duration);
+    auto laserattack2 = std::make_shared<RectangleAttack>(
+        pos[1], 2.0, 500.0f, 720.0f, 0.0f, 1
+    );
+    laserattack2->SetAutoRotation(false);
+    laserattack2->SetAttackDuration(duration);
+    pattern->AddAttack(laserattack1, 1.0f);
+    pattern->AddAttack(laserattack2, 1.0f);
+
+    auto rotateAttack1 = std::make_shared<RectangleAttack>(
+        centerPosition, 2.0, 1500.0f, 20.0f, 0.0f, 1
+    );
+    float rotationSpeed = 0.1f;
+    rotateAttack1->SetAutoRotation(true, rotationSpeed);
+    rotateAttack1->SetAttackDuration(30.0f);
+    rotateAttack1->SetZ(30.0f);
+    pattern->AddAttack(rotateAttack1, 1.0f);
+
+    std::uniform_real_distribution<float> y_pos(-360, 360);
+    std::uniform_real_distribution<float> x_pos(-125, 125);
+    for (int wave = 0; wave < 12; wave++) {
+        auto laser = std::make_shared<RectangleAttack>(
+            glm::vec2{x_pos(gen), y_pos(gen)}, 1.0f, 250.0f, 250.0, 0.0, 1+wave
+        );
+        laser->SetAutoRotation(false);
+        laser->SetAttackDuration(0.5f);
+        pattern->AddAttack(laser, 4.0f + wave * 1.0);
+    }
+
+    std::uniform_int_distribution<int> range_selector(0, 2);
+    int selected_range = range_selector(gen);
+
+    // 2. 根據選到的範圍建立對應的分布
+    std::uniform_real_distribution<float> rot;
+    if (selected_range == 0) {
+        rot = std::uniform_real_distribution<float>(-1.2f, 1.2f);
+    } else if (selected_range == 1) {
+        rot = std::uniform_real_distribution<float>(1.8f, 3.14f);
+    } else {
+        rot = std::uniform_real_distribution<float>(-3.14f, -1.8f);
+    }
+    for (int wave = 0; wave < 8; wave++) {
+        auto laser = std::make_shared<RectangleAttack>(
+            glm::vec2{x_pos(gen), y_pos(gen)}, 1.0f, 1000.0f, 150.0, rot(gen), 1+wave
+        );
+        laser->SetAutoRotation(false);
+        laser->SetAttackDuration(0.5f);
+        pattern->AddAttack(laser, 18.0f + wave * 1.5);
+    }
+
+    pattern->SetDuration(30.0f);
+    return pattern;
+}

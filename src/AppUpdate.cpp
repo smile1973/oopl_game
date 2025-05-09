@@ -37,10 +37,10 @@ void App::Update() {
     constexpr float moveSpeed = 5.0f; // 調整移動速度
     auto rabbitPos = m_Rabbit->GetPosition(); // 取得當前位置
     // 定義邊界
-    constexpr float minX = -550.0f;
-    constexpr float maxX = 550.0f;
-    constexpr float minY = -250.0f;
-    constexpr float maxY = 270.0f;
+    constexpr float minX = -600.0f;
+    constexpr float maxX = 600.0f;
+    constexpr float minY = -320.0f;
+    constexpr float maxY = 320.0f;
 
     if (Util::Input::IsKeyPressed(Util::Keycode::UP)) {
         rabbitPos.y += moveSpeed; // 向上移動

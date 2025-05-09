@@ -87,24 +87,6 @@ public:
         float delay = 2.0f);
 
     /**
-     * @brief 創建多個雷射攻擊的模式
-     * @param positions 多個攻擊起始位置
-     * @param directions 多個雷射方向
-     * @param width 雷射寬度
-     * @param length 雷射長度
-     * @param delay 倒數時間
-     * @param interval 攻擊間隔時間
-     * @return 配置好的攻擊模式
-     */
-    std::shared_ptr<AttackPattern> CreateMultiLaserPattern(
-        const std::vector<glm::vec2>& positions,
-        const std::vector<RectangleAttack::Direction>& directions,  // 使用 RectangleAttack::Direction
-        float width = 80.0f,
-        float length = 2000.0f,
-        float delay = 2.0f,
-        float interval = 0.5f);
-
-    /**
      * @brief 創建環形圓形攻擊的模式
      * @param centerPosition 中心位置
      * @param radius 環的半徑
@@ -217,6 +199,8 @@ public:
     std::shared_ptr<AttackPattern> CreateBattle4Pattern();
     std::shared_ptr<AttackPattern> CreateBattle5Pattern();
     std::shared_ptr<AttackPattern> CreateBattle6Pattern();
+    std::shared_ptr<AttackPattern> CreateBattle7Pattern();
+    std::shared_ptr<AttackPattern> CreateBattle8Pattern();
 
 private:
     // 私有構造函數防止外部創建實例
