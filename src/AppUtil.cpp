@@ -27,6 +27,7 @@ void App::GetReady() {
     if (m_Rabbit->GetPosition().x == -200) {
         m_Rabbit->MoveToPosition(glm::vec2(-100,0),1.3);
 
+        m_Enemy_dummy->SetHealth();
         m_Enemy_dummy->SetVisible(true);
         m_Enemy_dummy->MoveToPosition(glm::vec2(100,0),1.3);
         m_Onward->SetVisible(true);
@@ -36,7 +37,9 @@ void App::GetReady() {
     if (m_Rabbit->GetPosition().x == -100) m_IsReady = true;
 
     m_SkillUI->Update();
+    m_LevelUI->Update();
     m_HealthBarUI->Update();
+
     m_Rabbit->Update();
     m_Enemy_dummy->Update();
     m_Onward->Update();
@@ -61,9 +64,16 @@ void App::Pause() {
                 m_PRM->SetProgressBarVisible(false);
                 LOG_DEBUG("--App::Pause Continue--");
             break;
-            default: ;
+            case 1: //未完成
+                LOG_DEBUG("--App::Pause Restart_Game--");
+                m_PausedOption->SetVisible(false);
+                m_PRM->SetProgressBarVisible(false);
+                RestartGame();
+            break;
+            default:
+                LOG_ERROR("--App::Pause Switch Default--");
         }
-        m_PausedOption->Reset();
+        // m_PausedOption->Reset();
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::M);
 
@@ -93,11 +103,10 @@ void App::Defeat(){
                 m_DefeatScreen->SetVisible(false);
                 m_CurrentState = State::END;
             break;
-            case 1://未完成
+            case 1:
                 LOG_DEBUG("--App::Defeat New_Game--");
-                // m_DefeatScreen->SetVisible(false);
-                // m_PRM->ReStart();
-                // m_IsReady = false;
+                m_HealthBarUI->Reset();
+                RestartGame();
             break;
             default:
                 LOG_ERROR("--App::Defeat Switch Default--");
@@ -120,6 +129,45 @@ void App::Defeat(){
 }
 
 /**
+ * @brief 商店畫面。
+ */
+void App::Shop() {
+    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::E)) {
+        m_shopUI->SetVisible(false);
+        m_PRM->SetProgressBarVisible(true);
+    }
+    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::E);
+
+    if (m_LeftKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
+        m_shopUI->SwitchProduct(true);
+    }
+    m_LeftKeyDown = Util::Input::IsKeyPressed(Util::Keycode::LEFT);
+
+    if (m_RightKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
+        m_shopUI->SwitchProduct(false);
+    }
+    m_RightKeyDown = Util::Input::IsKeyPressed(Util::Keycode::RIGHT);
+
+    if (m_NKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::N)) {
+        if (m_Rabbit->GetMoney()>=5) {
+            if (m_shopUI->GetProduct()==0 && m_HealthBarUI->GetHealthBar()!=3) {
+                m_Rabbit->AddMoney(-5);
+                m_HealthBarUI->FullHealthBar();
+            }
+            if (m_shopUI->GetProduct()==1) {
+                m_Rabbit->AddMoney(-5);
+                m_Rabbit->AddExperience(100);
+            }
+        }
+    }
+    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
+
+    m_HealthBarUI->Update();
+    m_LevelUI->Update();
+    m_Rabbit->Update();
+    m_Root.Update();
+}
+/**
  * @brief 驗證當前任務狀態，並切換至適當的階段。
  */
 void App::ValidTask() {
@@ -130,8 +178,15 @@ void App::ValidTask() {
             LeavePhase();
         }
     }
-    if (!m_HealthBarUI->GetHealthBar()) {
+    if (m_HealthBarUI->GetHealthBar()<=0) {
         m_DefeatScreen->Get();
+    }
+    if (m_Enemy_shopkeeper->GetVisibility()) {
+        if (m_RKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::R)) {
+            m_shopUI->SetVisible(true);
+            m_PRM->SetProgressBarVisible(false);
+        }
+        m_RKeyDown = Util::Input::IsKeyPressed(Util::Keycode::R);
     }
 }
 
@@ -156,6 +211,7 @@ void App::LeavePhase() const {
         break;
         case 2:
             LOG_DEBUG("--Treasure opened--");
+            m_Rabbit->AddMoney(100);
         break;
         default: ;
     }
@@ -172,26 +228,27 @@ void App::SetSubPhase() const {
 
     // 重置玩家位置
     m_Rabbit->MoveToPosition({-400.0f, 160.0f});
+    m_Rabbit->m_Transform.scale.x = 0.5;
 
     // 根據小關索引設置固定的小關類型
     switch (m_SubPhaseIndex) {
         case 0:
             LOG_DEBUG("Next SubPhase: STORE");
+            m_DefeatScreen->AddPassedLevel(m_PRM->GetCurrentMainPhase());
             SetupStorePhase();
         break;
         case 1:
             m_Enemy_shopkeeper->SetVisible(false);
         [[fallthrough]];
         case 2:
-        case 3:
             LOG_DEBUG("Next SubPhase: BATTLE {}", m_SubPhaseIndex);
         SetupBattlePhase();
         break;
-        case 4:
+        case 3:
             LOG_DEBUG("Next SubPhase: TREASURE");
             SetupTreasurePhase();
         break;
-        case 5:
+        case 4:
             LOG_DEBUG("Next SubPhase: BOSS");
             SetupBattlePhase();
         break;
@@ -207,6 +264,7 @@ void App::SetSubPhase() const {
 void App::SetupStorePhase() const {
     LOG_INFO("Setup Phase: STORE");
     m_Enemy_shopkeeper->SetVisible(true);
+    // m_shopUI->SetVisible(true);
     m_PRM->SetProgressBarVisible(true);
 }
 /**
@@ -240,4 +298,60 @@ void App::SetupBattlePhase() const {
     }
 
     LOG_DEBUG("Set battle level: MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
+}
+
+/**
+* @brief 重新開始遊戲的實現
+*/
+void App::RestartGame() {
+    LOG_INFO("Restarting game...");
+
+    // 1. 重置遊戲狀態
+    m_IsReady = false;
+
+    // 2. 重置玩家角色
+    m_Rabbit->SetVisible(false);
+    m_Rabbit->Reset(); // 假設Character類中有此方法，如果沒有需要添加
+
+    // 3. 重置敵人
+    m_Enemy->Reset();
+    m_Enemy_dummy->Reset();
+    m_Enemy_bird_valedictorian->Reset();
+    m_Enemy_dragon_silver->Reset();
+
+    m_Enemy_shopkeeper->SetVisible(false);
+    m_Enemy_treasure->SetVisible(false);
+
+    // 4. 清除所有攻擊和特效
+    AttackManager::GetInstance().ClearAllAttacks();
+    Effect::EffectManager::GetInstance().ClearAllEffects(); // 假設有此方法，如果沒有需要添加
+
+    // 5. 重置階段管理器
+    m_PRM->ReStart(); // 已存在的方法，重置所有階段
+
+    // 6. 重置UI元素
+    m_GetReady->SetVisible(true);
+    m_PressZtoJoin->SetVisible(true);
+    m_Onward->SetPosition({500.0f, 160.0f});
+    m_Onward->SetVisible(false);
+    m_Overlay->SetVisible(false);
+    // m_HealthBarUI->Reset();
+
+    // 7. 隱藏結算畫面
+    m_DefeatScreen->SetVisible(false);
+    m_DefeatScreen->Reset();
+
+    // 8. 重置鍵盤狀態追蹤變量
+    m_ZKeyDown = false;
+    m_XKeyDown = false;
+    m_CKeyDown = false;
+    m_VKeyDown = false;
+    m_NKeyDown = false;
+    m_EnterDown = false;
+    m_UpKeyDown = false;
+    m_DownKeyDown = false;
+    m_LeftKeyDown = false;
+    m_RightKeyDown = false;
+
+    LOG_INFO("Game restart completed. Waiting for player to press Z to join.");
 }

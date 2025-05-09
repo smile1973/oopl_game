@@ -23,9 +23,12 @@ public:
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
     [[nodiscard]] bool GetVisibility() const { return m_Visible; }
     [[nodiscard]] int GetLevel() const { return m_Level; }
+    [[nodiscard]] int GetMoney() const { return m_Money; }
+    [[nodiscard]] int GetExperience() const { return m_Experience; }
 
     void UpdateLevel();
     void AddExperience(const int experience){ m_Experience += experience; }
+    void AddMoney(const int money){ m_Money += money; }
 
     // 檢測角色是否與另一個角色發生碰撞
     bool IfCollide(const std::shared_ptr<Character>& other, float Distance) const;
@@ -37,13 +40,16 @@ public:
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     void SetInversion() { m_Transform.scale.x *= -1; } // 設定左右反轉角色
 
-    void TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies); // 朝向最近的敵人
+    void TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies, bool isMove); // 朝向最近的敵人
 
     // 技能
     void AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
                  int duration = 175, float Cooldown = 2.0f);
     bool UseSkill(int skillId, const std::vector<std::shared_ptr<Character>>& m_Enemies);  // 1=Z, 2=X, 3=C, 4=V
     virtual void Update();
+    virtual void Reset();
+    void UpdateSkillXUes(const int skillId) { m_IsSkillXUes = skillId==2 ? true : false; }
+    [[nodiscard]] bool IsSkillXUes() const { return m_IsSkillXUes; }
 
     bool IsSkillOnCooldown(int skillId) const;
     [[nodiscard]] float GetRemainingCooldown(int skillId) const {
@@ -80,6 +86,8 @@ private:
 
     // 存所有技能
     std::unordered_map<int, std::shared_ptr<Skill>> m_Skills;
+    bool m_IsSkillXUes = false;
+    bool m_IsSkillCUes = false;
 
     State m_State = State::IDLE;
     int m_CurrentSkillId = -1;
@@ -103,10 +111,9 @@ private:
     glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
     glm::vec2 m_MoveSpeed = glm::vec2(0.0f, 0.0f);
 
-    int m_Money = 0;
+    int m_Money = 20;
     int m_Experience = 0;
     int m_Level = 1;
-    // int m_AttackDamage = 0;
 };
 
 

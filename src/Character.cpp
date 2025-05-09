@@ -37,8 +37,12 @@ bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Ch
             // SwitchToSkill(skillId);
             if (!it->second->IsOnCooldown()) {
                 LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
-                TowardNearestEnemy(m_Enemies);
-                SwitchToSkill(skillId);
+                TowardNearestEnemy(m_Enemies, skillId==3);
+                if (skillId == 3) {
+                    m_IsSkillCUes = true;
+                }else {
+                    SwitchToSkill(skillId);
+                }
                 return true;
             }
             LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " is on cooldown! " + std::to_string(it->second->GetRemainingCooldown()));
@@ -103,6 +107,11 @@ void Character::Update() {
             LOG_DEBUG("Character move to {}", m_Transform.translation);
         }
     }
+
+    if (m_IsSkillCUes && !m_IsMoving) {
+        SwitchToSkill(3);
+        m_IsSkillCUes=false;
+    }
 }
 
 void Character::SwitchToIdle() {
@@ -139,7 +148,7 @@ void Character::SwitchToHurt() {
 }
 
 
-void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies) {
+void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>& m_Enemies, const bool isMove) {
     if (m_Enemies.empty()) return;
 
     float minDistance = std::numeric_limits<float>::max();
@@ -163,6 +172,12 @@ void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>
         } else {
             LOG_DEBUG("Towards the Left");
             m_Transform.scale.x = -0.5f;
+        }
+
+        if (isMove) {
+            const float X = nearestEnemy->GetPosition().x - m_Transform.scale.x *180;
+            const float Y = nearestEnemy->GetPosition().y;
+            MoveToPosition(glm::vec2(X, Y), 0.2);
         }
     }
 }
@@ -236,6 +251,36 @@ void Character::UpdateLevel() {
     if (m_Experience >= 100) {
         m_Experience -= 100;
         m_Level++;
-        LOG_INFO("Character Level Up");
+        LOG_INFO("Character Level Up {}  --Exp: {}", m_Level, m_Experience);
     }
+}
+
+
+void Character::Reset() {
+    m_IsSkillXUes = false;
+    m_IsSkillCUes = false;
+
+    m_CurrentSkillId = -1;
+
+    // 血量相關屬性
+    m_Health = m_MaxHealth;       // 最大血量
+    m_Invincible = false; // 是否處於無敵狀態
+    m_InvincibleTimer = 0.0f; // 無敵時間計時器
+    m_InvincibleDuration = 1.5f; // 無敵時間(秒)
+
+    // 受傷動畫相關
+    m_HurtAnimationTimer = 0.0f;
+    m_HurtAnimationDuration = 0.5f; // 受傷動畫持續時間(秒)
+
+    // 移動相關屬性
+    m_IsMoving = false;
+    m_DistanceTraveled = 0.0f;
+    m_TotalTime = 0.0f;
+    m_TargetPosition = glm::vec2(0.0f, 0.0f);
+    m_MoveSpeed = glm::vec2(0.0f, 0.0f);
+
+    m_Money = 0;
+    m_Experience = 0;
+    m_Level = 1;
+    SwitchToIdle();
 }

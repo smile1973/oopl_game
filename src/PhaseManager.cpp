@@ -44,12 +44,11 @@ void PhaseManager::UpdateSubPhaseType() {
         case 0: m_SubPhaseType = 0; //STORE
             break;
         case 1:
-        case 2:
-        case 3: m_SubPhaseType = 1; //BATTLE
+        case 2: m_SubPhaseType = 1; //BATTLE
             break;
-        case 4: m_SubPhaseType = 2; //TREASURE
+        case 3: m_SubPhaseType = 2; //TREASURE
             break;
-        case 5: m_SubPhaseType = 3; //BOSS
+        case 4: m_SubPhaseType = 3; //BOSS
             break;
         default: LOG_ERROR("Invalid SubPhaseType: {}", m_SubPhase);
     }
@@ -100,8 +99,8 @@ void PhaseManager::Update() const {
 }
 
 void PhaseManager::ReStart() {
-    m_MainPhase = -1;
-    m_SubPhase = 0;
+    m_MainPhase = 0;
+    m_SubPhase = -1;
     m_SubPhaseType = 0;
     m_Background->SetBackground(m_MainPhase);
 }

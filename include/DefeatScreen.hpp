@@ -32,6 +32,8 @@ public:
 
     void Update();
 
+    void AddPassedLevel(int mainPhase);
+
 private:
     bool m_IfVisible = false;
     std::shared_ptr<Character> m_Character; // 我們正在監控技能的角色參考
@@ -48,6 +50,9 @@ private:
     int m_CurrentOption = 0;
     float m_GameTimer = 0.0f;
     bool m_IsGameStart = false;
+
+    std::vector<std::shared_ptr<Object>> m_PassedPhases;
+    std::vector<int> m_PassedLevels;
 
     static std::string StringGameTime(const float gameTime = 0) {
         const int totalMilliseconds = static_cast<int>(gameTime * 10); // 轉換成1/10豪秒的單位

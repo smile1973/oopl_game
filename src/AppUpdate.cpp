@@ -31,6 +31,10 @@ void App::Update() {
         Defeat();
         return;
     }
+    if (m_shopUI->GetVisibility() == true) {
+        Shop();
+        return;
+    }
 
 
     // 角色移動
@@ -86,9 +90,11 @@ void App::Update() {
                 // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
-                        enemy->TakeDamage(40);
+                        enemy->TakeDamage(10);
+                        enemy->TakeDamage(m_Rabbit->IsSkillXUes() ? 1000 : 0);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(1);
             }
         }
     }
@@ -105,6 +111,7 @@ void App::Update() {
                         enemy->TakeDamage(5*rabbitLevel);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(2);
             }
         }
     }
@@ -117,10 +124,12 @@ void App::Update() {
             if (m_Rabbit->UseSkill(3, m_enemies_characters)) {
                 // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                    if (m_Rabbit->IfCollideEllipse(enemy)) {
+                    if (m_Rabbit->IfCollideEllipse(enemy) || true) {
                         enemy->TakeDamage(5*rabbitLevel);
+                        enemy->TakeDamage(m_Rabbit->IsSkillXUes() ? 1000 : 0);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(3);
             }
         }
     }
@@ -137,6 +146,7 @@ void App::Update() {
                         enemy->TakeDamage(55*rabbitLevel);
                     }
                 }
+                m_Rabbit->UpdateSkillXUes(4);
             }
         }
     }
@@ -176,6 +186,7 @@ void App::Update() {
     m_Enemy_dummy->Update();
     m_SkillUI->Update();
     m_HealthBarUI->Update();
+    m_LevelUI->Update();
     m_DefeatScreen->Update();
 
 
@@ -183,8 +194,9 @@ void App::Update() {
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
             Pause();
-            LOG_DEBUG("--App::Pause--");
+            // LOG_DEBUG("--App::Pause--");
             // m_DefeatScreen->Get();
+            // m_Rabbit->AddExperience(10);
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);

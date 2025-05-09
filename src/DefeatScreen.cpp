@@ -11,7 +11,7 @@ DefeatScreen::DefeatScreen(const std::shared_ptr<Character>& character)
     m_BaseObject = std::make_shared<Object>(GA_RESOURCE_DIR "/Image/Background/defeat_screen.png");
     m_BaseObject -> SetPosition(glm::vec2(0, 0));
     m_BaseObject -> SetScale(0.75,0.75);
-    m_BaseObject -> SetZIndex(90);
+    m_BaseObject -> SetZIndex(85);
 
     m_GameTime = std::make_shared<TextObject>(StringGameTime(), 27);
     m_GameTime -> SetPosition(glm::vec2(15, 302));
@@ -40,8 +40,23 @@ DefeatScreen::DefeatScreen(const std::shared_ptr<Character>& character)
     m_Options[0] -> SetPosition(glm::vec2{-20-baseX, baseY});
     m_Options[1] -> SetPosition(glm::vec2{-40+baseX, baseY});
 
+    const std::vector<std::string> PhasesNums = {"0", "1", "2"};
+    constexpr int baseX2 = 30;
+    constexpr int baseY2 = 230;
+    constexpr float spacing = 126.0f;
+    for (int i = 0; i < PhasesNums.size(); ++i) {
+        m_PassedPhases.push_back(std::make_shared<Object>(GA_RESOURCE_DIR "/Image/UI/stage_icon_000" + PhasesNums[i] + ".png") );
+        m_PassedPhases[i] -> SetScale(0.1,0.1);
+        m_PassedPhases[i] -> SetZIndex(90);
+        m_PassedPhases[i] -> SetPosition(glm::vec2{baseX2+spacing*i, baseY2});
+        // LOG_ERROR("m_PassedPhases::{}", PhasesNums[i]);
+    }
+
 
     for (const auto& option : m_Options) {
+        m_Children.push_back(option);
+    }
+    for (const auto& option : m_PassedPhases) {
         m_Children.push_back(option);
     }
     m_Children.push_back(m_BaseObject);
@@ -83,7 +98,13 @@ void DefeatScreen::Get() {
     m_CurrentOption = -1;
     m_IsGameStart = false;
     SetVisible(true);
+    for (int i = m_PassedLevels.size(); i < m_PassedPhases.size(); ++i) {
+        if (m_PassedPhases[i]) {
+            m_PassedPhases[i]->SetVisible(false);
+        }
+    }
     m_GameTime -> SetText(StringGameTime(m_GameTimer));
+    m_Level -> SetText(std::to_string(m_Character->GetLevel()));
 }
 
 void DefeatScreen::Update(){
@@ -94,5 +115,21 @@ void DefeatScreen::Update(){
     for (const auto& option : m_Options) {
         option->Update();
     }
+}
+
+void DefeatScreen::AddPassedLevel(const int mainPhase) {
+    m_PassedLevels.push_back(mainPhase);
+    // LOG_INFO("DefeatScreen::AddPassedLevel--PassedLevels:"+std::to_string(m_PassedLevels));
+
+    std::ostringstream oss;
+    oss << "[";
+    for (size_t i = 0; i < m_PassedLevels.size(); ++i) {
+        oss << m_PassedLevels[i];
+        if (i < m_PassedLevels.size() - 1) {
+            oss << ", ";
+        }
+    }
+    oss << "]";
+    LOG_ERROR("DefeatScreen::AddPassedLevel--PassedLevels: {}", oss.str());
 }
 
