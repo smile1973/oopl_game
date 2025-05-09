@@ -28,6 +28,7 @@ public:
 
     void UpdateLevel();
     void AddExperience(const int experience){ m_Experience += experience; }
+    void AddMoney(const int money){ m_Money += money; }
 
     // 檢測角色是否與另一個角色發生碰撞
     bool IfCollide(const std::shared_ptr<Character>& other, float Distance) const;
@@ -110,7 +111,7 @@ private:
     glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
     glm::vec2 m_MoveSpeed = glm::vec2(0.0f, 0.0f);
 
-    int m_Money = 0;
+    int m_Money = 20;
     int m_Experience = 0;
     int m_Level = 1;
 };

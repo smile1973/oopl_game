@@ -12,6 +12,7 @@
 #include "SkillUI.hpp"
 #include "HealthBarUI.hpp"
 #include "LevelUI.hpp"
+#include "ShopUI.hpp"
 #include "Effect/EffectManager.hpp"
 #include "Attack/EnemyAttackController.hpp" // 敵人攻擊控制器
 #include "Attack/AttackManager.hpp" // 新增: 攻擊管理器
@@ -52,6 +53,7 @@ private:
     void GetReady();
     void Pause();
     void Defeat();
+    void Shop();
 
     // 執行有效的任務，內部函式
     void ValidTask();
@@ -104,7 +106,8 @@ private:
     std::shared_ptr<DefeatScreen> m_DefeatScreen;      // 結算畫面
     std::shared_ptr<SkillUI> m_SkillUI;                // 角色技能UI
     std::shared_ptr<HealthBarUI> m_HealthBarUI;        // 角色血條UI
-    std::shared_ptr<LevelUI> m_LevelUI;                // 角色血條UI
+    std::shared_ptr<LevelUI> m_LevelUI;                // 角色等級UI
+    std::shared_ptr<ShopUI> m_shopUI;                  // 商店UI
     std::shared_ptr<Util::GameObject> m_Overlay;
 
     bool m_EnterDown = false;
@@ -116,6 +119,7 @@ private:
 
     // 測試關卡切換
     bool m_NKeyDown = false;
+    bool m_RKeyDown = false;
     bool m_UpKeyDown = false;
     bool m_DownKeyDown = false;
     bool m_LeftKeyDown = false;

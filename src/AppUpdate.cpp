@@ -31,6 +31,10 @@ void App::Update() {
         Defeat();
         return;
     }
+    if (m_shopUI->GetVisibility() == true) {
+        Shop();
+        return;
+    }
 
 
     // 角色移動

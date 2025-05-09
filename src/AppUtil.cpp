@@ -129,6 +129,45 @@ void App::Defeat(){
 }
 
 /**
+ * @brief 商店畫面。
+ */
+void App::Shop() {
+    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::E)) {
+        m_shopUI->SetVisible(false);
+        m_PRM->SetProgressBarVisible(true);
+    }
+    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::E);
+
+    if (m_LeftKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::LEFT)) {
+        m_shopUI->SwitchProduct(true);
+    }
+    m_LeftKeyDown = Util::Input::IsKeyPressed(Util::Keycode::LEFT);
+
+    if (m_RightKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::RIGHT)) {
+        m_shopUI->SwitchProduct(false);
+    }
+    m_RightKeyDown = Util::Input::IsKeyPressed(Util::Keycode::RIGHT);
+
+    if (m_NKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::N)) {
+        if (m_Rabbit->GetMoney()>=5) {
+            if (m_shopUI->GetProduct()==0 && m_HealthBarUI->GetHealthBar()!=3) {
+                m_Rabbit->AddMoney(-5);
+                m_HealthBarUI->FullHealthBar();
+            }
+            if (m_shopUI->GetProduct()==1) {
+                m_Rabbit->AddMoney(-5);
+                m_Rabbit->AddExperience(100);
+            }
+        }
+    }
+    m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
+
+    m_HealthBarUI->Update();
+    m_LevelUI->Update();
+    m_Rabbit->Update();
+    m_Root.Update();
+}
+/**
  * @brief 驗證當前任務狀態，並切換至適當的階段。
  */
 void App::ValidTask() {
@@ -139,8 +178,15 @@ void App::ValidTask() {
             LeavePhase();
         }
     }
-    if (!m_HealthBarUI->GetHealthBar()) {
+    if (m_HealthBarUI->GetHealthBar()<=0) {
         m_DefeatScreen->Get();
+    }
+    if (m_Enemy_shopkeeper->GetVisibility()) {
+        if (m_RKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::R)) {
+            m_shopUI->SetVisible(true);
+            m_PRM->SetProgressBarVisible(false);
+        }
+        m_RKeyDown = Util::Input::IsKeyPressed(Util::Keycode::R);
     }
 }
 
@@ -165,6 +211,7 @@ void App::LeavePhase() const {
         break;
         case 2:
             LOG_DEBUG("--Treasure opened--");
+            m_Rabbit->AddMoney(100);
         break;
         default: ;
     }
@@ -217,6 +264,7 @@ void App::SetSubPhase() const {
 void App::SetupStorePhase() const {
     LOG_INFO("Setup Phase: STORE");
     m_Enemy_shopkeeper->SetVisible(true);
+    // m_shopUI->SetVisible(true);
     m_PRM->SetProgressBarVisible(true);
 }
 /**

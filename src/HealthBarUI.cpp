@@ -61,3 +61,10 @@ void HealthBarUI::Reset() {
 
     m_Visible = false;
 }
+
+void HealthBarUI::FullHealthBar() {
+    m_RemainingHealthBar = 3;
+    for (int i = 0; i < MAX_HEALTH_BARS; ++i) {
+        m_HealthBars[i]->SetVisible(true);
+    }
+}
