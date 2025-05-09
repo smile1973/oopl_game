@@ -181,11 +181,13 @@ void App::SetSubPhase() const {
 
     // 重置玩家位置
     m_Rabbit->MoveToPosition({-400.0f, 160.0f});
+    m_Rabbit->m_Transform.scale.x = 0.5;
 
     // 根據小關索引設置固定的小關類型
     switch (m_SubPhaseIndex) {
         case 0:
             LOG_DEBUG("Next SubPhase: STORE");
+            m_DefeatScreen->AddPassedLevel(m_PRM->GetCurrentMainPhase());
             SetupStorePhase();
         break;
         case 1:
