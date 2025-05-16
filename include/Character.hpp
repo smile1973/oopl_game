@@ -88,6 +88,7 @@ private:
     std::unordered_map<int, std::shared_ptr<Skill>> m_Skills;
     bool m_IsSkillXUes = false;
     bool m_IsSkillCUes = false;
+    bool m_IsSkillVUes = false;
 
     State m_State = State::IDLE;
     int m_CurrentSkillId = -1;

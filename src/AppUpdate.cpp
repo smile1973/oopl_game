@@ -140,12 +140,12 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
             LOG_DEBUG("V Key UP - Skill 4");
             if (m_Rabbit->UseSkill(4, m_enemies_characters)) {
-                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
-                for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                    if (m_Rabbit->IfCollideCircle(enemy, 200)) {
-                        enemy->TakeDamage(55*rabbitLevel);
-                    }
-                }
+                m_Rabbit -> TowardNearestEnemy(m_enemies_characters, false);
+                // for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
+                //     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
+                //         enemy->TakeDamage(55*rabbitLevel);
+                //     }
+                // }
                 m_Rabbit->UpdateSkillXUes(4);
             }
         }
