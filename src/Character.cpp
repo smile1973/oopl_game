@@ -40,6 +40,14 @@ bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Ch
                 TowardNearestEnemy(m_Enemies, skillId==3);
                 if (skillId == 3) {
                     m_IsSkillCUes = true;
+                }else if (skillId == 4) {
+                    m_IsSkillVUes = true;
+                    // 進入無敵
+                    m_Invincible = true;
+                    m_InvincibleTimer = 0.0f;
+                    m_InvincibleDuration = 2.0f;
+                    // LOG_ERROR("m_InvincibleDuration: " + std::to_string(m_InvincibleDuration));
+                    SwitchToSkill(skillId);
                 }else {
                     SwitchToSkill(skillId);
                 }
@@ -60,6 +68,11 @@ void Character::Update() {
             m_Invincible = false;
             m_InvincibleTimer = 0.0f;
             LOG_DEBUG("Character invincibility ended");
+            if (m_IsSkillVUes) {
+                m_IsSkillVUes = false;
+                m_InvincibleDuration = 1.5f;
+                // LOG_ERROR("m_InvincibleDuration: " + std::to_string(m_InvincibleDuration));
+            }
         }
         else {
             // 無敵時間內閃爍效果
