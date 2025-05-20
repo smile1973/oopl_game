@@ -74,6 +74,9 @@ public:
 
     void AddHurtAnimation(const std::vector<std::string>& hurtImageSet, int duration = 500);
 
+    void ToggleGodMode();
+    bool IsInGodMode() const { return m_GodMode; }
+
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
     void SwitchToIdle();
@@ -114,6 +117,7 @@ private:
     int m_Money = 20;
     int m_Experience = 0;
     int m_Level = 1;
+    bool m_GodMode = false;
 };
 
 

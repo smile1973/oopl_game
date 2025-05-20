@@ -130,6 +130,7 @@ private:
     bool m_IsReady = false;
     int m_CurrentPausedOption = 0;
     Phase m_Phase;
+    bool m_GKeyDown = false;
 };
 
 #endif

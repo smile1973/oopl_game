@@ -26,6 +26,12 @@ public:
     void InitBattle1Patterns();
     void InitBattle2Patterns();
     void InitBattle3Patterns();
+    void InitBattle4Patterns();
+    void InitBattle5Patterns();
+    void InitBattle6Patterns();
+    void InitBattle7Patterns();
+    void InitBattle8Patterns();
+    void InitBossPatterns();
 
     /**
      * @brief 更新控制器和當前執行的攻擊模式
@@ -91,6 +97,10 @@ private:
     bool m_IsActive = false;            // 控制器是否處於活動狀態
     int m_CurrentMainPhase = 1;
     int m_CurrentSubPhase = 1;
+
+    std::vector<std::shared_ptr<AttackPattern>> m_BossPatterns;
+    std::mt19937 m_RandomEngine;
+    void SelectRandomPatternForBoss();
 };
 
 #endif // ENEMYATTACKCONTROLLER_HPP

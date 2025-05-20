@@ -257,6 +257,20 @@ void App::Update() {
     //     // 放置在與第一個光束有點偏移的位置
     //     effect2->Play(cursorPos, 25.0f);
     // }
+    if (m_GKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::G)) {
+            if (m_Rabbit) {
+                m_Rabbit->ToggleGodMode();
+                // 更新 UI 顯示
+                if (m_Rabbit->IsInGodMode()) {
+                    LOG_DEBUG("God Mode enabled - Press G to disable");
+                } else {
+                    LOG_DEBUG("God Mode disabled");
+                }
+            }
+        }
+    }
+    m_GKeyDown = Util::Input::IsKeyPressed(Util::Keycode::G);
 
     m_Root.Update();
 }

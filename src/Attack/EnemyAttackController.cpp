@@ -5,24 +5,95 @@
 
 EnemyAttackController::EnemyAttackController(std::shared_ptr<Enemy> enemy)
     : m_Enemy(enemy) {
+    std::random_device rd;
+    m_RandomEngine.seed(rd());
 }
 
 void EnemyAttackController::InitBattle1Patterns() {
     ClearPatterns();
-    auto pattern = AttackPatternFactory::GetInstance().CreateBattle8Pattern();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle1Pattern();
     AddPattern(pattern);
 }
 
+// 初始化敵人2的攻擊模式 (Main1, Sub2)
 void EnemyAttackController::InitBattle2Patterns() {
+    ClearPatterns();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle2Pattern();
+    AddPattern(pattern);
+}
+
+// 初始化敵人3的攻擊模式 (Main1, Sub4)
+void EnemyAttackController::InitBattle3Patterns() {
+    ClearPatterns();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle3Pattern();
+    AddPattern(pattern);
+}
+
+// 初始化敵人4的攻擊模式 (Main2, Sub1)
+void EnemyAttackController::InitBattle4Patterns() {
+    ClearPatterns();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle4Pattern();
+    AddPattern(pattern);
+}
+
+// 初始化敵人5的攻擊模式 (Main2, Sub2)
+void EnemyAttackController::InitBattle5Patterns() {
+    ClearPatterns();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle5Pattern();
+    AddPattern(pattern);
+}
+
+// 初始化敵人6的攻擊模式 (Main2, Sub4)
+void EnemyAttackController::InitBattle6Patterns() {
+    ClearPatterns();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle6Pattern();
+    AddPattern(pattern);
+}
+
+// 初始化敵人7的攻擊模式 (Main3, Sub1)
+void EnemyAttackController::InitBattle7Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle7Pattern();
     AddPattern(pattern);
 }
 
-void EnemyAttackController::InitBattle3Patterns() {
+// 初始化敵人8的攻擊模式 (Main3, Sub2)
+void EnemyAttackController::InitBattle8Patterns() {
     ClearPatterns();
-    auto pattern = AttackPatternFactory::GetInstance().CreateBattle3Pattern();
+    auto pattern = AttackPatternFactory::GetInstance().CreateBattle8Pattern();
     AddPattern(pattern);
+}
+
+void EnemyAttackController::InitBossPatterns() {
+    m_BossPatterns.clear();
+
+    // 創建5個不同的攻擊模式並添加到集合中
+    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern1());
+    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern2());
+    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern3());
+    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern4());
+
+    // 初始化隨機數生成器
+    std::random_device rd;
+    m_RandomEngine.seed(rd());
+}
+
+void EnemyAttackController::SelectRandomPatternForBoss() {
+    // 確保有模式可選
+    if (m_BossPatterns.empty()) {
+        LOG_ERROR("No patterns available for Enemy9");
+        return;
+    }
+
+    // 生成隨機索引
+    std::uniform_int_distribution<int> distribution(0, m_BossPatterns.size() - 1);
+    int randomIndex = distribution(m_RandomEngine);
+
+    // 獲取隨機選擇的模式
+    auto selectedPattern = m_BossPatterns[randomIndex];
+    LOG_DEBUG("Randomly selected pattern {} for Enemy9", randomIndex);
+    ClearPatterns();
+    AddPattern(selectedPattern);
 }
 
 void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> player) {
@@ -51,12 +122,10 @@ void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> p
             m_ElapsedCooldownTime = 0.0f;
         }
     } else {
-        // 沒有當前模式，檢查隊列
         SwitchToNextPattern();
-
         if (!m_CurrentPattern && m_PatternQueue.empty() && !m_IsInCooldown) {
-            // 自動重新初始化當前階段的攻擊模式
-            InitPatternsForCurrentPhase();
+            if (m_CurrentMainPhase == 3 && m_CurrentSubPhase == 4) SelectRandomPatternForBoss();
+            else InitPatternsForCurrentPhase();
         }
     }
 }
@@ -131,14 +200,26 @@ void EnemyAttackController::InitPatternsForCurrentPhase() {
     // 清空現有的模式
     ClearPatterns();
 
-    // 根據主階段和子階段選擇攻擊模式
-    if (m_CurrentMainPhase == 1 || m_CurrentMainPhase == 2) { // 第一大關
-        if (m_CurrentSubPhase == 1) InitBattle1Patterns();
-        if (m_CurrentSubPhase == 2) InitBattle2Patterns();
-        if (m_CurrentSubPhase == 3) InitBattle3Patterns();
-        if (m_CurrentSubPhase == 5) InitBattle2Patterns();
-    } else { // 其他大關
-        InitBattle1Patterns();
+    if (m_CurrentMainPhase == 3 && m_CurrentSubPhase == 4) {
+        InitBossPatterns();
+        Start();
+        return;
     }
+
+    if (m_CurrentMainPhase == 1) { // 第一大關
+        if (m_CurrentSubPhase == 1) InitBattle1Patterns();      // 敵人1
+        else if (m_CurrentSubPhase == 2) InitBattle2Patterns(); // 敵人2
+        else if (m_CurrentSubPhase == 4) InitBattle3Patterns(); // 敵人3
+    }
+    else if (m_CurrentMainPhase == 2) { // 第二大關
+        if (m_CurrentSubPhase == 1) InitBattle4Patterns();      // 敵人4
+        else if (m_CurrentSubPhase == 2) InitBattle5Patterns(); // 敵人5
+        else if (m_CurrentSubPhase == 4) InitBattle6Patterns(); // 敵人6
+    }
+    else if (m_CurrentMainPhase == 3) { // 第三大關
+        if (m_CurrentSubPhase == 1) InitBattle7Patterns();      // 敵人7
+        else if (m_CurrentSubPhase == 2) InitBattle8Patterns(); // 敵人8
+    }
+
     Start();
 }

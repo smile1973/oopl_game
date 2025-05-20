@@ -11,195 +11,6 @@ AttackPatternFactory& AttackPatternFactory::GetInstance() {
     return instance;
 }
 
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateSingleCirclePattern(
-    const glm::vec2& position,
-    float radius,
-    float delay) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-    auto attack = std::make_shared<CircleAttack>(position, delay, radius);
-    pattern->AddAttack(attack, 0.0f);
-    pattern->SetDuration(delay + 1.0f);
-    return pattern;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateMultiCirclePattern(
-    const std::vector<glm::vec2>& positions,
-    float radius,
-    float delay,
-    float interval) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建多個圓形攻擊
-    float startTime = 0.0f;
-    int sequenceNumber = 1;
-
-    for (const auto& position : positions) {
-        auto attack = std::make_shared<CircleAttack>(position, delay, radius, sequenceNumber++);
-        pattern->AddAttack(attack, startTime);
-        startTime += interval;
-    }
-    pattern->SetDuration(startTime + delay + 1.0f);
-
-    return pattern;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateRectanglePattern(
-    const glm::vec2& position,
-    float width,
-    float height,
-    float rotation,
-    float delay) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建矩形攻擊
-    auto attack = std::make_shared<RectangleAttack>(position, delay, width, height, rotation);
-
-    // 將攻擊添加到模式中
-    pattern->AddAttack(attack, 0.0f);
-
-    // 設置模式總持續時間
-    pattern->SetDuration(delay + 1.0f);
-
-    return pattern;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateLaserPattern(
-    const glm::vec2& position,
-    RectangleAttack::Direction direction,
-    float width,
-    float length,
-    float delay) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建雷射攻擊（使用整合後的RectangleAttack）
-    auto attack = std::make_shared<RectangleAttack>(position, delay, direction, width, length);
-
-    // 將攻擊添加到模式中
-    pattern->AddAttack(attack, 0.0f);
-
-    // 設置模式總持續時間
-    pattern->SetDuration(delay + 1.0f);
-
-    return pattern;
-}
-
-std::vector<glm::vec2> AttackPatternFactory::CalculateCircularPositions(
-    const glm::vec2& center,
-    float radius,
-    int count,
-    float startAngle) {
-
-    std::vector<glm::vec2> positions;
-    positions.reserve(count);
-
-    // 計算環上的每個點
-    float angleStep = 2.0f * M_PI / static_cast<float>(count);
-
-    for (int i = 0; i < count; ++i) {
-        float angle = startAngle + i * angleStep;
-        float x = center.x + radius * cos(angle);
-        float y = center.y + radius * sin(angle);
-        positions.emplace_back(x, y);
-    }
-
-    return positions;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCircularPattern(
-    const glm::vec2& centerPosition,
-    float radius,
-    float attackRadius,
-    int count,
-    float delay,
-    float interval) {
-
-    // 計算環上的攻擊位置
-    std::vector<glm::vec2> positions = CalculateCircularPositions(centerPosition, radius, count);
-
-    // 創建多圓攻擊模式
-    auto pattern = CreateMultiCirclePattern(positions, attackRadius, delay, interval);
-
-    pattern->AddEnemyMovement([centerPosition](std::shared_ptr<Enemy> enemy, float totalTime) {
-        enemy->MoveToPosition(centerPosition, totalTime);
-        LOG_DEBUG("Enemy moving to center position: ({}, {}), duration: {}",
-                 centerPosition.x, centerPosition.y, totalTime);
-    }, 0.0f, 1.5f);  // 設置開始時間為0，持續時間為1.5秒
-
-    return pattern;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCrossRotatingLaserPattern(
-    const glm::vec2& centerPosition,
-    float width,
-    float height,
-    float rotationSpeed,
-    float duration,
-    float delay) {
-    auto pattern = std::make_shared<AttackPattern>();
-    auto horizontalAttack = std::make_shared<RectangleAttack>(
-        centerPosition, delay, width, height, 0.0f, 1
-    );
-
-    auto verticalAttack = std::make_shared<RectangleAttack>(
-        centerPosition, delay, width, height, 1.57f, 2  // 1.57 rad ≈ 90度
-    );
-
-    horizontalAttack->SetAutoRotation(true, rotationSpeed);
-    horizontalAttack->SetAttackDuration(duration);
-    verticalAttack->SetAutoRotation(true, rotationSpeed);
-    verticalAttack->SetAttackDuration(duration);
-    pattern->AddAttack(horizontalAttack, 0.0f);
-    pattern->AddAttack(verticalAttack, 0.0f);
-    pattern->SetDuration(delay + duration + 1.0f);
-    return pattern;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateMovingCirclePattern(
-    const glm::vec2& startPosition,
-    const glm::vec2& endPosition,
-    float radius,
-    float speed,
-    float delay) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-    auto circleAttack = std::make_shared<CircleAttack>(startPosition, delay, radius, 1);
-
-    glm::vec2 direction = endPosition - startPosition;
-    float distance = glm::length(direction);
-    direction = glm::normalize(direction);
-
-    float moveDuration = distance / speed;
-    circleAttack->SetColor(Util::Color::FromRGB(255, 100, 0, 200));
-    circleAttack->SetMovementParams(direction, speed, distance);
-    circleAttack->SetAttackDuration(moveDuration + 0.5f);  // 加一點緩衝時間
-    pattern->AddAttack(circleAttack, 0.0f);
-    pattern->SetDuration(delay + moveDuration + 1.0f);
-
-    return pattern;
-}
-
-std::shared_ptr<AttackPattern> AttackPatternFactory::CreateCornerBulletPattern(
-    int bulletCount,
-    float bulletSpeed,
-    float bulletRadius,
-    float delay) {
-
-    auto pattern = std::make_shared<AttackPattern>();
-
-    // 創建角落子彈攻擊
-    auto attack = std::make_shared<CornerBulletAttack>(delay, bulletCount);
-    attack->SetBulletSpeed(bulletSpeed);
-    attack->SetRadius(bulletRadius);
-
-    pattern->AddAttack(attack, 0.0f);
-    pattern->SetDuration(delay + 3.0f);  // 給予足夠時間讓子彈飛行
-    return pattern;
-}
-
 void AttackPatternFactory::AddCircleAttackRow(
     std::shared_ptr<AttackPattern> pattern,
     const glm::vec2& startPos,
@@ -270,6 +81,28 @@ void AttackPatternFactory::AddCrossLaserAttack(
     verticalLaser->SetZ(10.0);
     pattern->AddAttack(horizontalLaser, startTime);
     pattern->AddAttack(verticalLaser, startTime);
+}
+
+std::vector<glm::vec2> AttackPatternFactory::CalculateCircularPositions(
+    const glm::vec2& center,
+    float radius,
+    int count,
+    float startAngle) {
+
+    std::vector<glm::vec2> positions;
+    positions.reserve(count);
+
+    // 計算環上的每個點
+    float angleStep = 2.0f * M_PI / static_cast<float>(count);
+
+    for (int i = 0; i < count; ++i) {
+        float angle = startAngle + i * angleStep;
+        float x = center.x + radius * cos(angle);
+        float y = center.y + radius * sin(angle);
+        positions.emplace_back(x, y);
+    }
+
+    return positions;
 }
 
 std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
@@ -942,7 +775,6 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle8Pattern() {
     std::uniform_int_distribution<int> range_selector(0, 2);
     int selected_range = range_selector(gen);
 
-    // 2. 根據選到的範圍建立對應的分布
     std::uniform_real_distribution<float> rot;
     if (selected_range == 0) {
         rot = std::uniform_real_distribution<float>(-1.2f, 1.2f);
@@ -961,5 +793,144 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle8Pattern() {
     }
 
     pattern->SetDuration(30.0f);
+    return pattern;
+}
+
+std::shared_ptr<AttackPattern> AttackPatternFactory::BossPattern1() {
+    auto pattern = std::make_shared<AttackPattern>();
+    glm::vec2 centerPosition(0.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);
+
+    // 腳色動慢點
+    int count = 16;
+    std::vector<glm::vec2> positions = CalculateCircularPositions(centerPosition, 300, count);
+    for (int wave = 0; wave < count; wave++) {
+        auto laser = std::make_shared<RectangleAttack>(
+            positions[wave], 0.5, 2000, 80, (-2.0 * M_PI/count) * wave, 1+wave
+        );
+        laser->SetAutoRotation(false);
+        laser->SetAttackDuration(0.4f);
+        pattern->AddAttack(laser, 1.0f + wave * 0.3);
+    }
+    pattern->SetDuration(2.0f + count * 0.4f);
+    return pattern;
+}
+std::shared_ptr<AttackPattern> AttackPatternFactory::BossPattern2() {
+    auto pattern = std::make_shared<AttackPattern>();
+    glm::vec2 centerPosition(0.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);
+
+    int count = 6;
+    float delay = 0.4f;
+    float interval = 0.5f;
+    float duration = 0.8f;
+    for (int wave = 0; wave < count; wave++) {
+        auto laser = std::make_shared<RectangleAttack>(
+            glm::vec2{100.0, -320 + (wave * (720 / count))}, delay, 2000, 50, -0.5, 1+wave
+        );
+        laser->SetAutoRotation(false);
+        laser->SetAttackDuration(duration);
+        pattern->AddAttack(laser, 1.0f + wave * interval);
+    }
+    for (int wave = 0; wave < count; wave++) {
+        auto laser = std::make_shared<RectangleAttack>(
+            glm::vec2{-100.0, 320 - (wave * (720 / count))}, delay, 2000, 50, 0.5, 1+wave
+        );
+        laser->SetAutoRotation(false);
+        laser->SetAttackDuration(duration);
+        pattern->AddAttack(laser, 1.25f + (wave * interval));
+    }
+    pattern->SetDuration(2.0f + 2 * count * interval);
+    return pattern;
+}
+std::shared_ptr<AttackPattern> AttackPatternFactory::BossPattern3() {
+    auto pattern = std::make_shared<AttackPattern>();
+    glm::vec2 centerPosition(0.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);
+
+    int count = 8;
+    std::vector<glm::vec2> positions = CalculateCircularPositions(centerPosition, 500, count);
+    float delay = 2.0f;
+    float interval = 1.5f;
+    float duration = 0.5f;
+    std::uniform_real_distribution<float> rot(0.6, 1.1);
+    for (int wave = 0; wave < count; wave++) {
+        auto laser = std::make_shared<RectangleAttack>(
+            positions[2 * (wave % 4) + 1], delay, 2000.0f, 900.0f + (wave / 4) * 100, pow(-1, wave) * rot(gen) , 1+wave
+        );
+        laser->SetAutoRotation(false);
+        laser->SetAttackDuration(duration);
+        pattern->AddAttack(laser, 1.0f + wave * interval);
+    }
+    pattern->SetDuration(2.0f + count * interval);
+    return pattern;
+}
+std::shared_ptr<AttackPattern> AttackPatternFactory::BossPattern4() {
+    auto pattern = std::make_shared<AttackPattern>();
+    glm::vec2 centerPosition(0.0f, 0.0f);
+    pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
+        enemy->MoveToPosition(centerPosition, totalTime);
+    }, 0.0f, 1.0f);
+
+    for (int wave = 0; wave < 4; wave++) {
+        AddCircleAttackRow(
+            pattern,                   // Pattern to add to
+            glm::vec2(620.0f, 360.0f), // top right
+            false,                    // vertical row
+            10,                        // 10 circles
+            30.0,                     // zindex
+            -36.0f,                   // spacing
+            35.0f,                    // radius
+            Util::Color(0.0, 1.0, 1.0, 0.4),
+            glm::vec2(-1.0f, 0.0f),// Move left
+            300.0f,                    // Speed
+            1500.0f,                   // Distance
+            0.5f,                      // delay
+            1.5f + wave * 2.0f,        // Start at
+            0.0f                       // No interval (simultaneous)
+        );
+        AddCircleAttackRow(
+            pattern,                   // Pattern to add to
+            glm::vec2(-620.0f, 0.0f), // top left
+            false,                    // vertical row
+            10,                        // 10 circles
+            30.0,                     // zindex
+            -36.0f,                   // spacing
+            35.0f,                    // radius
+            Util::Color(0.0, 1.0, 1.0, 0.4),
+            glm::vec2(1.0f, 0.0f),// Move left
+            300.0f,                    // Speed
+            1500.0f,                   // Distance
+            0.5f,                      // delay
+            1.5f + wave * 2.3f,        // Start at
+            0.0f                       // No interval (simultaneous)
+        );
+    }
+
+    float delay = 3.0f;
+    auto laser11 = std::make_shared<RectangleAttack>(
+        glm::vec2{0.0, -180.0}, delay, 2000.0f, 360, 0
+    );
+    auto laser12 = std::make_shared<RectangleAttack>(
+        glm::vec2{400.0, 0.0}, delay, 1200.0f, 1000.0f, 0
+    );
+    pattern->AddAttack(laser11, 7.0f);
+    pattern->AddAttack(laser12, 7.0f);
+
+    auto laser21 = std::make_shared<RectangleAttack>(
+        glm::vec2{0.0, 180.0}, delay, 2000.0f, 360, 0
+    );
+    auto laser22 = std::make_shared<RectangleAttack>(
+        glm::vec2{-330, 0.0}, delay, 660.0f, 1000.0f, 0
+    );
+    pattern->AddAttack(laser21, 1.0f);
+    pattern->AddAttack(laser22, 1.0f);
+    pattern->SetDuration(10.0f);
     return pattern;
 }

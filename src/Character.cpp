@@ -54,7 +54,7 @@ bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Ch
 }
 
 void Character::Update() {
-    if (m_Invincible) {
+    if (m_Invincible && !m_GodMode) {
         m_InvincibleTimer += Util::Time::GetDeltaTimeMs() / 1000.0f;
         if (m_InvincibleTimer >= m_InvincibleDuration) {
             m_Invincible = false;
@@ -65,11 +65,6 @@ void Character::Update() {
             // 無敵時間內閃爍效果
         }
     }
-
-    // 基於當前狀態更新角色
-    // if (m_State == State::USING_SKILL && m_CurrentSkill) {
-    //     // 更新技能
-    //     m_CurrentSkill->Update(Util::Time::GetDeltaTimeMs() / 1000.0f);
 
     // 更新技能
     for (auto it = m_Skills.begin(); it != m_Skills.end(); ++it) {
@@ -213,7 +208,7 @@ void Character::MoveToPosition(const glm::vec2& targetPosition, const float tota
 
 void Character::TakeDamage(int damage) {
     // 如果無敵不受傷
-    if (m_Invincible || !IsAlive()) {
+    if (m_GodMode || m_Invincible || !IsAlive()) {
         LOG_DEBUG("Character is invincible or already defeated, damage ignored");
         return;
     }
@@ -283,4 +278,10 @@ void Character::Reset() {
     m_Experience = 0;
     m_Level = 1;
     SwitchToIdle();
+}
+
+void Character::ToggleGodMode() {
+    m_GodMode = !m_GodMode;
+    if (m_GodMode) LOG_INFO("God Mode enabled - Character is now invincible");
+    else LOG_INFO("God Mode disabled - Character returns to normal");
 }
