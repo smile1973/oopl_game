@@ -98,9 +98,9 @@ private:
     int m_CurrentMainPhase = 1;
     int m_CurrentSubPhase = 1;
 
-    std::vector<std::shared_ptr<AttackPattern>> m_BossPatterns;
     std::mt19937 m_RandomEngine;
     void SelectRandomPatternForBoss();
+    std::vector<int> m_BossPatternTypes;
 };
 
 #endif // ENEMYATTACKCONTROLLER_HPP

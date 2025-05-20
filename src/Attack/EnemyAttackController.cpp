@@ -65,35 +65,56 @@ void EnemyAttackController::InitBattle8Patterns() {
 }
 
 void EnemyAttackController::InitBossPatterns() {
-    m_BossPatterns.clear();
-
-    // 創建5個不同的攻擊模式並添加到集合中
-    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern1());
-    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern2());
-    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern3());
-    m_BossPatterns.push_back(AttackPatternFactory::GetInstance().BossPattern4());
-
-    // 初始化隨機數生成器
-    std::random_device rd;
-    m_RandomEngine.seed(rd());
+    m_BossPatternTypes.clear();
+    m_BossPatternTypes = {0, 1, 2, 3};
+    SelectRandomPatternForBoss();
 }
 
 void EnemyAttackController::SelectRandomPatternForBoss() {
-    // 確保有模式可選
-    if (m_BossPatterns.empty()) {
-        LOG_ERROR("No patterns available for Enemy9");
+    // 確保有模式類型可選
+    if (m_BossPatternTypes.empty()) {
+        LOG_ERROR("No pattern types available for Boss");
         return;
     }
 
     // 生成隨機索引
-    std::uniform_int_distribution<int> distribution(0, m_BossPatterns.size() - 1);
+    std::uniform_int_distribution<int> distribution(0, m_BossPatternTypes.size() - 1);
     int randomIndex = distribution(m_RandomEngine);
 
-    // 獲取隨機選擇的模式
-    auto selectedPattern = m_BossPatterns[randomIndex];
-    LOG_DEBUG("Randomly selected pattern {} for Enemy9", randomIndex);
+    // 獲取隨機選擇的模式類型
+    int patternType = m_BossPatternTypes[randomIndex];
+
+    LOG_DEBUG("Randomly selected pattern type {} for Boss", patternType);
+
+    // 清空當前隊列
     ClearPatterns();
-    AddPattern(selectedPattern);
+
+    // 根據模式類型創建新的模式實例
+    std::shared_ptr<AttackPattern> newPattern = nullptr;
+
+    switch (patternType) {
+        case 0:
+            newPattern = AttackPatternFactory::GetInstance().BossPattern1();
+        break;
+        case 1:
+            newPattern = AttackPatternFactory::GetInstance().BossPattern2();
+        break;
+        case 2:
+            newPattern = AttackPatternFactory::GetInstance().BossPattern3();
+        break;
+        case 3:
+            newPattern = AttackPatternFactory::GetInstance().BossPattern4();
+        break;
+        default:
+            newPattern = AttackPatternFactory::GetInstance().CreateBattle1Pattern();
+        break;
+    }
+
+    // 添加新創建的模式
+    if (newPattern) {
+        AddPattern(newPattern);
+        LOG_DEBUG("Created new pattern instance of type {} for Boss", patternType);
+    }
 }
 
 void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> player) {
@@ -124,7 +145,7 @@ void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> p
     } else {
         SwitchToNextPattern();
         if (!m_CurrentPattern && m_PatternQueue.empty() && !m_IsInCooldown) {
-            if (m_CurrentMainPhase == 3 && m_CurrentSubPhase == 4) SelectRandomPatternForBoss();
+            if (m_CurrentMainPhase == 1 && m_CurrentSubPhase == 1) SelectRandomPatternForBoss();
             else InitPatternsForCurrentPhase();
         }
     }
@@ -200,15 +221,15 @@ void EnemyAttackController::InitPatternsForCurrentPhase() {
     // 清空現有的模式
     ClearPatterns();
 
-    if (m_CurrentMainPhase == 3 && m_CurrentSubPhase == 4) {
+    if (m_CurrentMainPhase == 1 && m_CurrentSubPhase == 1) {
         InitBossPatterns();
         Start();
         return;
     }
 
     if (m_CurrentMainPhase == 1) { // 第一大關
-        if (m_CurrentSubPhase == 1) InitBattle1Patterns();      // 敵人1
-        else if (m_CurrentSubPhase == 2) InitBattle2Patterns(); // 敵人2
+        // if (m_CurrentSubPhase == 1) InitBattle1Patterns();      // 敵人1
+        if (m_CurrentSubPhase == 2) InitBattle2Patterns(); // 敵人2
         else if (m_CurrentSubPhase == 4) InitBattle3Patterns(); // 敵人3
     }
     else if (m_CurrentMainPhase == 2) { // 第二大關
