@@ -98,12 +98,10 @@ void App::Start() {
 
     // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態
     std::vector<std::string> birdValedictorian;
-    birdValedictorian.reserve(7);
-    for (int i = 0; i < 7; ++i) {
+    birdValedictorian.reserve(8);
+    for (int i = 0; i < 8; ++i) {
         birdValedictorian.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_valedictorian/hb_bird_valedictorian_idle_" + std::to_string(i+1) + ".png");
     }
-    m_Enemy_bird_valedictorian = std::make_shared<Enemy>("bird_valedictorian",120, birdValedictorian);
-    m_Root.AddChild(m_Enemy_bird_valedictorian);
 
     // 初始化敵人(dragonGold)，設定圖片、位置與初始閒置狀態
     std::vector<std::string> dragonGold;
@@ -121,12 +119,12 @@ void App::Start() {
 
     // 初始化敵人(DragonSilver)，設定圖片、位置與初始閒置狀態
     std::vector<std::string> dragonSilver;
-    dragonSilver.reserve(7);
-    for (int i = 0; i < 7; ++i) {
-        dragonSilver.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_idle_" + std::to_string(i+1) + ".png");
+    dragonSilver.reserve(9);
+    dragonSilver.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_split_1.png");
+    dragonSilver.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_split_2.png");
+    for (int i = 7; i < 14; ++i) {
+        dragonSilver.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_split_" + std::to_string(i+1) + ".png");
     }
-    m_Enemy_dragon_silver = std::make_shared<Enemy>("dragon_silver",120, dragonSilver);
-    m_Root.AddChild(m_Enemy_dragon_silver);
 
 
 
@@ -155,17 +153,20 @@ void App::Start() {
     // 添加更多图片集
     m_Enemy->SetImageSetCollection(0, std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
 
-    m_Enemy->SetImageSetCollection(101, mousePaladin);
+    // m_Enemy->SetImageSetCollection(101, mousePaladin);
     m_Enemy->SetImageSetCollection(102, mouseRoseMage);
     m_Enemy->SetImageSetCollection(104, mouseCommander);
 
     m_Enemy->SetImageSetCollection(201, dragonGold);
     m_Enemy->SetImageSetCollection(202, dragonMythril);
     m_Enemy->SetImageSetCollection(204, dragonSilver);
+    m_Enemy->SetImageSetCollection(101, dragonSilver);
 
     m_Enemy->SetImageSetCollection(301, birdStudent);
     m_Enemy->SetImageSetCollection(302, birdWhispering);
     m_Enemy->SetImageSetCollection(304, birdValedictorian);
+
+    m_Enemy->m_Transform.scale.x = -0.5;
 
 
 

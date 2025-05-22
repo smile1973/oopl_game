@@ -72,8 +72,6 @@ void App::Update() {
     // 初始化敵人容器
     std::vector<std::shared_ptr<Enemy>> m_Enemies;
     m_Enemies.push_back(m_Enemy);
-    m_Enemies.push_back(m_Enemy_bird_valedictorian);
-    m_Enemies.push_back(m_Enemy_dragon_silver);
     m_Enemies.push_back(m_Enemy_treasure);
     m_Enemies.push_back(m_Enemy_dummy);
     std::vector<std::shared_ptr<Character>> m_enemies_characters;

@@ -318,8 +318,6 @@ void App::RestartGame() {
     // 3. 重置敵人
     m_Enemy->Reset();
     m_Enemy_dummy->Reset();
-    m_Enemy_bird_valedictorian->Reset();
-    m_Enemy_dragon_silver->Reset();
 
     m_Enemy_shopkeeper->SetVisible(false);
     m_Enemy_treasure->SetVisible(false);
