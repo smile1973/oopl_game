@@ -288,7 +288,9 @@ void App::SetupBattlePhase() const {
     // 設置基本敵人
     m_Enemy->SetPosition({197.5f, -3.5f});
     m_Enemy->SetVisible(true);
-    m_Enemy->SetHealth(baseHealth + 10.0f * SubPhaseIndex);
+    m_Enemy->SetHealth(baseHealth + 30.0f * SubPhaseIndex);
+
+    m_Enemy->SwitchImageSetByIndex(MainPhaseIndex*100 + SubPhaseIndex);
 
     // 設置敵人攻擊控制器
     if (m_EnemyAttackController) {
@@ -297,7 +299,7 @@ void App::SetupBattlePhase() const {
         m_EnemyAttackController->InitPatternsForCurrentPhase();
     }
 
-    LOG_DEBUG("Set battle level: MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
+    LOG_INFO("Set battle level: MainPhaseIndex {}, SubPhaseIndex {}", MainPhaseIndex, SubPhaseIndex);
 }
 
 /**

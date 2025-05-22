@@ -77,6 +77,12 @@ public:
     void ToggleGodMode();
     bool IsInGodMode() const { return m_GodMode; }
 
+protected:
+    // 為子類提供的方法
+    void SetImagePathSet(const std::vector<std::string>& newImageSet) { m_ImagePathSet = newImageSet; }
+    void SetIdleAnimation(const std::shared_ptr<Util::Animation> &animation) { m_IdleAnimation = animation; }
+    std::shared_ptr<Util::Animation> GetIdleAnimation() const { return m_IdleAnimation; }
+
 private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
     void SwitchToIdle();
