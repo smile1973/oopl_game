@@ -145,7 +145,7 @@ void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> p
     } else {
         SwitchToNextPattern();
         if (!m_CurrentPattern && m_PatternQueue.empty() && !m_IsInCooldown) {
-            if (m_CurrentMainPhase == 1 && m_CurrentSubPhase == 1) SelectRandomPatternForBoss();
+            if (m_CurrentMainPhase == 3 && m_CurrentSubPhase == 4) SelectRandomPatternForBoss();
             else InitPatternsForCurrentPhase();
         }
     }
@@ -221,14 +221,14 @@ void EnemyAttackController::InitPatternsForCurrentPhase() {
     // 清空現有的模式
     ClearPatterns();
 
-    if (m_CurrentMainPhase == 1 && m_CurrentSubPhase == 1) {
+    if (m_CurrentMainPhase == 3 && m_CurrentSubPhase == 4) {
         InitBossPatterns();
         Start();
         return;
     }
 
     if (m_CurrentMainPhase == 1) { // 第一大關
-        // if (m_CurrentSubPhase == 1) InitBattle1Patterns();      // 敵人1
+        if (m_CurrentSubPhase == 1) InitBattle1Patterns();      // 敵人1
         if (m_CurrentSubPhase == 2) InitBattle2Patterns(); // 敵人2
         else if (m_CurrentSubPhase == 4) InitBattle3Patterns(); // 敵人3
     }
