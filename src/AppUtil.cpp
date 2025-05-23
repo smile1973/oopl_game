@@ -204,17 +204,19 @@ void App::LeavePhase() const {
             LOG_DEBUG("--Leave the store--");
         break;
         case 1:
-        case 3:
+        case 2:
+        case 4:
             AttackManager::GetInstance().ClearAllAttacks(); // 清除所有攻擊
-            m_Rabbit->AddExperience(130);
+
             LOG_DEBUG("--Battle is over--");
         break;
-        case 2:
+        case 3:
             LOG_DEBUG("--Treasure opened--");
-            m_Rabbit->AddMoney(100);
+            // m_Rabbit->AddMoney(100);
         break;
         default: ;
     }
+    m_Rabbit->ResetSkill();
     SetSubPhase();
 }
 

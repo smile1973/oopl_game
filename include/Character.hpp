@@ -46,6 +46,8 @@ public:
     void AddSkill(int skillId, const std::vector<std::string>& skillImageSet,
                  int duration = 175, float Cooldown = 2.0f);
     bool UseSkill(int skillId, const std::vector<std::shared_ptr<Character>>& m_Enemies);  // 1=Z, 2=X, 3=C, 4=V
+    void ResetSkill();
+
     virtual void Update();
     virtual void Reset();
     void UpdateSkillXUes(const int skillId) { m_IsSkillXUes = skillId==2 ? true : false; }

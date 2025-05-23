@@ -171,6 +171,15 @@ void App::Update() {
         enemy->DrawHealthBar();
     }
     if (Enemy::s_HealthBarYPositions.empty()) {
+        if (!m_Onward->GetVisibility()) {
+            if (m_PRM->GetCurrentSubPhase()==1 || m_PRM->GetCurrentSubPhase()==2 || m_PRM->GetCurrentSubPhase()==4) {
+                m_Rabbit->AddExperience(130);
+                LOG_INFO("AddExperience(130)");
+            }else if (m_PRM->GetCurrentSubPhase()==3) {
+                m_Rabbit->AddMoney(30);
+                LOG_INFO("AddMoney(30)");
+            }
+        }
         m_Onward->SetVisible(true);
     } else {
         m_Onward->SetVisible(false);

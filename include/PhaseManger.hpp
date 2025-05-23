@@ -121,9 +121,8 @@ private:
             case 0: return "STORE";
             case 1: return "BATTLE_1";
             case 2: return "BATTLE_2";
-            case 3: return "BATTLE_3";
-            case 4: return "TREASURE";
-            case 5: return "BOSS";
+            case 3: return "TREASURE";
+            case 4: return "BOSS";
             default: return "Error";
         }
     }

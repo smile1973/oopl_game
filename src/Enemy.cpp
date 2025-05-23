@@ -36,7 +36,7 @@ void Enemy::TakeDamage(float damage) {
         if (! this->IfAlive()) {
             this->SetVisible(false);
             Effect::EffectManager::GetInstance().ClearAllEffects();
-            AttackManager::GetInstance().ClearAllAttacks(); // 清除所有攻擊
+            AttackManager::GetInstance().ClearAllAttacks();
             App::GetInstance().GetOverlay()->SetVisible(false);
             LOG_DEBUG("The Enemy dies");
         }

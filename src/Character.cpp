@@ -60,6 +60,19 @@ bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Ch
     }
     return false;
 }
+void Character::ResetSkill() {
+    m_IsSkillXUes = false;
+    m_IsSkillCUes = false;
+    m_IsSkillVUes = false;
+    LOG_INFO("X: " + std::to_string(m_IsSkillXUes) +
+            " C: " + std::to_string(m_IsSkillCUes) +
+            " V: " + std::to_string(m_IsSkillVUes));
+
+    for (auto it = m_Skills.begin(); it != m_Skills.end(); ++it) {
+        it->second->ResetCooldown();
+    }
+}
+
 
 void Character::Update() {
     if (m_Invincible && !m_GodMode) {
