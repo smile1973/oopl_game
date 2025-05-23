@@ -35,6 +35,12 @@ SkillUI::SkillUI(const std::shared_ptr<Character>& character)
         m_CooldownTexts2[i] -> SetZIndex(81);
         // LOG_INFO("CooldownTexts: {} -- {}", i, m_CooldownTexts[i]->GetPosition());
     }
+
+    for (int i = 0; i < 2; ++i) {
+        m_ExclamationMark.emplace_back( std::make_shared<TextObject>(" ", 35) );
+        m_ExclamationMark[i] -> SetPosition(glm::vec2(baseX + i * 100+5, baseY+25));
+        m_ExclamationMark[i] -> SetZIndex(81);
+    }
 }
 
 void SkillUI::Update() {
@@ -60,6 +66,14 @@ void SkillUI::Update() {
         }
     }
 
+    if (m_Character->IsSkillXUes()) {
+        m_ExclamationMark[0]->SetText("^");
+        m_ExclamationMark[1]->SetText("^");
+    }else {
+        m_ExclamationMark[0]->SetText(" ");
+        m_ExclamationMark[1]->SetText(" ");
+    }
+
     IconsFollow();
 }
 
@@ -76,6 +90,8 @@ void SkillUI::SetVisible(const bool visible) {
         m_CooldownTexts2[i] -> SetVisible(visible);
         // LOG_INFO("SetVisible: {} -- {}", i, visible);
     }
+    m_ExclamationMark[0] -> SetVisible(visible);
+    m_ExclamationMark[1] -> SetVisible(visible);
 }
 
 void SkillUI::IconsFollow() const {

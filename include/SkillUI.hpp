@@ -34,6 +34,9 @@ public:
         for (const auto& icon : m_CooldownTexts2) {
             children.push_back(icon);
         }
+        for (const auto& icon : m_ExclamationMark) {
+            children.push_back(icon);
+        }
         return children;
     }
 
@@ -51,6 +54,8 @@ private:
     std::vector<std::shared_ptr<TextObject>> m_CooldownTexts; // 技能冷卻文字
     std::vector<std::shared_ptr<Object>> m_SkillIcons2; // 技能圖示圖片
     std::vector<std::shared_ptr<TextObject>> m_CooldownTexts2; // 技能冷卻文字
+
+    std::vector<std::shared_ptr<TextObject>> m_ExclamationMark; // 技能冷卻文字
 
     static std::string IconImagePath(const int skillId) {
         switch (skillId) {
