@@ -27,6 +27,13 @@ public:
 
     [[nodiscard]] std::string& GetName() { return m_Name; }
 
+    // 新增：切換敵人圖片集的函數
+    void SwitchImageSet(const std::vector<std::string>& newImageSet, bool keepCurrentFrame = false);
+    void SwitchImageSetByIndex(int imageSetIndex, bool keepCurrentFrame = false);
+    void AddImageSetCollection(const std::vector<std::vector<std::string>>& imageSets);
+    void SetImageSetCollection(int index, const std::vector<std::string>& imageSet);
+    [[nodiscard]] int GetCurrentImageSetIndex() const { return m_CurrentImageSetIndex; }
+    [[nodiscard]] size_t GetImageSetCollectionSize() const { return m_ImageSetCollection.size(); }
 
     virtual void SetProgressIcon(const std::string &ImagePath) { m_Drawable = std::make_shared<Util::Image>(ImagePath); }
 
@@ -46,12 +53,19 @@ private:
     static void InitVertexArray();  // 初始化頂點陣列（Vertex Array Object）
     void InitUniforms();    // 初始化 Uniform 變數（著色器中的全域變數）
 
+    // 重建動畫的私有函數
+    void RebuildAnimation(const std::vector<std::string>& newImageSet, bool keepCurrentFrame);
+
     static std::unique_ptr<Core::Program> s_Program;    // 靜態成員變數：共享的著色程序
     static std::unique_ptr<Core::VertexArray> s_VertexArray;    // 靜態成員變數：共享的頂點數據
 
     std::string m_Name;
     float m_Health;
     float m_MaxHealth;
+
+    // 圖片集管理
+    std::vector<std::vector<std::string>> m_ImageSetCollection;  // 存储多组图片集
+    int m_CurrentImageSetIndex = 0;  // 当前使用的图片集索引
 
     bool m_IsMoving = false;
     float m_Speed = 0.0f;

@@ -65,6 +65,10 @@ void App::Start() {
     m_Enemy->InitHealthRing();
     m_Root.AddChild(m_Enemy);
 
+
+
+
+
     // 初始化敵人攻擊控制器
     m_EnemyAttackController = std::make_shared<EnemyAttackController>(m_Enemy);
 
@@ -78,23 +82,92 @@ void App::Start() {
     m_Enemy_dummy->InitHealthRing();
     m_Root.AddChild(m_Enemy_dummy);
 
-    // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態
-    std::vector<std::string> enemyImages;
-    enemyImages.reserve(7);
-    for (int i = 0; i < 7; ++i) {
-        enemyImages.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_valedictorian/hb_bird_valedictorian_idle_" + std::to_string(i+1) + ".png");
+    // 初始化敵人(birdStudent)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> birdStudent;
+    birdStudent.reserve(7);
+    for (int i = 7; i < 14; ++i) {
+        birdStudent.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_student/bird_student_split_" + std::to_string(i+1) + ".png");
     }
-    m_Enemy_bird_valedictorian = std::make_shared<Enemy>("bird_valedictorian",120, enemyImages);
-    m_Root.AddChild(m_Enemy_bird_valedictorian);
+
+    // 初始化敵人(birdWhispering)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> birdWhispering;
+    birdWhispering.reserve(7);
+    for (int i = 7; i < 14; ++i) {
+        birdWhispering.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_whispering/bird_whispering_split_" + std::to_string(i+1) + ".png");
+    }
+
+    // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> birdValedictorian;
+    birdValedictorian.reserve(8);
+    for (int i = 0; i < 8; ++i) {
+        birdValedictorian.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_valedictorian/hb_bird_valedictorian_idle_" + std::to_string(i+1) + ".png");
+    }
+
+    // 初始化敵人(dragonGold)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> dragonGold;
+    dragonGold.reserve(7);
+    for (int i = 7; i < 14; ++i) {
+        dragonGold.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_gold/dragon_gold_split_" + std::to_string(i+1) + ".png");
+    }
+
+    // 初始化敵人(dragonMythril)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> dragonMythril;
+    dragonMythril.reserve(7);
+    for (int i = 7; i < 14; ++i) {
+        dragonMythril.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_mythril/dragon_mythril_split_" + std::to_string(i+1) + ".png");
+    }
 
     // 初始化敵人(DragonSilver)，設定圖片、位置與初始閒置狀態
-    std::vector<std::string> enemyImages2;
-    enemyImages2.reserve(7);
-    for (int i = 0; i < 7; ++i) {
-        enemyImages2.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_idle_" + std::to_string(i+1) + ".png");
+    std::vector<std::string> dragonSilver;
+    dragonSilver.reserve(9);
+    dragonSilver.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_split_1.png");
+    dragonSilver.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_split_2.png");
+    for (int i = 7; i < 14; ++i) {
+        dragonSilver.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/dragon_silver/dragon_silver_split_" + std::to_string(i+1) + ".png");
     }
-    m_Enemy_dragon_silver = std::make_shared<Enemy>("dragon_silver",120, enemyImages2);
-    m_Root.AddChild(m_Enemy_dragon_silver);
+
+
+
+    // 初始化敵人(mousePaladin)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> mousePaladin;
+    mousePaladin.reserve(7);
+    for (int i = 7; i < 14; ++i) {
+        mousePaladin.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/mouse_paladin/mouse_paladin_split_" + std::to_string(i+1) + ".png");
+    }
+
+    // 初始化敵人(mouseRoseMage)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> mouseRoseMage;
+    // mouseRoseMage.reserve(7);
+    for (int i = 7; i < 14; ++i) {
+        mouseRoseMage.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/mouse_rosemage/mouse_rosemage_split_" + std::to_string(i+1) + ".png");
+    }
+
+    // 初始化敵人(mouseCommander)，設定圖片、位置與初始閒置狀態
+    std::vector<std::string> mouseCommander;
+    mouseCommander.reserve(10);
+    for (int i = 7; i < 17; ++i) {
+        mouseCommander.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/mouse_commander/mouse_commander_split_" + std::to_string(i+1) + ".png");
+    }
+
+
+    // 添加更多图片集
+    m_Enemy->SetImageSetCollection(0, std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
+
+    m_Enemy->SetImageSetCollection(101, mousePaladin);
+    m_Enemy->SetImageSetCollection(102, mouseRoseMage);
+    m_Enemy->SetImageSetCollection(104, mouseCommander);
+
+    m_Enemy->SetImageSetCollection(201, dragonGold);
+    m_Enemy->SetImageSetCollection(202, dragonMythril);
+    m_Enemy->SetImageSetCollection(204, dragonSilver);
+
+    m_Enemy->SetImageSetCollection(301, birdStudent);
+    m_Enemy->SetImageSetCollection(302, birdWhispering);
+    m_Enemy->SetImageSetCollection(304, birdValedictorian);
+
+    m_Enemy->m_Transform.scale.x = -0.5;
+
+
 
     // 初始化敵人(Shopkeeper)，設定圖片、位置與初始閒置狀態
     std::vector<std::string> ShopkeeperImages2;
