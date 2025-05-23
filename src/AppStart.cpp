@@ -153,14 +153,13 @@ void App::Start() {
     // 添加更多图片集
     m_Enemy->SetImageSetCollection(0, std::vector<std::string>{GA_RESOURCE_DIR"/Image/Enemy/training_dummy_anim.png"});
 
-    // m_Enemy->SetImageSetCollection(101, mousePaladin);
+    m_Enemy->SetImageSetCollection(101, mousePaladin);
     m_Enemy->SetImageSetCollection(102, mouseRoseMage);
     m_Enemy->SetImageSetCollection(104, mouseCommander);
 
     m_Enemy->SetImageSetCollection(201, dragonGold);
     m_Enemy->SetImageSetCollection(202, dragonMythril);
     m_Enemy->SetImageSetCollection(204, dragonSilver);
-    m_Enemy->SetImageSetCollection(101, dragonSilver);
 
     m_Enemy->SetImageSetCollection(301, birdStudent);
     m_Enemy->SetImageSetCollection(302, birdWhispering);
