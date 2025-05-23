@@ -28,7 +28,7 @@ public:
 
     // 狀態檢查
     [[nodiscard]] bool IsFinished() const { return m_State == State::FINISHED; }
-    [[nodiscard]] State GetState() const { return m_State; }
+    State GetState() const { return m_State; }
 
     // 碰撞檢測
     bool CheckCollision(const std::shared_ptr<Character>& character);

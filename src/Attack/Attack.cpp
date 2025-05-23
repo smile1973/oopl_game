@@ -50,6 +50,7 @@ void Attack::Update(float deltaTime) {
             break;
 
         case State::ATTACKING:
+            LOG_WARN("Attacking");
             OnAttackUpdate(deltaTime);
             if (m_ElapsedTime >= m_AttackDuration) {
                 ChangeState(State::FINISHED);
@@ -169,6 +170,7 @@ void Attack::OnAttackStart() {
 }
 
 void Attack::OnAttackUpdate(float deltaTime) {
+    LOG_WARN("????6++");
     SyncWithEffect();
     if (m_TargetCharacter) {
         CheckCollision(m_TargetCharacter);
@@ -177,6 +179,7 @@ void Attack::OnAttackUpdate(float deltaTime) {
     if (m_AttackEffect && m_AttackEffect->IsFinished()) {
         CreateAttackEffect();
     }
+    LOG_WARN("????7++");
 }
 
 // 完成階段開始

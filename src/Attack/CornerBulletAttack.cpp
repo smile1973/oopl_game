@@ -117,6 +117,7 @@ void CornerBulletAttack::CreateWarningEffect() {
 }
 
 void CornerBulletAttack::CreateAttackEffect() {
+    LOG_WARN("test+++++++++++++++++++++++++++++++++++++++++++++in create");
     m_BulletAttacks.clear();
 
     int bulletIndex = 0;
@@ -141,6 +142,7 @@ void CornerBulletAttack::CreateAttackEffect() {
         path.bulletAttack = bulletAttack;
         m_BulletAttacks.push_back(bulletAttack);
     }
+    LOG_WARN("test+++++++++++++++++++++++++++++++++++++++++++++end create");
 }
 
 void CornerBulletAttack::OnAttackStart() {

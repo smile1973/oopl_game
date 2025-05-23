@@ -169,10 +169,6 @@ void App::Start() {
 
 
 
-
-
-
-
     // 初始化敵人(Shopkeeper)，設定圖片、位置與初始閒置狀態
     std::vector<std::string> ShopkeeperImages2;
     ShopkeeperImages2.reserve(2);

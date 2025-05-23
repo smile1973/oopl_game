@@ -36,7 +36,7 @@ public:
      * @param deltaTime 時間增量
      * @param player 玩家角色指針，用於碰撞檢測
      */
-    void Update(float deltaTime, std::shared_ptr<Character> player);
+    void Update(float deltaTime, std::shared_ptr<Character> &player);
 
     /**
      * @brief 清除所有活躍的攻擊
