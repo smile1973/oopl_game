@@ -94,7 +94,8 @@ void DefeatScreen::Reset() {
     LOG_INFO("DefeatScreen::Reset");
 }
 
-void DefeatScreen::Get() {
+void DefeatScreen::Get(const bool isVictory = false) {
+    SetScreen(isVictory);
     m_CurrentOption = -1;
     m_IsGameStart = false;
     SetVisible(true);
@@ -114,6 +115,14 @@ void DefeatScreen::Update(){
     }
     for (const auto& option : m_Options) {
         option->Update();
+    }
+}
+
+void DefeatScreen::SetScreen(const bool isVictory) const {
+    if (isVictory) {
+        m_BaseObject -> SetImage(GA_RESOURCE_DIR "/Image/Background/victory_screen.png");
+    }else {
+        m_BaseObject -> SetImage(GA_RESOURCE_DIR "/Image/Background/defeat_screen.png");
     }
 }
 

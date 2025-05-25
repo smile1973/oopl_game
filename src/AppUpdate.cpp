@@ -178,6 +178,9 @@ void App::Update() {
                 LOG_INFO("AddMoney(30)");
             }
         }
+        if (m_PRM->GetCurrentSubPhase()==4 && m_PRM->GetCurrentMainPhase()==3) {
+            m_DefeatScreen -> Get(true);
+        }
         m_Onward->SetVisible(true);
     } else {
         m_Onward->SetVisible(false);

@@ -28,9 +28,11 @@ public:
 
     void Reset() ;
 
-    void Get();
+    void Get(bool isVictory);
 
     void Update();
+
+    void SetScreen(bool isVictory) const;
 
     void AddPassedLevel(int mainPhase);
 

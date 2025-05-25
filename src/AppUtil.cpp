@@ -179,7 +179,7 @@ void App::ValidTask() {
         }
     }
     if (m_HealthBarUI->GetHealthBar()<=0) {
-        m_DefeatScreen->Get();
+        m_DefeatScreen->Get(false);
     }
     if (m_Enemy_shopkeeper->GetVisibility()) {
         if (m_RKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::R)) {

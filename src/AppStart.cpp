@@ -99,8 +99,8 @@ void App::Start() {
     // 初始化敵人(BirdValedictorian)，設定圖片、位置與初始閒置狀態
     std::vector<std::string> birdValedictorian;
     birdValedictorian.reserve(8);
-    for (int i = 0; i < 8; ++i) {
-        birdValedictorian.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_valedictorian/hb_bird_valedictorian_idle_" + std::to_string(i+1) + ".png");
+    for (int i = 7; i >= 0; --i) {
+        birdValedictorian.emplace_back(GA_RESOURCE_DIR"/Image/Enemy/bird_valedictorian/bird_valedictorian_split_" + std::to_string(i+1) + ".png");
     }
 
     // 初始化敵人(dragonGold)，設定圖片、位置與初始閒置狀態
