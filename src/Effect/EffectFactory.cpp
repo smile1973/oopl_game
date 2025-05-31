@@ -1,33 +1,88 @@
+// src/Effect/EffectFactory.cpp - 移除 AnimationModifier 的最終版本
 #include "Effect/EffectFactory.hpp"
 #include "Util/Logger.hpp"
 #include "Effect/Shape/RectangleShape.hpp"
 
 namespace Effect {
 
+    // 私有輔助方法：創建通用圓形特效
+    std::shared_ptr<CompositeEffect> EffectFactory::CreateCircleEffect(
+        float radius,
+        const Util::Color& color,
+        float duration,
+        Modifier::FillType fillType,
+        Modifier::EdgeType edgeType,
+        const glm::vec2& size,
+        float edgeWidth) {
+
+        auto circleShape = std::make_shared<Shape::CircleShape>(radius, duration);
+        circleShape->SetColor(color);
+        circleShape->SetSize(size);
+
+        auto effect = std::make_shared<CompositeEffect>(circleShape);
+        effect->SetFillModifier(Modifier::FillModifier(fillType, 0.02f));
+
+        // 設置邊緣效果（如果需要）
+        if (edgeType != Modifier::EdgeType::NONE) {
+            Util::Color defaultEdgeColor = (edgeType == Modifier::EdgeType::GLOW) ?
+                Util::Color(1.0f, 0.0f, 1.0f, 1.0f) : Util::Color(0.0f, 0.0f, 0.0f, 0.7f);
+            effect->SetEdgeModifier(Modifier::EdgeModifier(edgeType, edgeWidth, defaultEdgeColor));
+        }
+
+        return effect;
+    }
+
+    // 私有輔助方法：創建通用矩形特效
+    std::shared_ptr<CompositeEffect> EffectFactory::CreateRectangleEffect(
+        const glm::vec2& dimensions,
+        const Util::Color& color,
+        float duration,
+        bool autoRotate,
+        float rotationSpeed,
+        const glm::vec2& size) {
+
+        auto rectangleShape = std::make_shared<Shape::RectangleShape>(
+            dimensions, 0.0f, 0.0f, duration, autoRotate, rotationSpeed
+        );
+        rectangleShape->SetColor(color);
+        rectangleShape->SetSize(size);
+
+        auto effect = std::make_shared<CompositeEffect>(rectangleShape);
+        effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
+        effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 0.0f, 1.0f, 0.9f)));
+
+        return effect;
+    }
+
     std::shared_ptr<CompositeEffect> EffectFactory::CreateEffect(EffectType type) {
         std::shared_ptr<CompositeEffect> effect;
 
         switch (type) {
             case EffectType::SKILL_Z: {
-                auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 1.0f);
-                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.3f));
-                circleShape->SetSize({500, 500});
-                effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.005f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
+                effect = CreateCircleEffect(
+                    0.4f,
+                    Util::Color(1.0f, 0.8f, 0.7f, 0.3f),
+                    1.0f,
+                    Modifier::FillType::SOLID,
+                    Modifier::EdgeType::GLOW,
+                    {500, 500},
+                    0.005f
+                );
                 break;
             }
 
             case EffectType::SKILL_X: {
-                auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 2.0f);
-                circleShape->SetColor(Util::Color(1.0f, 0.8f, 0.7f, 0.1f));
-                circleShape->SetSize({150, 150});
-
-                effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::HOLLOW, 0.02f));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
+                effect = CreateCircleEffect(
+                    0.4f,
+                    Util::Color(1.0f, 0.8f, 0.7f, 0.1f),
+                    2.0f,
+                    Modifier::FillType::HOLLOW,
+                    Modifier::EdgeType::GLOW,
+                    {150, 150},
+                    0.02f
+                );
+                // 設置移動（替代尾跡效果）
                 effect->SetMovementModifier(Modifier::MovementModifier(true, 600.0f, 800.0f, {1.0f, 0.0f}));
-                effect->SetAnimationModifier(Modifier::AnimationModifier(Modifier::AnimationType::TRAIL, 1.0f, 2.0f));
                 break;
             }
 
@@ -42,74 +97,71 @@ namespace Effect {
             }
 
             case EffectType::SKILL_V: {
-                auto circleShape = std::make_shared<Shape::CircleShape>(0.4f, 1.5f);
-                circleShape->SetColor(Util::Color(0.9f, 0.9f, 0.9f, 0.05f)); // 半透明藍色
-
-                effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.05f, Util::Color(1.0f, 0.0f, 1.0f, 1.0f)));
-                effect->SetAnimationModifier(Modifier::AnimationModifier(Modifier::AnimationType::RIPPLE, 1.0f, 1.0f));
+                // 移除波紋效果，改用更強的發光效果來替代
+                effect = CreateCircleEffect(
+                    0.4f,
+                    Util::Color(0.9f, 0.9f, 0.9f, 0.05f),
+                    1.5f,
+                    Modifier::FillType::SOLID,
+                    Modifier::EdgeType::GLOW,
+                    {400, 400},
+                    0.08f  // 更寬的發光邊緣
+                );
                 break;
             }
 
             case EffectType::ENEMY_ATTACK_2: {
-                // 敵人攻擊2：空心圓，邊緣發光，不會移動
-                auto circleShape = std::make_shared<Shape::CircleShape>(0.35f, 1.0f);
-                circleShape->SetColor(Util::Color(1.0f, 0.2f, 0.0f, 0.7f)); // 半透明橙紅色
-
-                effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::HOLLOW, 0.04f));
+                effect = CreateCircleEffect(
+                    0.35f,
+                    Util::Color(1.0f, 0.2f, 0.0f, 0.7f),
+                    1.0f,
+                    Modifier::FillType::HOLLOW,
+                    Modifier::EdgeType::GLOW,
+                    {400, 400},
+                    0.06f
+                );
+                // 覆寫邊緣顏色為橙色
                 effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.06f, Util::Color(1.0f, 0.5f, 0.0f, 1.0f)));
                 break;
             }
 
             case EffectType::RECT_LASER: {
-                // 矩形雷射：實心矩形，邊緣發光
-                auto rectangleShape = std::make_shared<Shape::RectangleShape>(
-                    glm::vec2(1.0f, 0.1f), // 寬高比例
-                    0.0f,                  // 粗細 (實心)
-                    0.0f,                  // 初始旋轉角度
-                    2.0f,                  // 持續時間
-                    false,                 // 不啟用自動旋轉
-                    0.0f                   // 旋轉速度
+                effect = CreateRectangleEffect(
+                    glm::vec2(1.0f, 0.1f),
+                    Util::Color(1.0f, 0.7f, 0.4f, 0.3f),
+                    2.0f,
+                    false,
+                    0.0f,
+                    {2560, 2560}
                 );
-                rectangleShape->SetColor(Util::Color(1.0f, 0.7f, 0.4f, 0.3f));
-                rectangleShape->SetSize({2560, 2560}); // 效果尺寸
-
-                effect = std::make_shared<CompositeEffect>(rectangleShape);
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.01f, Util::Color(1.0f, 0.0f, 1.0f, 0.9f)));
-                // effect->SetMovementModifier(Modifier::MovementModifier(true, 800.0f, 1200.0f, {1.0f, 0.0f}));
                 break;
             }
 
             case EffectType::RECT_BEAM: {
-                // 矩形光束：空心矩形，邊緣發光，自動旋轉
-                auto rectangleShape = std::make_shared<Shape::RectangleShape>(
-                    glm::vec2(1.0f, 0.05f), // 寬高比例
-                    0.0,                     // 粗細 (實心) 空心放 width
-                    0.0f,                    // 初始旋轉角度
-                    5.0f,                    // 持續時間
-                    true,                    // 啟用自動旋轉
-                    0.3f                     // 旋轉速度 (弧度/秒)
+                effect = CreateRectangleEffect(
+                    glm::vec2(1.0f, 0.05f),
+                    Util::Color(1.0f, 0.7f, 0.4f, 0.3f),
+                    5.0f,
+                    true,
+                    0.3f,
+                    {1600, 1600}
                 );
-                rectangleShape->SetColor(Util::Color(1.0f, 0.7f, 0.4f, 0.3f));
-                rectangleShape->SetSize({1600, 1600}); // 效果尺寸
-
-                effect = std::make_shared<CompositeEffect>(rectangleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.02f, Util::Color(1.0f, 0.0f, 1.0f, 0.9f)));
                 break;
             }
-                
+
             default:
                 LOG_ERROR("Unknown effect type requested from EffectFactory");
-                // Provide a default effect
-                auto defaultShape = std::make_shared<Shape::CircleShape>(0.3f, 1.0f);
-                defaultShape->SetColor(Util::Color(255, 0, 255, 128)); // Semi-transparent magenta
-                effect = std::make_shared<CompositeEffect>(defaultShape);
+                effect = CreateCircleEffect(
+                    0.3f,
+                    Util::Color(255, 0, 255, 128),
+                    1.0f,
+                    Modifier::FillType::SOLID,
+                    Modifier::EdgeType::NONE,
+                    {200, 200}
+                );
                 break;
         }
-        
+
         return effect;
     }
 
@@ -117,33 +169,29 @@ namespace Effect {
         bool isCircle,
         const Modifier::FillType& fillType,
         const Modifier::EdgeType& edgeType,
-        bool isMoving,
-        const Modifier::AnimationType& animType
+        bool isMoving
     ) {
-        std::shared_ptr<Shape::BaseShape> baseShape;
-        
+        std::shared_ptr<CompositeEffect> effect;
+
         if (isCircle) {
-            baseShape = std::make_shared<Shape::CircleShape>(0.4f, 1.0f);
+            effect = CreateCircleEffect(
+                0.4f,
+                Util::Color(255, 255, 255, 255),
+                1.0f,
+                fillType,
+                edgeType,
+                {400, 400}
+            );
         } else {
-            baseShape = std::make_shared<Shape::EllipseShape>(glm::vec2(0.5f, 0.3f), 1.0f);
+            auto ellipseShape = std::make_shared<Shape::EllipseShape>(glm::vec2(0.5f, 0.3f), 1.0f);
+            effect = std::make_shared<CompositeEffect>(ellipseShape);
+            effect->SetFillModifier(Modifier::FillModifier(fillType, 0.03f));
+            effect->SetEdgeModifier(Modifier::EdgeModifier(edgeType, 0.05f, Util::Color(255, 255, 255, 255)));
         }
-        
-        auto effect = std::make_shared<CompositeEffect>(baseShape);
-        
-        // Set fill modifier
-        effect->SetFillModifier(Modifier::FillModifier(fillType, 0.03f));
 
-        // Set edge modifier
-        effect->SetEdgeModifier(Modifier::EdgeModifier(edgeType, 0.05f, Util::Color(255, 255, 255, 255)));
-
-        // Set movement modifier
+        // 設置移動修飾器
         if (isMoving) {
             effect->SetMovementModifier(Modifier::MovementModifier(true, 250.0f, 400.0f, {1.0f, 0.0f}));
-        }
-
-        // Set animation modifier
-        if (animType != Modifier::AnimationType::NONE) {
-            effect->SetAnimationModifier(Modifier::AnimationModifier(animType, 1.0f, 1.0f));
         }
         
         return effect;

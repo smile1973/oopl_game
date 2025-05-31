@@ -66,12 +66,6 @@ void RectangleAttack::CreateWarningEffect() {
         warningEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
         warningEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.001, Util::Color(0.9, 0.1, 0.1, 0.7)));
 
-        // 關閉任何動畫
-        warningEffect->SetAnimationModifier(Effect::Modifier::AnimationModifier(
-            Effect::Modifier::AnimationType::NONE,
-            0.0f,
-            0.0f
-        ));
 
         warningEffect->SetDuration(m_Delay + 1.0f);  // 確保持續足夠長的時間
         warningEffect->Play(m_Position, z_ind);
@@ -103,13 +97,6 @@ void RectangleAttack::CreateAttackEffect() {
 
         // 設置填充與邊緣效果
         rectangleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
-
-        // 關閉任何動畫
-        rectangleEffect->SetAnimationModifier(Effect::Modifier::AnimationModifier(
-            Effect::Modifier::AnimationType::NONE,
-            0.0f,
-            0.0f
-        ));
 
         // 使用較大值來確保特效持續整個攻擊階段
         float effectDuration = m_AttackDuration * 1.5f;

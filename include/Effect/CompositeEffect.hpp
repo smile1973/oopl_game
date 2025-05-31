@@ -1,3 +1,4 @@
+// include/Effect/CompositeEffect.hpp - 移除 AnimationModifier 版本
 #ifndef COMPOSITEEFFECT_HPP
 #define COMPOSITEEFFECT_HPP
 
@@ -7,11 +8,11 @@
 #include "Effect/Modifier/FillModifier.hpp"
 #include "Effect/Modifier/EdgeModifier.hpp"
 #include "Effect/Modifier/MovementModifier.hpp"
-#include "Effect/Modifier/AnimationModifier.hpp"
+// 移除 AnimationModifier 引用
 
 namespace Effect {
 
-    // 組合所有修飾器的特效類
+    // 組合所有修飾器的特效類（移除動畫修飾器）
     class CompositeEffect : public IEffect {
     public:
         // 建構函數基於形狀類型
@@ -27,11 +28,10 @@ namespace Effect {
         void Play(const glm::vec2& position, float zIndex = 0.0f) override;
         void Reset() override;
 
-        // 修飾器設置
+        // 修飾器設置（移除動畫修飾器）
         void SetFillModifier(const Modifier::FillModifier& modifier) { m_FillModifier = modifier; }
         void SetEdgeModifier(const Modifier::EdgeModifier& modifier) { m_EdgeModifier = modifier; }
         void SetMovementModifier(const Modifier::MovementModifier& modifier) { m_MovementModifier = modifier; }
-        void SetAnimationModifier(const Modifier::AnimationModifier& modifier) { m_AnimationModifier = modifier; }
 
         void SetDuration(float duration) override {
             m_Duration = duration;
@@ -50,7 +50,6 @@ namespace Effect {
         Modifier::FillModifier m_FillModifier;
         Modifier::EdgeModifier m_EdgeModifier;
         Modifier::MovementModifier m_MovementModifier;
-        Modifier::AnimationModifier m_AnimationModifier;
         float m_direction = 1.0f;
     };
 

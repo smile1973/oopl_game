@@ -1,4 +1,4 @@
-// Effect/CompositeEffect.cpp
+// src/Effect/CompositeEffect.cpp - 移除 AnimationModifier 版本
 #include "Effect/CompositeEffect.hpp"
 #include "Util/Logger.hpp"
 
@@ -34,12 +34,11 @@ namespace Effect {
         // 先綁定程序，這樣才能設置 uniform
         program->Bind();
 
-        // 依次應用修飾器
+        // 依次應用修飾器（移除動畫修飾器）
         m_FillModifier.Apply(*program);
         m_EdgeModifier.Apply(*program);
-        m_AnimationModifier.Apply(*program, m_ElapsedTime);
 
-        // 設置時間 uniform - 確保基本的時間變量存在於所有著色器中
+        // 設置時間 uniform - 基本的時間變量
         GLint timeLocation = glGetUniformLocation(program->GetId(), "u_Time");
         if (timeLocation != -1) {
             glUniform1f(timeLocation, m_ElapsedTime);
@@ -95,7 +94,6 @@ namespace Effect {
         m_State = State::ACTIVE;
 
         // Sync position to base shape
-
         m_BaseShape->Play(position, zIndex);
 
         // Reset movement modifier and set start position

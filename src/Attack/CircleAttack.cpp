@@ -118,11 +118,6 @@ void CircleAttack::SyncWithEffect() {
     }
 }
 
-float CircleAttack::CalculateDirectionAngle() const {
-    float angle = atan2(m_Direction.y, m_Direction.x);
-    return angle;
-}
-
 void CircleAttack::CreateDirectionIndicator() {
     // 懶初始化箭頭圖片資源
     if (!s_ArrowImage) s_ArrowImage = std::make_shared<Util::Image>(GA_RESOURCE_DIR "/Image/arrow.png");
@@ -139,7 +134,7 @@ void CircleAttack::CreateDirectionIndicator() {
     m_DirectionIndicator->m_Transform.translation = m_Position;
     m_DirectionIndicator->m_Transform.scale = glm::vec2(0.2f, 0.2f);
 
-    float angle = CalculateDirectionAngle();
+    float angle = atan2(m_Direction.y, m_Direction.x);
     m_DirectionIndicator->m_Transform.rotation = angle;
 
     App::GetInstance().AddToRoot(m_DirectionIndicator);

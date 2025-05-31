@@ -1,3 +1,4 @@
+// src/Effect/Modifier/FillModifier.cpp - 優化版本
 #include "Effect/Modifier/FillModifier.hpp"
 #include "Util/Logger.hpp"
 
@@ -9,25 +10,32 @@ namespace Effect {
         }
 
         void FillModifier::Apply(Core::Program& program) {
-            // 如果是第一次應用，獲取uniform位置
+            // 獲取 uniform 位置（只在第一次獲取）
             if (m_FillTypeLocation == -1) {
                 m_FillTypeLocation = glGetUniformLocation(program.GetId(), "u_FillType");
-                m_ThicknessLocation = glGetUniformLocation(program.GetId(), "u_Thickness");
 
-                // 如果找不到標準位置，嘗試查找替代名稱 (用於 Rectangle 著色器)
+                // 嘗試標準名稱，如果失敗則嘗試替代名稱
+                m_ThicknessLocation = glGetUniformLocation(program.GetId(), "u_Thickness");
                 if (m_ThicknessLocation == -1) {
                     m_ThicknessLocation = glGetUniformLocation(program.GetId(), "u_FillThickness");
                 }
+
+                // 檢查是否成功獲取必要的 uniform 位置
+                if (m_FillTypeLocation == -1) {
+                    LOG_WARN("u_FillType uniform not found in program {}", program.GetId());
+                }
+                if (m_ThicknessLocation == -1) {
+                    LOG_WARN("u_Thickness/u_FillThickness uniform not found in program {}", program.GetId());
+                }
             }
 
-            // 設置uniform值
-            glUniform1i(m_FillTypeLocation, static_cast<int>(m_FillType));
-            glUniform1f(m_ThicknessLocation, m_Thickness);
+            // 設置 uniform 值
+            if (m_FillTypeLocation != -1) {
+                glUniform1i(m_FillTypeLocation, static_cast<int>(m_FillType));
+            }
 
-            // 額外嘗試設置特定於 Rectangle 著色器的 uniform 變數
-            GLint fillThicknessLocation = glGetUniformLocation(program.GetId(), "u_FillThickness");
-            if (fillThicknessLocation != -1 && fillThicknessLocation != m_ThicknessLocation) {
-                glUniform1f(fillThicknessLocation, m_Thickness);
+            if (m_ThicknessLocation != -1) {
+                glUniform1f(m_ThicknessLocation, m_Thickness);
             }
         }
     }
