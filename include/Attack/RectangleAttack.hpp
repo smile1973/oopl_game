@@ -1,4 +1,3 @@
-// include/Attack/RectangleAttack.hpp
 #ifndef RECTANGLEATTACK_HPP
 #define RECTANGLEATTACK_HPP
 
@@ -7,12 +6,13 @@
 class RectangleAttack : public Attack {
 public:
     enum class Direction {
-        HORIZONTAL,  // 水平雷射
-        VERTICAL,    // 垂直雷射
-        DIAGONAL_TL_BR,  // 左上到右下對角線
-        DIAGONAL_TR_BL,  // 右上到左下對角線
+        HORIZONTAL,
+        VERTICAL,
+        DIAGONAL_TL_BR,
+        DIAGONAL_TR_BL,
         CUSTOM
     };
+
     RectangleAttack(const glm::vec2& position, float delay,
                    float width = 200.0f, float height = 100.0f,
                    float rotation = 0.0f, int sequenceNumber = 0);
@@ -32,10 +32,14 @@ public:
         m_AutoRotate = enable;
         m_RotationSpeed = speed;
     }
+
     bool IsAutoRotating() const { return m_AutoRotate; }
     float GetRotationSpeed() const { return m_RotationSpeed; }
     void CleanupVisuals() override;
-    void SetZ(float zInd) { z_ind = zInd; }
+
+    // 移除 SetZ 方法，改用繼承的 SetAttackZIndex
+    void SetAttackZIndex(float zIndex);
+
 protected:
     void CreateWarningEffect() override;
     void CreateAttackEffect() override;
@@ -50,22 +54,22 @@ private:
     [[nodiscard]] bool IsPointInPolygon(const glm::vec2& point, const glm::vec2* vertices, int vertexCount) const;
     [[nodiscard]] bool IsPointInRectangle(const glm::vec2& point) const;
 
-    float m_Width;                 // 矩形寬度
-    float m_Height;                // 矩形高度
-    float m_Rotation;              // 矩形旋轉角度（弧度）
-    Util::Color m_Color;           // 攻擊效果顏色
-    bool m_UseGlowEffect = true;   // 是否使用發光效果
+    float m_Width;
+    float m_Height;
+    float m_Rotation;
+    Util::Color m_Color;
+    bool m_UseGlowEffect = true;
     Direction m_Direction;
 
-    bool m_AutoRotate = false;       // 是否啟用自動旋轉
-    float m_RotationSpeed = 0.5f;    // 旋轉速度（弧度/秒）
+    bool m_AutoRotate = false;
+    float m_RotationSpeed = 0.5f;
+    // 移除硬編碼的 z_ind
 
     static std::shared_ptr<Util::Image> s_ClockwiseImage;
     static std::shared_ptr<Util::Image> s_CounterClockwiseImage;
     std::shared_ptr<Util::GameObject> m_DirectionIndicator;
 
     void CreateDirectionIndicator();
-    float z_ind = 10.0f;
 };
 
 #endif // RECTANGLEATTACK_HPP

@@ -1,4 +1,3 @@
-// src/Attack/Attack.cpp
 #include "Attack/Attack.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
@@ -7,7 +6,7 @@
 
 // 建構函數
 Attack::Attack(const glm::vec2& position, float delay, int sequenceNumber)
-    : Util::GameObject(nullptr, 20.0f), // Z索引設為20，確保攻擊效果在前景
+    : Util::GameObject(nullptr, 20.0f), // 設定基礎 Z-index 為 20
       m_Position(position),
       m_Delay(delay),
       m_SequenceNumber(sequenceNumber){
@@ -18,13 +17,13 @@ Attack::Attack(const glm::vec2& position, float delay, int sequenceNumber)
     m_State = State::CREATED;
 }
 
-// 主要更新函數 - 根據當前狀態調用相應的處理函數
+// 主要更新函數
 void Attack::Update(float deltaTime) {
     // 首次更新時，轉換到WARNING狀態
     if (m_IsFirstUpdate) {
         m_IsFirstUpdate = false;
         ChangeState(State::WARNING);
-        return; // 讓下一幀再開始計時
+        return;
     }
 
     m_ElapsedTime += deltaTime;
@@ -39,7 +38,6 @@ void Attack::Update(float deltaTime) {
 
         case State::COUNTDOWN:
             OnCountdownUpdate(deltaTime);
-
             UpdateTimeBar(CalculateProgress());
             if (m_ElapsedTime >= m_Delay) {
                 ChangeState(State::ATTACKING);
@@ -54,15 +52,12 @@ void Attack::Update(float deltaTime) {
             break;
 
         case State::FINISHED:
-            // 已結束的攻擊不做額外處理
-            break;
-
         case State::CREATED:
             break;
     }
 }
 
-// 繪製函數 - GameObject的虛函數
+// 繪製函數
 void Attack::Draw() {
     if (m_State == State::CREATED) {
         return;
@@ -75,9 +70,17 @@ void Attack::SetPosition(const glm::vec2& position) {
     m_Position = position;
     m_Transform.translation = position;
 
-    // 如果已經創建了特效，也要更新它們的位置
-    if (m_WarningEffect) {
-        m_WarningEffect->Play(position, m_ZIndex + 0.1f);
+    // 更新所有特效位置（如果已經創建）
+    if (m_WarningEffect && m_WarningEffect->IsActive()) {
+        m_WarningEffect->Play(position, GetWarningZIndex());
+    }
+    if (m_AttackEffect && m_AttackEffect->IsActive()) {
+        m_AttackEffect->Play(position, GetAttackZIndex());
+    }
+    if (m_TimeBarEffect && m_TimeBarEffect->IsActive()) {
+        glm::vec2 barPosition = position;
+        barPosition.y -= 50.0f;
+        m_TimeBarEffect->Play(barPosition, GetTimeBarZIndex());
     }
 
     if (m_SequenceText) {
@@ -85,11 +88,25 @@ void Attack::SetPosition(const glm::vec2& position) {
     }
 }
 
+// Z-index 更新方法
+void Attack::UpdateAllEffectZIndexes() {
+    // 更新所有特效的 Z-index
+    if (m_WarningEffect && m_WarningEffect->IsActive()) {
+        m_WarningEffect->Play(m_Position, GetWarningZIndex());
+    }
+    if (m_AttackEffect && m_AttackEffect->IsActive()) {
+        m_AttackEffect->Play(m_Position, GetAttackZIndex());
+    }
+    if (m_TimeBarEffect && m_TimeBarEffect->IsActive()) {
+        glm::vec2 barPosition = m_Position;
+        barPosition.y -= 50.0f;
+        m_TimeBarEffect->Play(barPosition, GetTimeBarZIndex());
+    }
+}
+
 // 設置序列號
 void Attack::SetSequenceNumber(int number) {
     m_SequenceNumber = number;
-
-    // 如果已經創建了序列文字，更新它
     if (m_SequenceText) {
         m_SequenceText->SetText(std::to_string(m_SequenceNumber));
     }
@@ -97,32 +114,25 @@ void Attack::SetSequenceNumber(int number) {
 
 // 狀態轉換函數
 void Attack::ChangeState(State newState) {
-    // 如果狀態沒有變化，直接返回
     if (m_State == newState) return;
 
-    // 保存舊狀態
     State oldState = m_State;
     m_State = newState;
-    m_ElapsedTime = 0.0f; // 重置計時器
+    m_ElapsedTime = 0.0f;
 
-    // 調用對應的狀態開始處理函數
     switch (newState) {
         case State::WARNING:
             OnWarningStart();
             break;
-
         case State::COUNTDOWN:
             OnCountdownStart();
             break;
-
         case State::ATTACKING:
             OnAttackStart();
             break;
-
         case State::FINISHED:
             OnFinishedStart();
             break;
-
         case State::CREATED:
             break;
     }
@@ -133,7 +143,6 @@ void Attack::OnWarningStart() {
     CreateWarningEffect();
 }
 
-// 警告階段更新
 void Attack::OnWarningUpdate(float deltaTime) {
     (void)deltaTime;
 }
@@ -143,7 +152,6 @@ void Attack::OnCountdownStart() {
     CreateTimeBar();
 }
 
-// 倒數階段更新
 void Attack::OnCountdownUpdate(float deltaTime) {
     (void)deltaTime;
 }
@@ -155,7 +163,6 @@ void Attack::OnAttackStart() {
     if (m_WarningEffect) {
         m_WarningEffect->Reset();
     }
-
     if (m_TimeBarEffect) {
         m_TimeBarEffect->Reset();
     }
@@ -175,26 +182,22 @@ void Attack::OnAttackUpdate(float deltaTime) {
 
 // 完成階段開始
 void Attack::OnFinishedStart() {
-    // 清理所有特效
     if (m_AttackEffect) {
         m_AttackEffect->Reset();
     }
 }
 
-// 創建時間條
+// 創建時間條 - 使用統一的 Z-index 管理
 void Attack::CreateTimeBar() {
-    // 使用矩形特效創建一個時間條
     auto rectangleEffect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
 
-    // 設置時間條的屬性
     if (auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(rectangleEffect->GetBaseShape())) {
-        rectangleShape->SetDimensions(glm::vec2(1.0f, 0.1f)); // 寬高比
+        rectangleShape->SetDimensions(glm::vec2(1.0f, 0.1f));
         rectangleShape->SetSize({200.0, 200.0});
-        rectangleShape->SetRotation(0.0f); // 不旋轉
-        rectangleShape->SetAutoRotation(false); // 禁用自動旋
+        rectangleShape->SetRotation(0.0f);
+        rectangleShape->SetAutoRotation(false);
     }
 
-    // 設置填充與邊緣效果
     rectangleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
     rectangleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(
         Effect::Modifier::EdgeType::GLOW,
@@ -204,13 +207,12 @@ void Attack::CreateTimeBar() {
 
     rectangleEffect->GetBaseShape()->SetColor(Util::Color(0.9, 0.9, 0.9, 0.5));
 
-    // 設置位置 - 在警告效果下方
+    // 使用統一的 Z-index 管理
     glm::vec2 barPosition = m_Position;
-    barPosition.y -= 50.0f; // 向下偏移
+    barPosition.y -= 50.0f;
 
-    // 播放時間條特效
     rectangleEffect->SetDuration(m_Delay);
-    rectangleEffect->Play(barPosition, m_ZIndex + 1.0f);
+    rectangleEffect->Play(barPosition, GetTimeBarZIndex()); // 使用統一的 Z-index
 
     m_TimeBarEffect = rectangleEffect;
 }
@@ -219,9 +221,7 @@ void Attack::CreateTimeBar() {
 void Attack::UpdateTimeBar(float progress) {
     if (!m_TimeBarEffect) return;
 
-    // 根據進度更新時間條的寬度和顏色
     if (auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(m_TimeBarEffect->GetBaseShape())) {
-        // 更新寬度
         float width = 0.8f * (1.0f - progress);
         rectangleShape->SetDimensions(glm::vec2(width, 0.05f));
     }
@@ -235,10 +235,8 @@ float Attack::CalculateProgress() const {
 
 // 碰撞檢測
 bool Attack::CheckCollision(const std::shared_ptr<Character>& character) {
-    // 只檢查攻擊階段
     if (m_State != State::ATTACKING) return false;
 
-    // 如果角色處於無敵狀態，則不檢測碰撞
     if (character->IsInvincible()) {
         return false;
     }

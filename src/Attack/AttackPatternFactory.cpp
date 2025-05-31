@@ -16,7 +16,7 @@ void AttackPatternFactory::AddCircleAttackRow(
     const glm::vec2& startPos,
     bool isHorizontal,
     int count,
-    float zind,
+    float zIndex,  // 正確接收 Z-index 參數
     float spacing,
     float radius,
     const Util::Color& color,
@@ -28,7 +28,6 @@ void AttackPatternFactory::AddCircleAttackRow(
     float timeInterval) {
 
     for (int i = 0; i < count; i++) {
-        // Calculate position based on direction
         glm::vec2 position = startPos;
         if (isHorizontal) {
             position.x += static_cast<float>(i) * spacing;
@@ -36,12 +35,12 @@ void AttackPatternFactory::AddCircleAttackRow(
             position.y += static_cast<float>(i) * spacing;
         }
 
-        // Create attack
         auto attack = std::make_shared<CircleAttack>(position, delay, radius, i + 1);
         attack->SetColor(color);
-        attack->SetZ(zind);
 
-        // Set movement if applicable
+        // 使用統一的 Z-index 設置方法
+        attack->SetAttackZIndex(zIndex);
+
         if (moveSpeed > 0.0f) {
             attack->SetMovementParams(moveDirection, moveSpeed, moveDistance);
         }
@@ -66,19 +65,21 @@ void AttackPatternFactory::AddCrossLaserAttack(
     );
     horizontalLaser->SetColor(color);
     horizontalLaser->SetAttackDuration(duration);
-    horizontalLaser->SetAutoRotation(false); // 確保不旋轉
+    horizontalLaser->SetAutoRotation(false);
+    // 使用統一的 Z-index 設置方法
+    horizontalLaser->SetAttackZIndex(10.0f);
 
     // 建立垂直雷射
     auto verticalLaser = std::make_shared<RectangleAttack>(
-        centerPosition, delay, width, length, 1.57f, sequenceNumber + 1  // 1.57 rad ≈ 90度
+        centerPosition, delay, width, length, 1.57f, sequenceNumber + 1
     );
     verticalLaser->SetColor(color);
     verticalLaser->SetAttackDuration(duration);
-    verticalLaser->SetAutoRotation(false); // 確保不旋轉
+    verticalLaser->SetAutoRotation(false);
+    // 使用統一的 Z-index 設置方法
+    verticalLaser->SetAttackZIndex(10.0f);
 
     // 添加到模式
-    horizontalLaser->SetZ(10.0);
-    verticalLaser->SetZ(10.0);
     pattern->AddAttack(horizontalLaser, startTime);
     pattern->AddAttack(verticalLaser, startTime);
 }
@@ -136,7 +137,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, 360.0f), // Starting position (top left)
             true,                      // Horizontal row
             10,                        // 10 circles
-            20.0,                  // zindex
+            16.0,                  // zindex
             128.0f,                    // 128px spacing
             32.0f,                     // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
@@ -169,7 +170,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, 360.0f), // Starting position (top left)
             true,                      // Horizontal row
             10,                        // 10 circles
-            20.0,                  // zindex
+            16.0,                  // zindex
             128.0f,                    // 128px spacing
             32.0f,                     // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
@@ -208,7 +209,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, -360.0f), // Starting position (bottom left)
             true,                       // Horizontal row
             10,                         // 10 circles
-            20.0f,
+            16.0f,
             128.0f,                     // 128px spacing
             32.0f,                      // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
@@ -241,7 +242,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, 360.0f), // Starting position (top left)
             true,                      // Horizontal row
             10,                        // 10 circles
-            20.0f,
+            16.0f,
             128.0f,                    // 128px spacing
             32.0f,                     // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
@@ -758,7 +759,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle8Pattern() {
     float rotationSpeed = 0.1f;
     rotateAttack1->SetAutoRotation(true, rotationSpeed);
     rotateAttack1->SetAttackDuration(30.0f);
-    rotateAttack1->SetZ(30.0f);
+    rotateAttack1->SetAttackZIndex(30.0f);
     pattern->AddAttack(rotateAttack1, 1.0f);
 
     std::uniform_real_distribution<float> y_pos(-360, 360);
