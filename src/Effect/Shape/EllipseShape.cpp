@@ -42,10 +42,6 @@ namespace Effect {
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            // 不要在這裡綁定程序，因為 CompositeEffect 已經綁定了
-            // 只設置自己特有的 uniform 變數，不要重設已由修飾器設置的變數
-
-            // 設置橢圓特有的 uniform
             glUniform2f(m_RadiiLocation, m_Radii.x, m_Radii.y);
 
             // 設置顏色 - 這個可能會與修飾器衝突，所以確保順序正確
@@ -54,16 +50,12 @@ namespace Effect {
             // 設置時間
             glUniform1f(m_TimeLocation, m_ElapsedTime);
 
-            // 不要進行驗證，因為這可能會干擾修飾器的設置
-            // s_Program->Validate();
-
             // Draw
             s_VertexArray->Bind();
             s_VertexArray->DrawTriangles();
         }
 
         void EllipseShape::InitializeResources() {
-            // Initialize shader program
             try {
                 s_Program = std::make_unique<Core::Program>(
                     GA_RESOURCE_DIR "/shaders/Ellipse.vert",

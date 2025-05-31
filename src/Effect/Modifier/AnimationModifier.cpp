@@ -27,5 +27,5 @@ namespace Effect {
             glUniform1f(m_SpeedLocation, m_Speed);
         }
 
-    } // namespace Modifier
-} // namespace Effect
+    }
+}

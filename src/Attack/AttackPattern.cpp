@@ -26,13 +26,11 @@ void AttackPattern::AddEnemyMovement(const EnemyMovement& movement, float startT
     // 新增敵人移動到列表中，加入持續時間
     m_Movements.push_back({movement, startTime, false, duration});
 
-    // 根據開始時間排序
     std::sort(m_Movements.begin(), m_Movements.end(),
               [](const MovementItem& a, const MovementItem& b) {
                   return a.startTime < b.startTime;
               });
 
-    // 更新總持續時間（考慮移動的持續時間）
     float movementEndTime = startTime + duration;
     if (movementEndTime > m_TotalDuration) {
         m_TotalDuration = movementEndTime;
@@ -46,7 +44,6 @@ void AttackPattern::Start(std::shared_ptr<Enemy> &enemy) {
     m_State = State::RUNNING;
     m_ElapsedTime = 0.0f;
 
-    // 重置所有攻擊和移動的狀態
     for (auto& item : m_Attacks) {item.started = false;}
     for (auto& item : m_Movements) {item.executed = false;}
 }
@@ -66,13 +63,10 @@ void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
     // 檢查是否達到總持續時間
     if (m_ElapsedTime >= m_TotalDuration) {
         m_State = State::FINISHED;
-        LOG_DEBUG("Attack pattern completed");
         return;
     }
 
-    // 更新攻擊 - 只負責初始化和啟動攻擊，不更新攻擊邏輯
     for (auto& item : m_Attacks) {
-        // 檢查是否到達攻擊開始時間
         if (!item.started && m_ElapsedTime >= item.startTime) {
             item.started = true;
 
@@ -81,7 +75,6 @@ void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
 
             // 將攻擊註冊到攻擊管理器，後續更新由管理器處理
             AttackManager::GetInstance().RegisterAttack(item.attack);
-            LOG_DEBUG("Starting attack at time {}", m_ElapsedTime);
         }
     }
 
@@ -94,8 +87,6 @@ void AttackPattern::Update(float deltaTime, std::shared_ptr<Character> player) {
             // 執行移動函數，傳入持續時間參數
             if (m_Enemy) {
                 item.movement(m_Enemy, item.duration);
-                LOG_DEBUG("Executing enemy movement at time {}, duration: {}",
-                         m_ElapsedTime, item.duration);
             }
         }
     }

@@ -72,10 +72,7 @@ void EnemyAttackController::InitBossPatterns() {
 
 void EnemyAttackController::SelectRandomPatternForBoss() {
     // 確保有模式類型可選
-    if (m_BossPatternTypes.empty()) {
-        LOG_ERROR("No pattern types available for Boss");
-        return;
-    }
+    if (m_BossPatternTypes.empty()) return;
 
     // 生成隨機索引
     std::uniform_int_distribution<int> distribution(0, m_BossPatternTypes.size() - 1);
@@ -84,12 +81,7 @@ void EnemyAttackController::SelectRandomPatternForBoss() {
     // 獲取隨機選擇的模式類型
     int patternType = m_BossPatternTypes[randomIndex];
 
-    LOG_DEBUG("Randomly selected pattern type {} for Boss", patternType);
-
-    // 清空當前隊列
     ClearPatterns();
-
-    // 根據模式類型創建新的模式實例
     std::shared_ptr<AttackPattern> newPattern = nullptr;
 
     switch (patternType) {
@@ -110,7 +102,6 @@ void EnemyAttackController::SelectRandomPatternForBoss() {
         break;
     }
 
-    // 添加新創建的模式
     if (newPattern) {
         AddPattern(newPattern);
         LOG_DEBUG("Created new pattern instance of type {} for Boss", patternType);
@@ -181,8 +172,6 @@ void EnemyAttackController::Start() {
         // 嘗試切換到下一個模式
         SwitchToNextPattern();
     }
-
-    LOG_DEBUG("Enemy attack controller started");
 }
 
 void EnemyAttackController::Stop() {
@@ -213,7 +202,6 @@ void EnemyAttackController::SwitchToNextPattern() {
     // 開始新模式
     if (m_CurrentPattern && m_IsActive) {
         m_CurrentPattern->Start(m_Enemy);
-        LOG_DEBUG("Switched to next attack pattern");
     }
 }
 
@@ -241,6 +229,5 @@ void EnemyAttackController::InitPatternsForCurrentPhase() {
         if (m_CurrentSubPhase == 1) InitBattle7Patterns();      // 敵人7
         else if (m_CurrentSubPhase == 2) InitBattle8Patterns(); // 敵人8
     }
-
     Start();
 }

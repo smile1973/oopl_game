@@ -189,7 +189,6 @@ void Enemy::SwitchImageSet(const std::vector<std::string>& newImageSet, bool kee
 
     // 更新Character基类的图片集
     SetImagePathSet(newImageSet);
-    // m_ImagePathSet = newImageSet;
 
     // 重建动画
     RebuildAnimation(newImageSet, keepCurrentFrame);
@@ -217,7 +216,6 @@ void Enemy::SwitchImageSetByIndex(int imageSetIndex, const bool keepCurrentFrame
 
     // 更新Character基类的图片集
     SetImagePathSet(newImageSet);
-    // m_ImagePathSet = newImageSet;
 
     // 重建动画
     RebuildAnimation(newImageSet, keepCurrentFrame);

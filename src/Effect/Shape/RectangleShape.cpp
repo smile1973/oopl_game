@@ -104,15 +104,6 @@ namespace Effect {
                 while (m_Rotation > 2.0f * 3.14159f) {
                     m_Rotation -= 2.0f * 3.14159f;
                 }
-
-                // 每1.5秒記錄一次旋轉角度（避免日誌過多）
-                static float logTimer = 0.0f;
-                logTimer += deltaTime;
-                if (logTimer > 1.5f) {
-                    LOG_DEBUG("RectangleShape auto-rotating: {:.2f} radians, speed: {:.2f}",
-                              m_Rotation, m_RotationSpeed);
-                    logTimer = 0.0f;
-                }
             }
         }
 

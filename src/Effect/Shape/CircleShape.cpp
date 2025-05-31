@@ -38,7 +38,6 @@ namespace Effect {
             // Update matrices
             m_MatricesBuffer->SetData(0, data);
 
-            // Enable blending
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -50,9 +49,6 @@ namespace Effect {
 
             // 設置時間
             glUniform1f(m_TimeLocation, m_ElapsedTime);
-
-            // 不要進行驗證，因為這可能會干擾修飾器的設置
-            // s_Program->Validate();
 
             // Draw
             s_VertexArray->Bind();

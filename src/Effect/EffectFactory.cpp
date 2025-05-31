@@ -52,18 +52,6 @@ namespace Effect {
                 break;
             }
 
-            case EffectType::ENEMY_ATTACK_1: {
-                // 敵人攻擊1：實心圓，邊緣加深，會移動
-                auto circleShape = std::make_shared<Shape::CircleShape>(0.3f, 3.5f);
-                circleShape->SetColor(Util::Color(1.0f, 0.0f, 0.0f, 0.5f)); // 半透明紅色
-
-                effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
-                effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::DARK, 0.03f));
-                effect->SetMovementModifier(Modifier::MovementModifier(true, 250.0f, 400.0f, {0.0f, -1.0f}));
-                break;
-            }
-
             case EffectType::ENEMY_ATTACK_2: {
                 // 敵人攻擊2：空心圓，邊緣發光，不會移動
                 auto circleShape = std::make_shared<Shape::CircleShape>(0.35f, 1.0f);
@@ -72,16 +60,6 @@ namespace Effect {
                 effect = std::make_shared<CompositeEffect>(circleShape);
                 effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::HOLLOW, 0.04f));
                 effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.06f, Util::Color(1.0f, 0.5f, 0.0f, 1.0f)));
-                break;
-            }
-
-            case EffectType::ENEMY_ATTACK_3: {
-                // 敵人攻擊3：實心圓，不會移動
-                auto circleShape = std::make_shared<Shape::CircleShape>(0.3f, 0.5f);
-                circleShape->SetColor(Util::Color(0.8f, 0.0f, 0.0f, 0.4f)); // 半透明紅色
-
-                effect = std::make_shared<CompositeEffect>(circleShape);
-                effect->SetFillModifier(Modifier::FillModifier(Modifier::FillType::SOLID));
                 break;
             }
 

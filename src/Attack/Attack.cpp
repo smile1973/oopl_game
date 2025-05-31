@@ -16,9 +16,6 @@ Attack::Attack(const glm::vec2& position, float delay, int sequenceNumber)
     m_Transform.translation = position;
     // 設置初始狀態為CREATED
     m_State = State::CREATED;
-
-    // LOG_DEBUG("Attack created at position ({}, {}), delay: {}, sequence: {}",
-    //          position.x, position.y, delay, sequenceNumber);
 }
 
 // 主要更新函數 - 根據當前狀態調用相應的處理函數
@@ -50,7 +47,6 @@ void Attack::Update(float deltaTime) {
             break;
 
         case State::ATTACKING:
-            LOG_WARN("Attacking");
             OnAttackUpdate(deltaTime);
             if (m_ElapsedTime >= m_AttackDuration) {
                 ChangeState(State::FINISHED);
@@ -128,11 +124,8 @@ void Attack::ChangeState(State newState) {
             break;
 
         case State::CREATED:
-            LOG_ERROR("Attempt to change attack state to CREATED");
             break;
     }
-
-    LOG_DEBUG("Attack state changed from {} to {}", static_cast<int>(oldState), static_cast<int>(newState));
 }
 
 // 警告階段開始
@@ -170,7 +163,6 @@ void Attack::OnAttackStart() {
 }
 
 void Attack::OnAttackUpdate(float deltaTime) {
-    LOG_WARN("????6++");
     SyncWithEffect();
     if (m_TargetCharacter) {
         CheckCollision(m_TargetCharacter);
@@ -179,7 +171,6 @@ void Attack::OnAttackUpdate(float deltaTime) {
     if (m_AttackEffect && m_AttackEffect->IsFinished()) {
         CreateAttackEffect();
     }
-    LOG_WARN("????7++");
 }
 
 // 完成階段開始
@@ -188,8 +179,6 @@ void Attack::OnFinishedStart() {
     if (m_AttackEffect) {
         m_AttackEffect->Reset();
     }
-
-    LOG_DEBUG("Attack finished at position ({}, {})", m_Position.x, m_Position.y);
 }
 
 // 創建時間條

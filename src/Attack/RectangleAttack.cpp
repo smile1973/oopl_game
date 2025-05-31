@@ -60,10 +60,6 @@ void RectangleAttack::CreateWarningEffect() {
             rectangleShape->SetAutoRotation(false);
             rectangleShape->SetSize({maxDimension * 1.2f, maxDimension * 1.2f});
             rectangleShape->SetColor(Util::Color(0.9, 0.1, 0.1, 0.5));
-
-            // LOG_DEBUG("Rectangle warning effect shape configured");
-        } else {
-            LOG_ERROR("Failed to cast to RectangleShape");
         }
 
         // 設置填充與邊緣效果
@@ -81,15 +77,12 @@ void RectangleAttack::CreateWarningEffect() {
         warningEffect->Play(m_Position, z_ind);
 
         m_WarningEffect = warningEffect;
-        // LOG_DEBUG("Rectangle warning effect created and played");
     } catch (const std::exception& e) {
         LOG_ERROR("Exception in CreateWarningEffect: {}", e.what());
     }
 }
 
 void RectangleAttack::CreateAttackEffect() {
-    // LOG_DEBUG("RectangleAttack::CreateAttackEffect called with duration: {}", m_AttackDuration);
-
     try {
         auto rectangleEffect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_LASER);
 
@@ -110,7 +103,6 @@ void RectangleAttack::CreateAttackEffect() {
 
         // 設置填充與邊緣效果
         rectangleEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
-        // rectangleEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.001, Util::Color(0.9, 0.1, 0.1, 0.7)));
 
         // 關閉任何動畫
         rectangleEffect->SetAnimationModifier(Effect::Modifier::AnimationModifier(
@@ -147,7 +139,6 @@ float RectangleAttack::CalculateRotationAngle() const {
 
 bool RectangleAttack::CheckCollisionInternal(const std::shared_ptr<Character>& character) {
     glm::vec2 characterPos = character->GetPosition();
-    // LOG_DEBUG("Character pos: {}", characterPos);
     return IsPointInRectangle(characterPos);
 }
 
@@ -156,7 +147,6 @@ bool RectangleAttack::IsPointInRectangle(const glm::vec2& circleCenter) const {
     float halfWidth = (m_Width * 1.2f) / 2.0f;
     float halfHeight = (m_Height * 1.2f) / 2.0f;
 
-    // 未旋轉時的四個角（相對於矩形中心）
     glm::vec2 corners[4] = {
         {-halfWidth, -halfHeight},  // 左下
         {halfWidth, -halfHeight},   // 右下
@@ -167,8 +157,6 @@ bool RectangleAttack::IsPointInRectangle(const glm::vec2& circleCenter) const {
     // 旋轉矩陣
     float cosA = cos(m_Rotation);
     float sinA = sin(m_Rotation);
-
-    // LOG_DEBUG("m_Rotation : {}", m_Rotation);
 
     glm::vec2 rotatedCorners[4];
     for (int i = 0; i < 4; i++) {

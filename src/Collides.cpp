@@ -55,21 +55,6 @@ bool Character::IfCollideSweptCircle(const std::shared_ptr<Character>& other) co
     return collisionDistance < ballRadius + enemyRadius;
 }
 
-
-bool Character::IfCollideRectangle(const std::shared_ptr<Character>& other) const{
-    if (!other) return false;
-
-    const glm::vec2 pos1 = this->GetPosition();
-    const glm::vec2 pos2 = other->GetPosition();
-    constexpr float rx = 275.0f; // X 半徑
-    constexpr float ry = 35.0f; // Y 半徑
-    constexpr float enemyRadius = 150.0f; // 敵人半徑
-
-    const bool isColliding = (abs(pos1.x - pos2.x) < rx + enemyRadius) &&
-                             (abs(pos1.y - pos2.y) < ry + enemyRadius);
-    return isColliding;
-}
-
 bool Character::IfCollideEllipse(const std::shared_ptr<Character>& other) const {
     if (!other) return false;
 

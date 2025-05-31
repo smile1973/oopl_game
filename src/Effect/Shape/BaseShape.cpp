@@ -22,9 +22,6 @@ namespace Effect {
             m_Transform.translation = position;
             m_ZIndex = zIndex;
             m_State = State::ACTIVE;
-
-            // LOG_DEBUG("BaseShape activated at position ({}, {}), z-index: {}",
-            //           position.x, position.y, zIndex);
         }
 
         void BaseShape::Reset() {
@@ -32,5 +29,5 @@ namespace Effect {
             m_State = State::INACTIVE;
         }
 
-    } // namespace Shape
-} // namespace Effect
+    }
+}

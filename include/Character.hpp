@@ -11,7 +11,7 @@ public:
     enum class State {
         IDLE,
         USING_SKILL,
-        HURT      // 新增受傷狀態
+        HURT
     };
 
     Character(const Character&) = delete;
@@ -34,7 +34,6 @@ public:
     bool IfCollide(const std::shared_ptr<Character>& other, float Distance) const;
     bool IfCollideCircle(const std::shared_ptr<Character>& other, float Distance) const;
     bool IfCollideSweptCircle(const std::shared_ptr<Character>& other) const;
-    bool IfCollideRectangle(const std::shared_ptr<Character>& other) const;
     bool IfCollideEllipse(const std::shared_ptr<Character>& other) const;
 
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }

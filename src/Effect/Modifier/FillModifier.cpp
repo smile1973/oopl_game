@@ -18,10 +18,6 @@ namespace Effect {
                 if (m_ThicknessLocation == -1) {
                     m_ThicknessLocation = glGetUniformLocation(program.GetId(), "u_FillThickness");
                 }
-
-                if (m_FillTypeLocation == -1 || m_ThicknessLocation == -1) {
-                    LOG_ERROR("Failed to get uniform locations for FillModifier");
-                }
             }
 
             // 設置uniform值
@@ -34,5 +30,5 @@ namespace Effect {
                 glUniform1f(fillThicknessLocation, m_Thickness);
             }
         }
-    } // namespace Modifier
-} // namespace Effect
+    }
+}

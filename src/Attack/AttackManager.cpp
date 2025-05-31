@@ -7,13 +7,8 @@ AttackManager& AttackManager::GetInstance() {
 }
 
 void AttackManager::RegisterAttack(std::shared_ptr<Attack> attack) {
-    if (!attack) {
-        LOG_ERROR("Attempted to register null attack");
-        return;
-    }
-
+    if (!attack) return;
     m_ActiveAttacks.push_back(attack);
-    LOG_DEBUG("Registered attack, total active attacks: {}", m_ActiveAttacks.size());
 }
 
 void AttackManager::Update(float deltaTime, std::shared_ptr<Character> &player) {
@@ -27,22 +22,18 @@ void AttackManager::Update(float deltaTime, std::shared_ptr<Character> &player) 
         if (player && attack->GetState() == Attack::State::ATTACKING) {
             attack->CheckCollision(player);
         }
-        LOG_WARN("in update 222+++++++++++++++++");
         // 如果攻擊已完成，從活躍列表中移除
         if (attack->IsFinished()) {
-            LOG_DEBUG("Attack completed and removed from manager");
             it = m_ActiveAttacks.erase(it);
         } else {
             ++it;
         }
-        LOG_WARN("in update 333+++++++++++++++++");
     }
 }
 
 void AttackManager::ClearAllAttacks() {
     for (auto& attack : m_ActiveAttacks) {
         if (attack) {
-            // 通過基類接口清理視覺元素
             attack->CleanupVisuals();
         }
     }

@@ -33,8 +33,6 @@ bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Ch
         // 檢查技能是否存在
         auto it = m_Skills.find(skillId);
         if (it != m_Skills.end()) {
-            // LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
-            // SwitchToSkill(skillId);
             if (!it->second->IsOnCooldown()) {
                 LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
                 TowardNearestEnemy(m_Enemies, skillId==3);
@@ -46,7 +44,6 @@ bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Ch
                     m_Invincible = true;
                     m_InvincibleTimer = 0.0f;
                     m_InvincibleDuration = 2.0f;
-                    // LOG_ERROR("m_InvincibleDuration: " + std::to_string(m_InvincibleDuration));
                     SwitchToSkill(skillId);
                 }else {
                     SwitchToSkill(skillId);
@@ -86,9 +83,6 @@ void Character::Update() {
                 m_InvincibleDuration = 1.5f;
                 // LOG_ERROR("m_InvincibleDuration: " + std::to_string(m_InvincibleDuration));
             }
-        }
-        else {
-            // 無敵時間內閃爍效果
         }
     }
 
@@ -224,9 +218,6 @@ void Character::MoveToPosition(const glm::vec2& targetPosition, const float tota
 
     m_IsMoving = true;
     m_TargetPosition = targetPosition;
-    // m_MaxDistance = glm::distance(this->GetPosition(), targetPosition);
-    // m_Direction = (targetPosition - this->GetPosition()) / m_MaxDistance;
-    // m_Speed = m_MaxDistance / totalTime;
     m_MoveSpeed = (targetPosition - this->GetPosition()) / totalTime;
     m_TotalTime = totalTime * 1000.0f; //(ms)
     LOG_DEBUG("Move Character to {}", m_Transform.translation);

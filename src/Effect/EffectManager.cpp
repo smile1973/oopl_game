@@ -11,9 +11,7 @@ namespace Effect {
             EffectType::SKILL_X,
             EffectType::SKILL_C,
             EffectType::SKILL_V,
-            EffectType::ENEMY_ATTACK_1,
             EffectType::ENEMY_ATTACK_2,
-            EffectType::ENEMY_ATTACK_3,
             EffectType::RECT_LASER,
             EffectType::RECT_BEAM,
         };
@@ -76,10 +74,7 @@ namespace Effect {
         // Get effect
         auto effect = GetEffect(type);
 
-        // Set duration
         effect->SetDuration(duration);
-
-        // Play effect
         effect->Play(position, zIndex);
 
         return effect;
@@ -100,7 +95,6 @@ namespace Effect {
 
                 // Return effect to its proper pool
                 m_InactiveEffects[type].push(effect);
-                LOG_DEBUG("Returned effect to pool, type: {}", typeValue);
 
                 // Remove from active list
                 it = m_ActiveEffects.erase(it);

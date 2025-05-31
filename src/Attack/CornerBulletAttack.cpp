@@ -8,7 +8,6 @@ CornerBulletAttack::CornerBulletAttack(float delay, int bulletCount, int sequenc
     : CircleAttack({0, 0}, delay, 30.0f, sequenceNumber),  // 使用基類構造函數
       m_BulletCount(bulletCount) {
 
-    // 初始化隨機數生成器
     std::random_device rd;
     m_RandomEngine.seed(rd());
 }
@@ -18,7 +17,6 @@ void CornerBulletAttack::SetBulletSpeed(float speed) {
 }
 
 std::vector<float> CornerBulletAttack::GenerateRandomAngles(float baseAngle) {
-    // 與原來相同
     std::vector<float> angles;
 
     // 固定偏移角
@@ -44,7 +42,6 @@ std::vector<float> CornerBulletAttack::GenerateRandomAngles(float baseAngle) {
     for (int i = 0; i < m_BulletCount; ++i) {
         float angle = baseAngle + use[i % use.size()] + distribution(m_RandomEngine);
         angles.push_back(angle);
-        LOG_DEBUG("Generated bullet angle: {:.2f} ({:.4f} rad)", angle * 180.0f / M_PI, angle);
     }
     return angles;
 }
@@ -117,7 +114,6 @@ void CornerBulletAttack::CreateWarningEffect() {
 }
 
 void CornerBulletAttack::CreateAttackEffect() {
-    LOG_WARN("test+++++++++++++++++++++++++++++++++++++++++++++in create");
     m_BulletAttacks.clear();
 
     int bulletIndex = 0;
@@ -142,7 +138,6 @@ void CornerBulletAttack::CreateAttackEffect() {
         path.bulletAttack = bulletAttack;
         m_BulletAttacks.push_back(bulletAttack);
     }
-    LOG_WARN("test+++++++++++++++++++++++++++++++++++++++++++++end create");
 }
 
 void CornerBulletAttack::OnAttackStart() {

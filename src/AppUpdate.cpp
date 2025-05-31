@@ -103,7 +103,6 @@ void App::Update() {
         if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
             LOG_DEBUG("X Key UP - Skill 2");
             if (m_Rabbit->UseSkill(2, m_enemies_characters)) {
-                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideSweptCircle(enemy)) {
                         enemy->TakeDamage(5*rabbitLevel);
@@ -139,11 +138,6 @@ void App::Update() {
             LOG_DEBUG("V Key UP - Skill 4");
             if (m_Rabbit->UseSkill(4, m_enemies_characters)) {
                 m_Rabbit -> TowardNearestEnemy(m_enemies_characters, false);
-                // for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
-                //     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
-                //         enemy->TakeDamage(55*rabbitLevel);
-                //     }
-                // }
                 m_Rabbit->UpdateSkillXUes(4);
             }
         }
@@ -204,69 +198,11 @@ void App::Update() {
     if (m_NKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
             Pause();
-            // LOG_DEBUG("--App::Pause--");
-            // m_DefeatScreen->Get();
-            // m_Rabbit->AddExperience(10);
+            LOG_DEBUG("--App::Pause--");
         }
     }
     m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
-    
 
-    //
-    // // 按B鍵手動啟動Battle 1攻擊模式
-    // if (Util::Input::IsKeyDown(Util::Keycode::B)) {
-    //     if (m_EnemyAttackController) {
-    //         m_EnemyAttackController->InitBattle1Patterns();
-    //         m_EnemyAttackController->Start();
-    //         LOG_DEBUG("Manual start Battle 1 attack patterns");
-    //     }
-    // }
-    //
-    // // 按M鍵手動啟動Battle 2攻擊模式
-    // if (Util::Input::IsKeyDown(Util::Keycode::M)) {
-    //     if (m_EnemyAttackController) {
-    //         m_EnemyAttackController->InitBattle2Patterns();
-    //         m_EnemyAttackController->Start();
-    //         LOG_DEBUG("Manual start Battle 2 attack patterns");
-    //     }
-    // }
-    // // 測試矩形雷射特效 - 按下 1 鍵
-    // if (Util::Input::IsKeyDown(Util::Keycode::NUM_1)) {
-    //     auto cursorPos = Util::Input::GetCursorPosition();
-    //     auto effect = Effect::EffectManager::GetInstance().PlayEffect(
-    //         Effect::EffectType::RECT_LASER,
-    //         cursorPos,
-    //         20.0f, // z-index
-    //         2.0f   // 持續時間
-    //     );
-    //     LOG_DEBUG("Created RECT_LASER effect at position: ({}, {})", cursorPos.x, cursorPos.y);
-    // }
-    //
-    // // 測試矩形光束特效 - 按下 2 鍵
-    // if (Util::Input::IsKeyDown(Util::Keycode::NUM_2)) {
-    //     auto cursorPos = Util::Input::GetCursorPosition();
-    //
-    //     // 獲取標準自動旋轉特效
-    //     auto effect1 = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
-    //     auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect1->GetBaseShape());
-    //     rectangleShape->SetRotation(0.0f);
-    //     effect1->SetDuration(10.0f);
-    //     effect1->Play(cursorPos, 20.0f);
-    //     LOG_DEBUG("Created standard auto-rotating RECT_BEAM effect at position: ({}, {})", cursorPos.x, cursorPos.y);
-    //
-    //     // 創建一個新的自定義光束特效 - 從工廠獲取類似的基本特效
-    //     auto effect2 = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
-    //     if (auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(effect2->GetBaseShape())) {
-    //         // 設置90度旋轉 (π/2 弧度)
-    //         rectangleShape->SetRotation(1.57f);
-    //         effect2->SetDuration(10.0f);
-    //         // 可選：調整旋轉速度
-    //         // rectangleShape->SetAutoRotation(true, 1.0f);  // 減慢旋轉速度
-    //     }
-    //
-    //     // 放置在與第一個光束有點偏移的位置
-    //     effect2->Play(cursorPos, 25.0f);
-    // }
     if (m_GKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::G)) {
             if (m_Rabbit) {

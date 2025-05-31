@@ -36,12 +36,10 @@ void CircleAttack::CreateWarningEffect() {
         warningEffect->SetFillModifier(Effect::Modifier::FillModifier(Effect::Modifier::FillType::SOLID));
         warningEffect->SetEdgeModifier(Effect::Modifier::EdgeModifier(Effect::Modifier::EdgeType::GLOW, 0.005, Util::Color(1.0, 0.0, 0.0, 0.7)));
 
-        // 設置持續時間和播放特效
         warningEffect->SetDuration(m_Delay + 1.0f);
         warningEffect->Play(m_Position, m_ZIndex - 2.0f);
 
         m_WarningEffect = warningEffect;
-        // LOG_DEBUG("Circle warning effect created and played");
     } catch (const std::exception& e) {
         LOG_ERROR("Exception in CreateWarningEffect: {}", e.what());
     }
@@ -91,13 +89,8 @@ void CircleAttack::CreateAttackEffect() {
             circleEffect->SetMovementModifier(movementMod);
         }
 
-        // 設置持續時間和播放特效
         circleEffect->SetDuration(m_AttackDuration);
         circleEffect->Play(m_Position, z_ind);
-
-        // LOG_DEBUG("Circle attack effect created at ({}, {}) with duration: {}",
-        //           m_Position.x, m_Position.y, m_AttackDuration);
-
         m_AttackEffect = circleEffect;
     } catch (const std::exception& e) {
         LOG_ERROR("Exception in CreateAttackEffect: {}", e.what());
@@ -150,8 +143,6 @@ void CircleAttack::CreateDirectionIndicator() {
     m_DirectionIndicator->m_Transform.rotation = angle;
 
     App::GetInstance().AddToRoot(m_DirectionIndicator);
-    LOG_DEBUG("Direction arrow added to root for movement direction: ({}, {})",
-             m_Direction.x, m_Direction.y);
 }
 
 void CircleAttack::OnCountdownStart() {
@@ -172,7 +163,6 @@ void CircleAttack::OnAttackStart() {
     if (m_DirectionIndicator) {
         App::GetInstance().RemoveFromRoot(m_DirectionIndicator);
         m_DirectionIndicator = nullptr;
-        LOG_DEBUG("Direction arrow removed from root");
     }
 }
 

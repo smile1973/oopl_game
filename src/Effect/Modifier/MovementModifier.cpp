@@ -32,5 +32,5 @@ namespace Effect {
             return !m_IsMoving || m_DistanceTraveled >= m_MaxDistance;
         }
 
-    } // namespace Modifier
-} // namespace Effect
+    }
+}
