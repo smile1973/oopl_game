@@ -57,25 +57,19 @@ void App::GetReady() {
 void App::Pause() {
     m_PausedOption->SetVisible(true);
     m_PRM->SetProgressBarVisible(true);
-    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::M)) {
+    if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::N)) {
         switch (m_PausedOption->GetCurrentOption()) {
             case 0:
                 m_PausedOption->SetVisible(false);
                 m_PRM->SetProgressBarVisible(false);
                 LOG_DEBUG("--App::Pause Continue--");
             break;
-            case 1: //未完成
-                LOG_DEBUG("--App::Pause Restart_Game--");
-                m_PausedOption->SetVisible(false);
-                m_PRM->SetProgressBarVisible(false);
-                RestartGame();
-            break;
             default:
                 LOG_ERROR("--App::Pause Switch Default--");
         }
         // m_PausedOption->Reset();
     }
-    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::M);
+    m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
     if (m_UpKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::UP)) {
         m_PausedOption->Switch(true);

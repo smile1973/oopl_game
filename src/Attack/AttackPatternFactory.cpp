@@ -137,7 +137,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, 360.0f), // Starting position (top left)
             true,                      // Horizontal row
             10,                        // 10 circles
-            16.0,                  // zindex
+            30.0,                  // zindex
             128.0f,                    // 128px spacing
             32.0f,                     // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
@@ -170,7 +170,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, 360.0f), // Starting position (top left)
             true,                      // Horizontal row
             10,                        // 10 circles
-            16.0,                  // zindex
+            30.0,                  // zindex
             128.0f,                    // 128px spacing
             32.0f,                     // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
@@ -209,7 +209,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, -360.0f), // Starting position (bottom left)
             true,                       // Horizontal row
             10,                         // 10 circles
-            16.0f,
+            30.0f,
             128.0f,                     // 128px spacing
             32.0f,                      // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
@@ -242,7 +242,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
             glm::vec2(-620.0f, 360.0f), // Starting position (top left)
             true,                      // Horizontal row
             10,                        // 10 circles
-            16.0f,
+            30.0f,
             128.0f,                    // 128px spacing
             32.0f,                     // 32px radius
             Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
