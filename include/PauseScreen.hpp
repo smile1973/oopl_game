@@ -7,7 +7,7 @@
 class PausedScreen {
 public:
     PausedScreen() {
-        std::vector<std::string> optionNames = {"continue", "restart", "manage_player", "game_setting", "return_title_page"};
+        std::vector<std::string> optionNames = {"continue", "restart", "manage_player", "game_setting", "leave_game"};
         for (int i = 0; i < optionNames.size(); ++i) {
             m_Options.push_back(std::make_shared<Enemy>(optionNames[i],1,std::vector{ ImagePath(optionNames[i])}));
             m_Options[i] -> m_Transform.scale =  {1.05f, 1.05f};
@@ -19,6 +19,7 @@ public:
         m_Options[2] -> SetPosition(m_BasePosition + glm::vec2{-70,-222});
         m_Options[3] -> SetPosition(m_BasePosition + glm::vec2{-130,-305});
         m_Options[4] -> SetPosition(m_BasePosition + glm::vec2{-200,-388});
+        m_Options[4] -> m_Transform.scale =  {0.82f, 0.86f};
 
     }
 
@@ -43,10 +44,10 @@ public:
 
     void Switch (const bool isUp){
         constexpr int maxOption = 4;
-        m_Options[m_CurrentOption]->m_Transform.scale =  {1.05f, 1.05f};
+        m_Options[m_CurrentOption]->m_Transform.scale =  (m_CurrentOption != 4) ? glm::vec2{1.05f, 1.05f} : glm::vec2{0.82f, 0.86f};
         m_CurrentOption = isUp ? (m_CurrentOption == 0) ? maxOption : m_CurrentOption - 1
                                : (m_CurrentOption == maxOption) ? 0 : m_CurrentOption + 1;
-        m_Options[m_CurrentOption]->m_Transform.scale =  {1.2f, 1.2f};
+        m_Options[m_CurrentOption]->m_Transform.scale *=  1.143;
     }
 
     void Reset() {

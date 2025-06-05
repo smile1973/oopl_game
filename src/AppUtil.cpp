@@ -64,6 +64,19 @@ void App::Pause() {
                 m_PRM->SetProgressBarVisible(false);
                 LOG_DEBUG("--App::Pause Continue--");
             break;
+            case 1:
+                LOG_DEBUG("--App::Pause New_Game--");
+                m_HealthBarUI->Reset();
+                m_PausedOption->SetVisible(false);
+                m_PRM->SetProgressBarVisible(false);
+                m_HealthBarUI->SetVisible(false);
+                RestartGame();
+            break;
+            case 4:
+                LOG_DEBUG("--App::Pause Leave_Game--");
+                m_PausedOption->SetVisible(false);
+                m_CurrentState = State::END;
+            break;
             default:
                 LOG_ERROR("--App::Pause Switch Default--");
         }
