@@ -77,6 +77,7 @@ void PhaseManager::UpdateStageTitle() const {
     m_MainStageTitle->MovePosition(glm::vec2(100, 0));
     m_MainStageTitle->SetVisible(true);
     m_MainStageTitle->MovePosition(glm::vec2(-100, 0), 1.5f);
+    // LOG_ERROR("PhaseManager::UpdateStageTitle " + (m_MainStageTitle->GetVisibility()==true)?"true":"false" );
 }
 
 void PhaseManager::UpdateProgressBar() const {
@@ -95,6 +96,7 @@ void PhaseManager::Update() const {
     if (m_MainStageTitle->GetPosition() == m_MainStageTitle->GetTargetPosition()) {
         m_MainStageTitle->SetVisible(false);
     }
+    // LOG_ERROR("PhaseManager::Update");
 }
 
 void PhaseManager::ReStart() {

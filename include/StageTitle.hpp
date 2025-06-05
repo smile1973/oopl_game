@@ -4,11 +4,12 @@
 #include "Enemy.hpp"
 #include "Util/Image.hpp"
 
-class StageTitle : public Enemy {
+class StageTitle : public Object {
 public:
-    explicit StageTitle(const int mainPhase) : Enemy("StageTitle", 1.0f, {ImagePath(mainPhase)}) { // 修正建構子
+    explicit StageTitle(const int mainPhase) : Object({ImagePath(mainPhase)}) { // 修正建構子
         m_Transform.scale = {0.5f, 0.5f};
-        SetZIndex(200);
+        SetZIndex(99);
+        GameObject::SetVisible(false);
     }
 
     void SetStageTitle(const int mainPhase) {
