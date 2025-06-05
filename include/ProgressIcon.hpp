@@ -4,14 +4,15 @@
 #include "Enemy.hpp"
 #include "Util/Image.hpp"
 
-class ProgressIcon : public Enemy {
+class ProgressIcon : public Object {
 public:
-    explicit ProgressIcon(const std::string& imageName) : Enemy(imageName, 1.0f, {IconImagePath(imageName)}) { // 修正建構子
+    explicit ProgressIcon(const std::string& imageName) : Object({IconImagePath(imageName)}) { // 修正建構子
         m_Transform.scale = {0.5f, 0.5f};
         SetZIndex(30);
+        GameObject::SetVisible(false);
     }
 
-    void SetProgressIcon(const std::string &imageName) override {
+    void SetProgressIcon(const std::string &imageName){
         m_Drawable = std::make_shared<Util::Image>(IconImagePath(imageName));
     }
 
