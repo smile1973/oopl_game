@@ -1,11 +1,10 @@
-// include/Attack/AttackPatternFactory.hpp
 #ifndef ATTACKPATTERNFACTORY_HPP
 #define ATTACKPATTERNFACTORY_HPP
 
 #include "Attack/AttackPattern.hpp"
 #include "Attack/CircleAttack.hpp"
 #include "Attack/CornerBulletAttack.hpp"
-#include "Attack/RectangleAttack.hpp"  // 整合後不再需要單獨的 LaserAttack.hpp
+#include "Attack/RectangleAttack.hpp"
 
 /**
  * @class AttackPatternFactory
@@ -16,13 +15,8 @@
  */
 class AttackPatternFactory {
 public:
-    /**
-     * @brief 獲取工廠的單例實例
-     * @return 工廠實例的引用
-     */
     static AttackPatternFactory& GetInstance();
 
-    // 禁止複製和移動
     AttackPatternFactory(const AttackPatternFactory&) = delete;
     AttackPatternFactory(AttackPatternFactory&&) = delete;
     AttackPatternFactory& operator=(const AttackPatternFactory&) = delete;
@@ -70,10 +64,8 @@ public:
     std::shared_ptr<AttackPattern> BossPattern5();
 
 private:
-    // 私有構造函數防止外部創建實例
     AttackPatternFactory() = default;
 
-    // 計算環形位置的輔助方法
     std::vector<glm::vec2> CalculateCircularPositions(
         const glm::vec2& center,
         float radius,
@@ -81,4 +73,4 @@ private:
         float startAngle = 0.0f);
 };
 
-#endif // ATTACKPATTERNFACTORY_HPP
+#endif

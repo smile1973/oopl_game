@@ -1,12 +1,12 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include "pch.hpp" // IWYU pragma: export
+#include "pch.hpp"
 
 #include "Util/Renderer.hpp"
 #include "Character.hpp"
 #include "Enemy.hpp"
-#include "PhaseManger.hpp" // 階段資源管理
+#include "PhaseManger.hpp"
 #include "PauseScreen.hpp"
 #include "DefeatScreen.hpp"
 #include "SkillUI.hpp"
@@ -14,8 +14,8 @@
 #include "LevelUI.hpp"
 #include "ShopUI.hpp"
 #include "Effect/EffectManager.hpp"
-#include "Attack/EnemyAttackController.hpp" // 敵人攻擊控制器
-#include "Attack/AttackManager.hpp" // 新增: 攻擊管理器
+#include "Attack/EnemyAttackController.hpp"
+#include "Attack/AttackManager.hpp"
 
 class App {
 public:
@@ -40,7 +40,7 @@ public:
 
     void Update();
 
-    void End(); // NOLINT(readability-convert-member-functions-to-static)
+    void End();
 
     void AddToRoot(const std::shared_ptr<Util::GameObject> &object) {
         m_Root.AddChild(object);
@@ -55,7 +55,6 @@ private:
     void Defeat();
     void Shop();
 
-    // 執行有效的任務，內部函式
     void ValidTask();
     void LeavePhase() const;
     void SetSubPhase() const;      // 設置關卡配置
@@ -67,7 +66,6 @@ private:
     App() : m_CurrentState(State::START),
            m_Phase(Phase::START) {}
 
-    //private:
     enum class Phase {
         START,
         BATTLE_1,
@@ -87,10 +85,6 @@ private:
     static App* s_Instance;
 
     State m_CurrentState = State::START;
-    // PausedOption m_CurrenPausedOption = PausedOption::CONTINUE;
-    // MainPhase m_MainPhase = MainPhase::INITIAL_SCENE;  // 當前大關
-    // int m_SubPhaseIndex = 0;                           // 當前小關索引 (0-4)
-    // SubPhase m_CurrentSubPhase = SubPhase::BATTLE;     // 當前小關類型
 
     Util::Renderer m_Root;
     std::shared_ptr<PhaseManager> m_PRM; // 階段資源管理器
@@ -115,7 +109,6 @@ private:
     bool m_VKeyDown = false;
     float m_TestEffectTimer = 0.0f;
 
-    // 測試關卡切換
     bool m_NKeyDown = false;
     bool m_RKeyDown = false;
     bool m_UpKeyDown = false;

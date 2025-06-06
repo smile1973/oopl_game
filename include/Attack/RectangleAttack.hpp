@@ -37,7 +37,6 @@ public:
     float GetRotationSpeed() const { return m_RotationSpeed; }
     void CleanupVisuals() override;
 
-    // 移除 SetZ 方法，改用繼承的 SetAttackZIndex
     void SetAttackZIndex(float zIndex);
 
 protected:
@@ -63,7 +62,6 @@ private:
 
     bool m_AutoRotate = false;
     float m_RotationSpeed = 0.5f;
-    // 移除硬編碼的 z_ind
 
     static std::shared_ptr<Util::Image> s_ClockwiseImage;
     static std::shared_ptr<Util::Image> s_CounterClockwiseImage;
@@ -72,4 +70,4 @@ private:
     void CreateDirectionIndicator();
 };
 
-#endif // RECTANGLEATTACK_HPP
+#endif

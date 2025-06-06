@@ -1,7 +1,7 @@
 #ifndef MOVEMENTMODIFIER_HPP
 #define MOVEMENTMODIFIER_HPP
 
-#include "pch.hpp"
+#include "Effect/Shape/BaseShape.hpp"
 
 namespace Effect {
     namespace Modifier {
@@ -10,10 +10,8 @@ namespace Effect {
         public:
             MovementModifier(bool isMoving = false, float speed = 200.0f, float distance = 400.0f, const glm::vec2& direction = {1.0f, 0.0f});
 
-            // 更新位置
             void Update(float deltaTime, glm::vec2& position);
 
-            // 設置參數
             void SetMoving(bool isMoving) { m_IsMoving = isMoving; }
             bool IsMoving() const { return m_IsMoving; }
 
@@ -27,23 +25,21 @@ namespace Effect {
             const glm::vec2& GetDirection() const { return m_Direction; }
 
             void SetStartPosition(const glm::vec2& position) { m_StartPosition = position; }
-            // 重置移動狀態
             void Reset();
 
-            // 檢查是否已達到最大距離
             bool HasReachedDestination() const;
 
         private:
-            bool m_IsMoving;                // 是否移動
-            float m_Speed;                  // 移動速度
-            float m_MaxDistance;            // 最大移動距離
-            glm::vec2 m_Direction;          // 移動方向
+            bool m_IsMoving;
+            float m_Speed;
+            float m_MaxDistance;
+            glm::vec2 m_Direction;
 
-            glm::vec2 m_StartPosition;      // 起始位置
-            float m_DistanceTraveled = 0.0f; // 已移動距離
+            glm::vec2 m_StartPosition;
+            float m_DistanceTraveled = 0.0f;
         };
 
-    } // namespace Modifier
-} // namespace Effect
+    }
+}
 
-#endif //MOVEMENTMODIFIER_HPP
+#endif

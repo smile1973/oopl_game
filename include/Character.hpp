@@ -30,7 +30,6 @@ public:
     void AddExperience(const int experience){ m_Experience += experience; }
     void AddMoney(const int money){ m_Money += money; }
 
-    // 檢測角色是否與另一個角色發生碰撞
     bool IfCollide(const std::shared_ptr<Character>& other, float Distance) const;
     bool IfCollideCircle(const std::shared_ptr<Character>& other, float Distance) const;
     bool IfCollideSweptCircle(const std::shared_ptr<Character>& other) const;
@@ -61,11 +60,10 @@ public:
         return 0.0f;
     }
 
-    virtual void MovePosition(const glm::vec2& Position, float totalTime = 0.0f);  //平移位置
-    virtual void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
+    virtual void MovePosition(const glm::vec2& Position, float totalTime);  //平移位置
+    virtual void MoveToPosition(const glm::vec2& targetPosition, float totalTime); //平移到某位置
     [[nodiscard]] virtual glm::vec2& GetTargetPosition() { return m_TargetPosition; }
 
-    // 血量相關
     void TakeDamage(int damage = 1);
     bool IsInvincible() const { return m_Invincible; }
     int GetHealth() const { return m_Health; }
@@ -79,7 +77,6 @@ public:
     bool IsInGodMode() const { return m_GodMode; }
 
 protected:
-    // 為子類提供的方法
     void SetImagePathSet(const std::vector<std::string>& newImageSet) { m_ImagePathSet = newImageSet; }
     void SetIdleAnimation(const std::shared_ptr<Util::Animation> &animation) { m_IdleAnimation = animation; }
     std::shared_ptr<Util::Animation> GetIdleAnimation() const { return m_IdleAnimation; }
@@ -88,13 +85,12 @@ private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
     void SwitchToIdle();
     void SwitchToSkill(int skillId);
-    void SwitchToHurt();    // 切換到受傷狀態
+    void SwitchToHurt();
 
     std::vector<std::string> m_ImagePathSet;
     std::shared_ptr<Util::Animation> m_IdleAnimation;
-    std::shared_ptr<Util::Animation> m_HurtAnimation;  // 受傷動畫
+    std::shared_ptr<Util::Animation> m_HurtAnimation;
 
-    // 存所有技能
     std::unordered_map<int, std::shared_ptr<Skill>> m_Skills;
     bool m_IsSkillXUes = false;
     bool m_IsSkillCUes = false;
@@ -113,7 +109,7 @@ private:
 
     // 受傷動畫相關
     float m_HurtAnimationTimer = 0.0f;
-    float m_HurtAnimationDuration = 0.5f; // 受傷動畫持續時間(秒)
+    float m_HurtAnimationDuration = 0.5f;
 
     // 移動相關屬性
     bool m_IsMoving = false;
@@ -129,4 +125,4 @@ private:
 };
 
 
-#endif //CHARACTER_HPP
+#endif

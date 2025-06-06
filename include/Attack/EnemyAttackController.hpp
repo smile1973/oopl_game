@@ -17,10 +17,6 @@
  */
 class EnemyAttackController {
 public:
-    /**
-     * @brief 建構函數
-     * @param enemy 控制器將管理的敵人
-     */
     explicit EnemyAttackController(std::shared_ptr<Enemy> enemy);
 
     void InitBattle1Patterns();
@@ -33,43 +29,13 @@ public:
     void InitBattle8Patterns();
     void InitBossPatterns();
 
-    /**
-     * @brief 更新控制器和當前執行的攻擊模式
-     * @param deltaTime 時間增量
-     * @param player 目標玩家
-     */
     void Update(float deltaTime, std::shared_ptr<Character> player);
-
-    /**
-     * @brief 檢查所有攻擊模式是否已經完成
-     * @return 如果所有模式都完成則返回true
-     */
+    
     bool IsAllPatternsCompleted() const;
-
-    /**
-     * @brief 將新的攻擊模式添加到序列末尾
-     * @param pattern 要添加的攻擊模式
-     */
     void AddPattern(std::shared_ptr<AttackPattern> pattern);
-
-    /**
-     * @brief 清空所有攻擊模式
-     */
     void ClearPatterns();
-
-    /**
-     * @brief 開始執行攻擊模式序列
-     */
     void Start();
-
-    /**
-     * @brief 停止當前攻擊模式
-     */
     void Stop();
-
-    /**
-     * @brief 重置控制器
-     */
     void Reset();
 
     void SetCurrentPhase(int mainPhase, int subPhase) {
@@ -77,24 +43,21 @@ public:
         m_CurrentSubPhase = subPhase;
     }
 
-    // 根據當前階段初始化攻擊模式
     void InitPatternsForCurrentPhase();
 
-    // 獲取當前階段
     int GetCurrentMainPhase() const { return m_CurrentMainPhase; }
     int GetCurrentSubPhase() const { return m_CurrentSubPhase; }
 
 private:
-    // 切換到下一個攻擊模式
     void SwitchToNextPattern();
 
     std::shared_ptr<Enemy> m_Enemy;
     std::queue<std::shared_ptr<AttackPattern>> m_PatternQueue;
     std::shared_ptr<AttackPattern> m_CurrentPattern;
-    float m_CooldownTime = 2.0f;         // 模式間的冷卻時間
-    float m_ElapsedCooldownTime = 0.0f;  // 當前已過的冷卻時間
-    bool m_IsInCooldown = false;        // 是否處於冷卻狀態
-    bool m_IsActive = false;            // 控制器是否處於活動狀態
+    float m_CooldownTime = 2.0f;
+    float m_ElapsedCooldownTime = 0.0f;
+    bool m_IsInCooldown = false;
+    bool m_IsActive = false;
     int m_CurrentMainPhase = 1;
     int m_CurrentSubPhase = 1;
 
@@ -103,4 +66,4 @@ private:
     std::vector<int> m_BossPatternTypes;
 };
 
-#endif // ENEMYATTACKCONTROLLER_HPP
+#endif

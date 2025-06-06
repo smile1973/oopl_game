@@ -22,7 +22,6 @@ public:
     void CleanupVisuals() override;
     void SetAttackDuration(float duration) { m_AttackDuration = duration; }
 
-    // 移除 SetZ 方法，改用繼承的 SetAttackZIndex
     void SetAttackZIndex(float zIndex);
 
 protected:
@@ -42,7 +41,6 @@ private:
     glm::vec2 m_Direction = {1.0f, 0.0f};
     float m_Speed = 200.0f;
     float m_Distance = 800.0f;
-    // 移除硬編碼的 z_ind
 
     static std::shared_ptr<Util::Image> s_ArrowImage;
     std::shared_ptr<Util::GameObject> m_DirectionIndicator;
@@ -51,4 +49,4 @@ private:
     float CalculateDirectionAngle() const;
 };
 
-#endif // CIRCLEATTACK_HPP
+#endif

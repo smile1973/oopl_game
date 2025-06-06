@@ -4,10 +4,6 @@
 #include "Util/GameObject.hpp"
 #include "Util/Image.hpp"
 
-/**
- * @class BackgroundImage
- * @brief 負責管理遊戲背景圖的類別。
- */
 class BackgroundImage : public Util::GameObject {
 public:
     BackgroundImage() : GameObject(
@@ -20,11 +16,6 @@ public:
     }
 
 private:
-    /**
-     * @brief 取得對應大關的背景圖片路徑。
-     * @param mainPhase 當前遊戲大關。
-     * @return 對應的圖片路徑。
-     */
     static std::string ImagePath(const int mainPhase) {
         switch (mainPhase) {
             case 1: return GA_RESOURCE_DIR "/Image/Background/stage_bg_0000.png";
@@ -38,4 +29,4 @@ private:
     }
 };
 
-#endif // BACKGROUND_IMAGE_HPP
+#endif
