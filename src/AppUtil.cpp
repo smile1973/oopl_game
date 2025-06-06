@@ -61,10 +61,8 @@ void App::Pause() {
             break;
             case 1:
                 LOG_DEBUG("--App::Pause New_Game--");
-                m_HealthBarUI->Reset();
                 m_PausedOption->SetVisible(false);
                 m_PRM->SetProgressBarVisible(false);
-                m_HealthBarUI->SetVisible(false);
                 RestartGame();
             break;
             case 4:
@@ -75,7 +73,6 @@ void App::Pause() {
             default:
                 LOG_ERROR("--App::Pause Switch Default--");
         }
-        // m_PausedOption->Reset();
     }
     m_EnterDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 
@@ -107,7 +104,6 @@ void App::Defeat(){
             break;
             case 1:
                 LOG_DEBUG("--App::Defeat New_Game--");
-                m_HealthBarUI->Reset();
                 RestartGame();
             break;
             default:
@@ -267,7 +263,6 @@ void App::SetSubPhase() const {
 void App::SetupStorePhase() const {
     LOG_INFO("Setup Phase: STORE");
     m_Enemy_shopkeeper->SetVisible(true);
-    // m_shopUI->SetVisible(true);
     m_PRM->SetProgressBarVisible(true);
 }
 /**
@@ -338,7 +333,9 @@ void App::RestartGame() {
     m_Onward->SetPosition({500.0f, 160.0f});
     m_Onward->SetVisible(false);
     m_Overlay->SetVisible(false);
-    // m_HealthBarUI->Reset();
+    m_HealthBarUI->Reset();
+    m_HealthBarUI->SetVisible(false);
+    m_LevelUI->SetVisible(false);
 
     // 7. 隱藏結算畫面
     m_DefeatScreen->SetVisible(false);
