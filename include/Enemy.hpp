@@ -28,8 +28,8 @@ public:
     [[nodiscard]] std::string& GetName() { return m_Name; }
 
     // 新增：切換敵人圖片集的函數
-    void SwitchImageSet(const std::vector<std::string>& newImageSet, bool keepCurrentFrame = false);
-    void SwitchImageSetByIndex(int imageSetIndex, bool keepCurrentFrame = false);
+    void SwitchImageSet(const std::vector<std::string>& newImageSet);
+    void SwitchImageSetByIndex(int imageSetIndex);
     void AddImageSetCollection(const std::vector<std::vector<std::string>>& imageSets);
     void SetImageSetCollection(int index, const std::vector<std::string>& imageSet);
     [[nodiscard]] int GetCurrentImageSetIndex() const { return m_CurrentImageSetIndex; }
@@ -54,7 +54,7 @@ private:
     void InitUniforms();    // 初始化 Uniform 變數（著色器中的全域變數）
 
     // 重建動畫的私有函數
-    void RebuildAnimation(const std::vector<std::string>& newImageSet, bool keepCurrentFrame);
+    void RebuildAnimation(const std::vector<std::string>& newImageSet);
 
     static std::unique_ptr<Core::Program> s_Program;    // 靜態成員變數：共享的著色程序
     static std::unique_ptr<Core::VertexArray> s_VertexArray;    // 靜態成員變數：共享的頂點數據

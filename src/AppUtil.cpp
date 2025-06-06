@@ -214,7 +214,6 @@ void App::LeavePhase() const {
         break;
         case 3:
             LOG_DEBUG("--Treasure opened--");
-            // m_Rabbit->AddMoney(100);
         break;
         default: ;
     }

@@ -9,7 +9,7 @@ Enemy::Enemy(std::string name, const float health, const std::vector<std::string
 
     m_Transform.scale = {0.5f, 0.5f};
     SetZIndex(10);
-    SetVisible(false);
+    GameObject::SetVisible(false);
 
     // 将初始图片集添加到集合中
     m_ImageSetCollection.push_back(ImageSet);
@@ -72,7 +72,6 @@ void Enemy::MoveToPosition(const glm::vec2& targetPosition, const float totalTim
 }
 
 void Enemy::Update() {
-    // if (!m_IsMoving || !GetVisibility()) return;
     if (m_ShowHealthRing) UpdateHealthRing();
     if (!m_IsMoving) return;
     // 計算移動距離
@@ -120,9 +119,9 @@ void Enemy::InitHealthRing() {
         dot->SetVisible(false);  // 初始隱藏
 
         // 計算點的位置 (圓形分布)
-        float angle = 2.0f * M_PI * i / m_TotalDots;
-        float x = cos(angle) * m_RingRadius;
-        float y = sin(angle) * m_RingRadius;
+        const float angle = 2.0f * M_PI * i / m_TotalDots;
+        const float x = cos(angle) * m_RingRadius;
+        const float y = sin(angle) * m_RingRadius;
 
         dot->m_Transform.translation = glm::vec2(x, y);
 
@@ -160,9 +159,9 @@ void Enemy::UpdateHealthRing() {
     for (int i = 0; i < m_TotalDots; i++) {
         if (i < m_HealthDots.size() && m_HealthDots[i]) {
             // 計算點的位置 (相對於敵人)
-            float angle = 2.0f * M_PI * i / m_TotalDots;
-            float x = cos(angle) * m_RingRadius;
-            float y = sin(angle) * m_RingRadius;
+            const float angle = 2.0f * M_PI * i / m_TotalDots;
+            const float x = cos(angle) * m_RingRadius;
+            const float y = sin(angle) * m_RingRadius;
 
             m_HealthDots[i]->m_Transform.translation = this->GetPosition() + glm::vec2(x, y);
 
@@ -177,27 +176,19 @@ void Enemy::Reset() {
     if (m_ShowHealthRing) UpdateHealthRing();
 }
 
-
-// 切換敵人圖片集 - 使用新的图片集向量
-void Enemy::SwitchImageSet(const std::vector<std::string>& newImageSet, bool keepCurrentFrame) {
+void Enemy::SwitchImageSet(const std::vector<std::string>& newImageSet) {
     if (newImageSet.empty()) {
         LOG_ERROR("Cannot switch to empty image set for enemy: {}", m_Name);
         return;
     }
-
     LOG_INFO("Switching image set for enemy: {} to new set with {} images", m_Name, newImageSet.size());
 
-    // 更新Character基类的图片集
     SetImagePathSet(newImageSet);
-
-    // 重建动画
-    RebuildAnimation(newImageSet, keepCurrentFrame);
-
+    RebuildAnimation(newImageSet);
     LOG_DEBUG("Successfully switched image set for enemy: {}", m_Name);
 }
 
-// 切換敵人圖片集 - 使用索引从集合中选择
-void Enemy::SwitchImageSetByIndex(int imageSetIndex, const bool keepCurrentFrame) {
+void Enemy::SwitchImageSetByIndex(int imageSetIndex) {
     if (imageSetIndex < 0 || imageSetIndex >= static_cast<int>(m_ImageSetCollection.size())) {
         LOG_ERROR("Invalid image set index {} for enemy: {}. Available sets: {}",
                   imageSetIndex, m_Name, m_ImageSetCollection.size());
@@ -214,16 +205,13 @@ void Enemy::SwitchImageSetByIndex(int imageSetIndex, const bool keepCurrentFrame
     m_CurrentImageSetIndex = imageSetIndex;
     const auto& newImageSet = m_ImageSetCollection[imageSetIndex];
 
-    // 更新Character基类的图片集
     SetImagePathSet(newImageSet);
 
-    // 重建动画
-    RebuildAnimation(newImageSet, keepCurrentFrame);
+    RebuildAnimation(newImageSet);
 
     LOG_DEBUG("Successfully switched to image set index {} for enemy: {}", imageSetIndex, m_Name);
 }
 
-// 添加多个图片集到集合中
 void Enemy::AddImageSetCollection(const std::vector<std::vector<std::string>>& imageSets) {
     for (const auto& imageSet : imageSets) {
         if (!imageSet.empty()) {
@@ -237,14 +225,12 @@ void Enemy::AddImageSetCollection(const std::vector<std::vector<std::string>>& i
              imageSets.size(), m_Name, m_ImageSetCollection.size());
 }
 
-// 设置特定索引的图片集
 void Enemy::SetImageSetCollection(int index, const std::vector<std::string>& imageSet) {
     if (imageSet.empty()) {
         LOG_ERROR("Cannot set empty image set at index {} for enemy: {}", index, m_Name);
         return;
     }
 
-    // 如果索引超出范围，扩展集合
     if (index >= static_cast<int>(m_ImageSetCollection.size())) {
         m_ImageSetCollection.resize(index + 1);
     }
@@ -253,44 +239,14 @@ void Enemy::SetImageSetCollection(int index, const std::vector<std::string>& ima
     LOG_INFO("Set image set at index {} with {} images for enemy: {}",
               index, imageSet.size(), m_Name);
 
-    // 如果是当前正在使用的图片集，立即更新
     if (index == m_CurrentImageSetIndex) {
         SetImagePathSet(imageSet);
-        RebuildAnimation(imageSet, false);
+        RebuildAnimation(imageSet);
         LOG_INFO("Updated current animation for enemy: {}", m_Name);
     }
 }
 
-// 重建动画的私有函数
-void Enemy::RebuildAnimation(const std::vector<std::string>& newImageSet, bool keepCurrentFrame = false) {
-    // int currentFrame = 0;
-    // bool isPlaying = false;
-    //
-    // // 如果需要保持当前帧，先获取当前动画状态
-    // if (keepCurrentFrame && GetIdleAnimation()) {
-    //     // 注意：这里假设Animation类有获取当前帧的方法
-    //     // 如果没有，可能需要添加这些方法到Animation类中
-    //     // currentFrame = m_IdleAnimation->GetCurrentFrame();
-    //     // isPlaying = m_IdleAnimation->IsPlaying();
-    // }
-
-    // 创建新的闲置动画
+void Enemy::RebuildAnimation(const std::vector<std::string>& newImageSet) {
     SetIdleAnimation(std::make_shared<Util::Animation>(newImageSet, true, 250, true, 0));
-    // m_IdleAnimation = std::make_shared<Util::Animation>(newImageSet, true, 250, true, 0);
-
     m_Drawable = GetIdleAnimation();
-
-    // // 如果当前状态是闲置，更新显示的动画
-    // // if (m_State == State::IDLE) {
-    // //     m_Drawable = m_IdleAnimation;
-    // // }
-    //
-    // // 如果需要保持当前帧状态
-    // if (keepCurrentFrame) {
-    //     // 设置到之前的帧（如果Animation类支持的话）
-    //     // m_IdleAnimation->SetCurrentFrame(currentFrame);
-    //     // if (isPlaying) {
-    //     //     m_IdleAnimation->Play();
-    //     // }
-    // }
 }
