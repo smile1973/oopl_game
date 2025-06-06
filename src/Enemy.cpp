@@ -158,7 +158,7 @@ void Enemy::UpdateHealthRing() {
 
     // 更新每個點的位置和可見性
     for (int i = 0; i < m_TotalDots; i++) {
-        if (i < m_HealthDots.size() && m_HealthDots[i]) {
+        if (i < static_cast<int>(m_HealthDots.size()) && m_HealthDots[i]) {
             // 計算點的位置 (相對於敵人)
             float angle = 2.0f * M_PI * i / m_TotalDots;
             float x = cos(angle) * m_RingRadius;

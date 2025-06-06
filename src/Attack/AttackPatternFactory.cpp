@@ -16,7 +16,7 @@ void AttackPatternFactory::AddCircleAttackRow(
     const glm::vec2& startPos,
     bool isHorizontal,
     int count,
-    float zIndex,  // 正確接收 Z-index 參數
+    float zIndex,
     float spacing,
     float radius,
     const Util::Color& color,
@@ -38,7 +38,6 @@ void AttackPatternFactory::AddCircleAttackRow(
         auto attack = std::make_shared<CircleAttack>(position, delay, radius, i + 1);
         attack->SetColor(color);
 
-        // 使用統一的 Z-index 設置方法
         attack->SetAttackZIndex(zIndex);
 
         if (moveSpeed > 0.0f) {
@@ -66,20 +65,16 @@ void AttackPatternFactory::AddCrossLaserAttack(
     horizontalLaser->SetColor(color);
     horizontalLaser->SetAttackDuration(duration);
     horizontalLaser->SetAutoRotation(false);
-    // 使用統一的 Z-index 設置方法
     horizontalLaser->SetAttackZIndex(10.0f);
 
-    // 建立垂直雷射
     auto verticalLaser = std::make_shared<RectangleAttack>(
         centerPosition, delay, width, length, 1.57f, sequenceNumber + 1
     );
     verticalLaser->SetColor(color);
     verticalLaser->SetAttackDuration(duration);
     verticalLaser->SetAutoRotation(false);
-    // 使用統一的 Z-index 設置方法
     verticalLaser->SetAttackZIndex(10.0f);
 
-    // 添加到模式
     pattern->AddAttack(horizontalLaser, startTime);
     pattern->AddAttack(verticalLaser, startTime);
 }
@@ -102,7 +97,6 @@ std::vector<glm::vec2> AttackPatternFactory::CalculateCircularPositions(
         float y = center.y + radius * sin(angle);
         positions.emplace_back(x, y);
     }
-
     return positions;
 }
 
@@ -112,7 +106,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
     glm::vec2 centerPosition(200.0f, 0.0f);
     pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
         enemy->MoveToPosition(centerPosition, totalTime);
-    }, 0.0f, 1.5f);  // 設置開始時間為0，持續時間為1.5秒
+    }, 0.0f, 1.5f);
 
 
     glm::vec2 startPos(680.0f, 0.0f);
@@ -133,20 +127,20 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
 
     for (int wave = 0; wave < 3; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, 360.0f), // Starting position (top left)
-            true,                      // Horizontal row
-            10,                        // 10 circles
-            30.0,                  // zindex
-            128.0f,                    // 128px spacing
-            32.0f,                     // 32px radius
-            Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
-            glm::vec2(0.0f, -1.0f),    // Move downward
-            350.0f,                    // Speed
-            720.0f,                    // Distance (full height)
-            1.0f,                      // 1s delay
-            1.0f + wave,               // Start at 6 7 8
-            0.0f                       // No interval (simultaneous)
+            pattern,
+            glm::vec2(-620.0f, 360.0f),
+            true,
+            10,
+            30.0,
+            128.0f,
+            32.0f,
+            Util::Color(0.0, 1.0, 0.3, 0.4),
+            glm::vec2(0.0f, -1.0f),
+            350.0f,
+            720.0f,
+            1.0f,
+            1.0f + static_cast<float>(wave),// Start at 6 7 8
+            0.0f
         );
     }
 
@@ -166,20 +160,20 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
 
     for (int wave = 0; wave < 3; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, 360.0f), // Starting position (top left)
-            true,                      // Horizontal row
-            10,                        // 10 circles
-            30.0,                  // zindex
-            128.0f,                    // 128px spacing
-            32.0f,                     // 32px radius
-            Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
-            glm::vec2(0.0f, -1.0f),    // Move downward
-            350.0f,                    // Speed
-            720.0f,                    // Distance (full height)
-            1.0f,                      // 1s delay
-            6.0f + wave,               // Start at 6 7 8
-            0.0f                       // No interval (simultaneous)
+            pattern,
+            glm::vec2(-620.0f, 360.0f),
+            true,
+            10,
+            30.0,
+            128.0f,
+            32.0f,
+            Util::Color(0.0, 1.0, 0.3, 0.4),
+            glm::vec2(0.0f, -1.0f),
+            350.0f,
+            720.0f,
+            1.0f,
+            6.0f + static_cast<float>(wave),
+            0.0f
         );
     }
 
@@ -187,7 +181,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
     glm::vec2 upPosition(200.0f, 100.0f);
     pattern->AddEnemyMovement([upPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
         enemy->MoveToPosition(upPosition, totalTime);
-    }, 9.5f, 1.5f);  // 設置開始時間為0，持續時間為1.5秒
+    }, 9.5f, 1.5f);
 
     startPos = glm::vec2(680.0f, 0.0f);
     endPos = glm::vec2(-680.0f, 0.0f);
@@ -205,20 +199,20 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
 
     for (int wave = 0; wave < 3; wave++) {
         AddCircleAttackRow(
-            pattern,                    // Pattern to add to
-            glm::vec2(-620.0f, -360.0f), // Starting position (bottom left)
-            true,                       // Horizontal row
-            10,                         // 10 circles
+            pattern,
+            glm::vec2(-620.0f, -360.0f),
+            true,
+            10,
             30.0f,
-            128.0f,                     // 128px spacing
-            32.0f,                      // 32px radius
-            Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
-            glm::vec2(0.0f, 1.0f),      // Move upward
-            350.0f,                     // Speed
-            720.0f,                     // Distance (full height)
-            1.0f,                       // 1s delay
-            12.0f + wave,                // Start at 12 13 14
-            0.0f                        // No interval (simultaneous)
+            128.0f,
+            32.0f,
+            Util::Color(0.0, 1.0, 0.3, 0.4),
+            glm::vec2(0.0f, 1.0f),
+            350.0f,
+            720.0f,
+            1.0f,
+            12.0f + static_cast<float>(wave),
+            0.0f
         );
     }
 
@@ -238,20 +232,20 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle1Pattern() {
 
     for (int wave = 0; wave < 3; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, 360.0f), // Starting position (top left)
-            true,                      // Horizontal row
-            10,                        // 10 circles
+            pattern,
+            glm::vec2(-620.0f, 360.0f),
+            true,
+            10,
             30.0f,
-            128.0f,                    // 128px spacing
-            32.0f,                     // 32px radius
-            Util::Color(0.0, 1.0, 0.3, 0.4), // Green color
-            glm::vec2(0.0f, -1.0f),    // Move downward
-            350.0f,                    // Speed
-            720.0f,                    // Distance (full height)
-            1.0f,                      // 1s delay
-            17.0f + wave,              // 17 18 19
-            0.0f                       // No interval (simultaneous)
+            128.0f,
+            32.0f,
+            Util::Color(0.0, 1.0, 0.3, 0.4),
+            glm::vec2(0.0f, -1.0f),
+            350.0f,
+            720.0f,
+            1.0f,
+            17.0f + static_cast<float>(wave),
+            0.0f
         );
     }
 
@@ -264,7 +258,7 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle2Pattern() {
     glm::vec2 centerPosition(0.0f, 0.0f);
     pattern->AddEnemyMovement([centerPosition](const std::shared_ptr<Enemy>& enemy, float totalTime) {
         enemy->MoveToPosition(centerPosition, totalTime);
-    }, 0.0f, 1.0f);  // 設置開始時間為0，持續時間為1.5秒
+    }, 0.0f, 1.0f);
 
     float delay = 1.5f;
     auto cornerbulletAttack = std::make_shared<CornerBulletAttack>(delay, 3);
@@ -318,8 +312,8 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle3Pattern() {
     glm::vec2 endPos;
     for (int wave = 0; wave < 3; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(620.0f, 360.0f), // Starting position (top right)
+            pattern,
+            glm::vec2(620.0f, 360.0f),
             false,
             11,
             20.0,
@@ -327,17 +321,17 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle3Pattern() {
             20.0f,
             Util::Color(0.0, 1.0, 0.3, 0.4),
             glm::vec2(-1.0f, 0.0f),
-            350.0f,                    // Speed
-            1200.0f,                    // Distance
-            1.0f,                      // 1s delay
-            1.0f + wave * 2.0,               // Start at 6 7 8
-            0.0f                       // No interval (simultaneous)
+            350.0f,
+            1200.0f,
+            1.0f,
+            1.0f + static_cast<float>(wave) * 2.0,
+            0.0f
         );
     }
     for (int wave = 0; wave < 3; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, -360.0f), // Starting position (top left)
+            pattern,
+            glm::vec2(-620.0f, -360.0f),
             false,
             11,
             20.0,
@@ -345,11 +339,11 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle3Pattern() {
             20.0f,
             Util::Color(0.0, 1.0, 0.3, 0.4),
             glm::vec2(1.0f, 0.0f),
-            350.0f,                    // Speed
-            1200.0f,                    // Distance
-            1.0f,                      // 1s delay
-            2.0f + wave * 2.0,               // Start at 6 7 8
-            0.0f                       // No interval (simultaneous)
+            350.0f,
+            1200.0f,
+            1.0f,
+            2.0f + static_cast<float>(wave) * 2.0,
+            0.0f
         );
     }
 
@@ -388,24 +382,24 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle4Pattern() {
     std::vector<glm::vec2> pos2 = {{-600.0f, -150.0f}, {630.0f, -300.0f}, {-200.0f, 180.0f}, {0.0f, 340.0f}};
     for (int count = 0; count < 4; count++) {
         AddCrossLaserAttack(
-            pattern,                       // 攻擊模式
-            pos1[count],   // 中心位置
-            200.0f,                         // 寬度
-            2500.0f,                       // 長度
-            Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-            2.0f,                          // 倒數時間
-            2.0f,            // 開始時間
-            1.0f                           // 持續時間
+            pattern,
+            pos1[count],
+            200.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            2.0f,
+            1.0f
         );
         AddCrossLaserAttack(
-            pattern,                       // 攻擊模式
-            pos2[count],   // 中心位置
-            200.0f,                         // 寬度
-            2500.0f,                       // 長度
-            Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-            2.0f,                          // 倒數時間
-            7.0f,            // 開始時間
-            1.0f                           // 持續時間
+            pattern,
+            pos2[count],
+            200.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            7.0f,
+            1.0f
         );
     }
 
@@ -435,35 +429,26 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle4Pattern() {
     std::vector<glm::vec2> pos4 = {{-500.0f, -400.0f}, {-300.0f, 400.0f}, {-100.0f, -400.0f}, {350.0f, 400.0f},{550.0, -400.0f}};
     for (int count = 0; count < 5; count++) {
         AddCrossLaserAttack(
-            pattern,                       // 攻擊模式
-            pos3[count],   // 中心位置
-            250.0f,                         // 寬度
-            2500.0f,                       // 長度
-            Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-            2.0f,                          // 倒數時間
-            12.5f + (count * 0.3f),            // 開始時間
-            1.0f                           // 持續時間
+            pattern,
+            pos3[count],
+            250.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            12.5f + (static_cast<float>(count) * 0.3f),
+            1.0f
         );
         AddCrossLaserAttack(
-            pattern,                       // 攻擊模式
-            pos4[count],   // 中心位置
-            250.0f,                         // 寬度
-            2500.0f,                       // 長度
-            Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-            2.0f,                          // 倒數時間
-            18.5f + (count * 0.3f),            // 開始時間
-            1.0f                           // 持續時間
+            pattern,
+            pos4[count],
+            250.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            18.5f + (static_cast<float>(count) * 0.3f),
+            1.0f
         );
     }
-
-    // centerPosition = {300.0f, 0.0f};
-    // auto rotateAttack3 = std::make_shared<RectangleAttack>(
-    //     centerPosition, delay, 2500.0f, 150.0f, 0.0f, 1
-    // );
-    // rotationSpeed = 0.35f;
-    // rotateAttack3->SetAutoRotation(true, rotationSpeed);
-    // rotateAttack3->SetAttackDuration(duration);
-    // pattern->AddAttack(rotateAttack3, 0.0f);
     pattern->SetDuration(23.0f);
     return pattern;
 }
@@ -491,59 +476,59 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle5Pattern() {
 
     for (int wave = 0; wave < 6; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(640.0f, 360.0f), // top right
-            true,                    // vertical row
-            20,                        // 10 circles
-            20.0,                     // zindex
-            -65.0f,                   // spacing
-            15.0f,                    // radius
+            pattern,
+            glm::vec2(640.0f, 360.0f),
+            true,
+            20,
+            20.0,
+            -65.0f,
+            15.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(0.0f, -1.0f),// Move left
-            110.0f,                    // Speed
-            1200.0f,                   // Distance
-            1.0f,                      // delay
-            1.0f + wave * 3.8f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(0.0f, -1.0f),
+            110.0f,
+            1200.0f,
+            1.0f,
+            1.0f + static_cast<float>(wave) * 3.8f,
+            0.0f
         );
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
+            pattern,
             glm::vec2(685.0f, 360.0f),
-            true,                    // vertical row
-            21,                        // 10 circles
-            19.0,                     // zindex
-            -65.0f,                   // spacing
-            15.0f,                    // radius
+            true,
+            21,
+            19.0,
+            -65.0f,
+            15.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(0.0f, -1.0f),// Move left
-            110.0f,                    // Speed
-            1200.0f,                   // Distance
-            1.0f,                      // delay
-            3.0f + wave * 3.8f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(0.0f, -1.0f),
+            110.0f,
+            1200.0f,
+            1.0f,
+            3.0f + static_cast<float>(wave) * 3.8f,
+            0.0f
         );
     }
 
     for (int wave = 0; wave < 4; wave++) {
         AddCrossLaserAttack(
-             pattern,                       // 攻擊模式
-             glm::vec2(-300.0f, -100.0f),   // 中心位置
-             150.0f,                         // 寬度
-             2500.0f,                       // 長度
-             Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-             2.0f,                          // 倒數時間
-             2.0f + wave * 5.0,            // 開始時間
-             1.0f                           // 持續時間
+            pattern,
+            glm::vec2(-300.0f, -100.0f),
+            150.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            2.0f + static_cast<float>(wave) * 5.0,
+            1.0f
         );
         AddCrossLaserAttack(
-            pattern,                       // 攻擊模式
-            glm::vec2(300.0f, 100.0f),   // 中心位置
-            150.0f,                         // 寬度
-            2500.0f,                       // 長度
-            Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-            2.0f,                          // 倒數時間
-            4.0f + wave * 5.0f,            // 開始時間
-            1.0f                           // 持續時間
+            pattern,
+            glm::vec2(300.0f, 100.0f),
+            150.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            4.0f + static_cast<float>(wave) * 5.0f,
+            1.0f
         );
     }
     pattern->SetDuration(25.0f);
@@ -559,105 +544,105 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::CreateBattle6Pattern() {
 
     for (int wave = 0; wave < 10; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(620.0f, 360.0f), // top right
-            false,                    // vertical row
-            7,                        // 10 circles
-            20.0,                     // zindex
-            -120.0f,                   // spacing
-            20.0f,                    // radius
+            pattern,
+            glm::vec2(620.0f, 360.0f),
+            false,
+            7,
+            20.0,
+            -120.0f,
+            20.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(-1.0f, 0.0f),// Move left
-            300.0f,                    // Speed
-            1200.0f,                   // Distance
-            1.0f,                      // delay
-            1.5f + wave * 1.0f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(-1.0f, 0.0f),
+            300.0f,
+            1200.0f,
+            1.0f,
+            1.5f + static_cast<float>(wave) * 1.0f,
+            0.0f
         );
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, 360.0f), // top left
-            true,                    // vertical row
-            10,                        // 10 circles
-            20.0,                     // zindex
-            128.0f,                   // spacing
-            20.0f,                    // radius
+            pattern,
+            glm::vec2(-620.0f, 360.0f),
+            true,
+            10,
+            20.0,
+            128.0f,
+            20.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(0.0f, -1.0f),// Move left
-            300.0f,                    // Speed
-            1200.0f,                   // Distance
-            1.0f,                      // delay
-            1.5f + wave * 0.8f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(0.0f, -1.0f),
+            300.0f,
+            1200.0f,
+            1.0f,
+            1.5f + static_cast<float>(wave) * 0.8f,
+            0.0f
         );
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, 360.0f), // top right
-            false,                    // vertical row
-            7,                        // 10 circles
-            20.0,                     // zindex
-            -120.0f,                   // spacing
-            20.0f,                    // radius
+            pattern,
+            glm::vec2(-620.0f, 360.0f),
+            false,
+            7,
+            20.0,
+            -120.0f,
+            20.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(1.0f, 0.0f),// Move left
-            300.0f,                    // Speed
-            1200.0f,                   // Distance
-            1.0f,                      // delay
-            11.0f + wave * 1.0f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(1.0f, 0.0f),
+            300.0f,
+            1200.0f,
+            1.0f,
+            11.0f + static_cast<float>(wave) * 1.0f,
+            0.0f
         );
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, -360.0f), // top left
-            true,                    // vertical row
-            10,                        // 10 circles
-            20.0,                     // zindex
-            128.0f,                   // spacing
-            20.0f,                    // radius
+            pattern,
+            glm::vec2(-620.0f, -360.0f),
+            true,
+            10,
+            20.0,
+            128.0f,
+            20.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(0.0f, 1.0f),// Move left
-            300.0f,                    // Speed
-            1200.0f,                   // Distance
-            1.0f,                      // delay
-            11.0f + wave * 0.8f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(0.0f, 1.0f),
+            300.0f,
+            1200.0f,
+            1.0f,
+            11.0f + static_cast<float>(wave) * 0.8f,
+            0.0f
         );
     }
 
     for (int wave = 0; wave < 4; wave++) {
         AddCrossLaserAttack(
-             pattern,                       // 攻擊模式
-             glm::vec2(300.0f - wave * 600.0, 0.0f),   // 中心位置
-             230.0f,                         // 寬度
-             2500.0f,                       // 長度
-             Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-             2.0f,                          // 倒數時間
-             1.5f + wave * 6.0,            // 開始時間
-             0.8f                           // 持續時間
+            pattern,
+            glm::vec2(300.0f - static_cast<float>(wave) * 600.0, 0.0f),
+            230.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            1.5f + static_cast<float>(wave) * 6.0,
+            0.8f
         );
         AddCrossLaserAttack(
-            pattern,                       // 攻擊模式
-            glm::vec2(-300.0f, 0.0f),   // 中心位置
-            230.0f,                         // 寬度
-            2500.0f,                       // 長度
-            Util::Color(1.0, 0.8, 0.0, 0.6), // 黃色
-            2.0f,                          // 倒數時間
-            1.5f + wave * 6.0f,                         // 開始時間
-            0.8f                           // 持續時間
+            pattern,
+            glm::vec2(-300.0f, 0.0f),
+            230.0f,
+            2500.0f,
+            Util::Color(1.0, 0.8, 0.0, 0.6),
+            2.0f,
+            1.5f + static_cast<float>(wave) * 6.0f,
+            0.8f
         );
     }
-    std::vector positions = {glm::vec2(-580.0f, -300.0f), glm::vec2(-580.0f, 300.0f),
+    std::vector<glm::vec2> positions = {glm::vec2(-580.0f, -300.0f), glm::vec2(-580.0f, 300.0f),
         glm::vec2(580.0f, 300.0f), glm::vec2(580.0f, -300.0f)};
     for (int wave = 0; wave < 8; wave++) {
         AddCrossLaserAttack(
-             pattern,                       // 攻擊模式
-             positions[wave%4],               // 中心位置
-             230.0f,                         // 寬度
-             2500.0f,                       // 長度
-             Util::Color(0.0, 1.0, 1.0, 0.4), // 黃色
-             2.0f,                          // 倒數時間
-             2.0f + wave * 3.0f,                   // 開始時間
-             0.8f                           // 持續時間
+            pattern,
+            positions[wave%4],
+            230.0f,
+            2500.0f,
+            Util::Color(0.0, 1.0, 1.0, 0.4),
+            2.0f,
+            2.0f + static_cast<float>(wave) * 3.0f,
+            0.8f
         );
     }
 
@@ -804,7 +789,6 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::BossPattern1() {
         enemy->MoveToPosition(centerPosition, totalTime);
     }, 0.0f, 1.0f);
 
-    // 腳色動慢點
     int count = 16;
     std::vector<glm::vec2> positions = CalculateCircularPositions(centerPosition, 300, count);
     for (int wave = 0; wave < count; wave++) {
@@ -881,36 +865,36 @@ std::shared_ptr<AttackPattern> AttackPatternFactory::BossPattern4() {
 
     for (int wave = 0; wave < 4; wave++) {
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(620.0f, 360.0f), // top right
-            false,                    // vertical row
-            10,                        // 10 circles
-            30.0,                     // zindex
-            -36.0f,                   // spacing
-            35.0f,                    // radius
+            pattern,
+            glm::vec2(620.0f, 360.0f),
+            false,
+            10,
+            30.0,
+            -36.0f,
+            35.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(-1.0f, 0.0f),// Move left
-            300.0f,                    // Speed
-            1500.0f,                   // Distance
-            0.5f,                      // delay
-            1.5f + wave * 2.0f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(-1.0f, 0.0f),
+            300.0f,
+            1500.0f,
+            0.5f,
+            1.5f + static_cast<float>(wave) * 2.0f,
+            0.0f
         );
         AddCircleAttackRow(
-            pattern,                   // Pattern to add to
-            glm::vec2(-620.0f, 0.0f), // top left
-            false,                    // vertical row
-            10,                        // 10 circles
-            30.0,                     // zindex
-            -36.0f,                   // spacing
-            35.0f,                    // radius
+            pattern,
+            glm::vec2(-620.0f, 0.0f),
+            false,
+            10,
+            30.0,
+            -36.0f,
+            35.0f,
             Util::Color(0.0, 1.0, 1.0, 0.4),
-            glm::vec2(1.0f, 0.0f),// Move left
-            300.0f,                    // Speed
-            1500.0f,                   // Distance
-            0.5f,                      // delay
-            1.5f + wave * 2.3f,        // Start at
-            0.0f                       // No interval (simultaneous)
+            glm::vec2(1.0f, 0.0f),
+            300.0f,
+            1500.0f,
+            0.5f,
+            1.5f + static_cast<float>(wave) * 2.3f,
+            0.0f
         );
     }
 

@@ -11,7 +11,6 @@ namespace Effect {
         EllipseShape::EllipseShape(const glm::vec2& radii, float duration)
             : BaseShape(duration), m_Radii(radii) {
 
-            // Initialize OpenGL resources
             if (s_Program == nullptr || s_VertexArray == nullptr) {
                 EllipseShape::InitializeResources();
             }
@@ -19,7 +18,6 @@ namespace Effect {
             m_MatricesBuffer = std::make_unique<Core::UniformBuffer<Core::Matrices>>(
                 *s_Program, "Matrices", 0);
 
-            // Get uniform locations for this instance
             s_Program->Bind();
             m_RadiiLocation = glGetUniformLocation(s_Program->GetId(), "u_Radii");
             m_ColorLocation = glGetUniformLocation(s_Program->GetId(), "u_Color");
@@ -35,7 +33,6 @@ namespace Effect {
         void EllipseShape::Draw(const Core::Matrices& data) {
             if (m_State != State::ACTIVE) return;
 
-            // Update matrices
             m_MatricesBuffer->SetData(0, data);
 
             // Enable blending
@@ -43,10 +40,8 @@ namespace Effect {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             glUniform2f(m_RadiiLocation, m_Radii.x, m_Radii.y);
-
-            // 設置顏色 - 這個可能會與修飾器衝突，所以確保順序正確
+            // 設置顏色
             glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
-
             // 設置時間
             glUniform1f(m_TimeLocation, m_ElapsedTime);
 
@@ -96,5 +91,5 @@ namespace Effect {
                 }));
         }
 
-    } // namespace Shape
-} // namespace Effect
+    }
+}

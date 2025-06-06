@@ -27,7 +27,6 @@ namespace Effect {
             m_DistanceTraveled = 0.0f;
         }
 
-
         bool MovementModifier::HasReachedDestination() const {
             return !m_IsMoving || m_DistanceTraveled >= m_MaxDistance;
         }

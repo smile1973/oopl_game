@@ -1,4 +1,3 @@
-// src/Effect/Modifier/FillModifier.cpp - 優化版本
 #include "Effect/Modifier/FillModifier.hpp"
 #include "Util/Logger.hpp"
 
@@ -10,11 +9,9 @@ namespace Effect {
         }
 
         void FillModifier::Apply(Core::Program& program) {
-            // 獲取 uniform 位置（只在第一次獲取）
             if (m_FillTypeLocation == -1) {
                 m_FillTypeLocation = glGetUniformLocation(program.GetId(), "u_FillType");
 
-                // 嘗試標準名稱，如果失敗則嘗試替代名稱
                 m_ThicknessLocation = glGetUniformLocation(program.GetId(), "u_Thickness");
                 if (m_ThicknessLocation == -1) {
                     m_ThicknessLocation = glGetUniformLocation(program.GetId(), "u_FillThickness");

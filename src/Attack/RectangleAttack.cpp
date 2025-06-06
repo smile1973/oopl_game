@@ -21,8 +21,8 @@ RectangleAttack::RectangleAttack(const glm::vec2& position, float delay, Directi
     : Attack(position, delay, sequenceNumber),
       m_Width(width),
       m_Height(height),
-      m_Direction(direction),
-      m_Color(Util::Color::FromRGB(255, 20, 20, 200)) {
+      m_Color(Util::Color::FromRGB(255, 20, 20, 200)),
+      m_Direction(direction) {
     m_Rotation = CalculateRotationAngle();
     m_UseGlowEffect = true;
 }
@@ -50,7 +50,6 @@ void RectangleAttack::CreateWarningEffect() {
         ));
 
         warningEffect->SetDuration(m_Delay + 1.0f);
-        // 使用統一的 Z-index 管理
         warningEffect->Play(m_Position, GetWarningZIndex());
 
         m_WarningEffect = warningEffect;
@@ -80,7 +79,6 @@ void RectangleAttack::CreateAttackEffect() {
         float effectDuration = m_AttackDuration * 1.5f;
         rectangleEffect->SetDuration(effectDuration);
 
-        // 使用統一的 Z-index 管理，移除硬編碼的 z_ind
         rectangleEffect->Play(m_Position, GetAttackZIndex());
         m_AttackEffect = rectangleEffect;
     } catch (const std::exception& e) {
@@ -106,7 +104,7 @@ void RectangleAttack::CreateDirectionIndicator() {
 
     m_DirectionIndicator = std::make_shared<Util::GameObject>(
         directionImage,
-        GetIndicatorZIndex(), // 使用統一的 Z-index 管理
+        GetIndicatorZIndex(),
         m_Position,
         true
     );
@@ -214,7 +212,6 @@ void RectangleAttack::CleanupVisuals() {
     }
 }
 
-// 移除 SetZ 方法，改用繼承的 SetAttackZIndex
 void RectangleAttack::SetAttackZIndex(float zIndex) {
-    Attack::SetAttackZIndex(zIndex); // 呼叫基類方法
+    Attack::SetAttackZIndex(zIndex);
 }

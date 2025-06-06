@@ -1,11 +1,8 @@
-// src/Effect/EffectFactory.cpp - 移除 AnimationModifier 的最終版本
 #include "Effect/EffectFactory.hpp"
 #include "Util/Logger.hpp"
 #include "Effect/Shape/RectangleShape.hpp"
 
 namespace Effect {
-
-    // 私有輔助方法：創建通用圓形特效
     std::shared_ptr<CompositeEffect> EffectFactory::CreateCircleEffect(
         float radius,
         const Util::Color& color,
@@ -22,7 +19,6 @@ namespace Effect {
         auto effect = std::make_shared<CompositeEffect>(circleShape);
         effect->SetFillModifier(Modifier::FillModifier(fillType, 0.02f));
 
-        // 設置邊緣效果（如果需要）
         if (edgeType != Modifier::EdgeType::NONE) {
             Util::Color defaultEdgeColor = (edgeType == Modifier::EdgeType::GLOW) ?
                 Util::Color(1.0f, 0.0f, 1.0f, 1.0f) : Util::Color(0.0f, 0.0f, 0.0f, 0.7f);
@@ -32,7 +28,6 @@ namespace Effect {
         return effect;
     }
 
-    // 私有輔助方法：創建通用矩形特效
     std::shared_ptr<CompositeEffect> EffectFactory::CreateRectangleEffect(
         const glm::vec2& dimensions,
         const Util::Color& color,
@@ -81,7 +76,6 @@ namespace Effect {
                     {150, 150},
                     0.02f
                 );
-                // 設置移動（替代尾跡效果）
                 effect->SetMovementModifier(Modifier::MovementModifier(true, 600.0f, 800.0f, {1.0f, 0.0f}));
                 break;
             }
@@ -97,7 +91,6 @@ namespace Effect {
             }
 
             case EffectType::SKILL_V: {
-                // 移除波紋效果，改用更強的發光效果來替代
                 effect = CreateCircleEffect(
                     0.4f,
                     Util::Color(0.9f, 0.9f, 0.9f, 0.05f),
@@ -105,7 +98,7 @@ namespace Effect {
                     Modifier::FillType::SOLID,
                     Modifier::EdgeType::GLOW,
                     {400, 400},
-                    0.08f  // 更寬的發光邊緣
+                    0.08f
                 );
                 break;
             }
@@ -120,7 +113,6 @@ namespace Effect {
                     {400, 400},
                     0.06f
                 );
-                // 覆寫邊緣顏色為橙色
                 effect->SetEdgeModifier(Modifier::EdgeModifier(Modifier::EdgeType::GLOW, 0.06f, Util::Color(1.0f, 0.5f, 0.0f, 1.0f)));
                 break;
             }
@@ -164,37 +156,4 @@ namespace Effect {
 
         return effect;
     }
-
-    std::shared_ptr<CompositeEffect> EffectFactory::CreateCustomEffect(
-        bool isCircle,
-        const Modifier::FillType& fillType,
-        const Modifier::EdgeType& edgeType,
-        bool isMoving
-    ) {
-        std::shared_ptr<CompositeEffect> effect;
-
-        if (isCircle) {
-            effect = CreateCircleEffect(
-                0.4f,
-                Util::Color(255, 255, 255, 255),
-                1.0f,
-                fillType,
-                edgeType,
-                {400, 400}
-            );
-        } else {
-            auto ellipseShape = std::make_shared<Shape::EllipseShape>(glm::vec2(0.5f, 0.3f), 1.0f);
-            effect = std::make_shared<CompositeEffect>(ellipseShape);
-            effect->SetFillModifier(Modifier::FillModifier(fillType, 0.03f));
-            effect->SetEdgeModifier(Modifier::EdgeModifier(edgeType, 0.05f, Util::Color(255, 255, 255, 255)));
-        }
-
-        // 設置移動修飾器
-        if (isMoving) {
-            effect->SetMovementModifier(Modifier::MovementModifier(true, 250.0f, 400.0f, {1.0f, 0.0f}));
-        }
-        
-        return effect;
-    }
-
-} // namespace Effect
+}

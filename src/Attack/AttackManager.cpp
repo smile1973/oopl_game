@@ -15,14 +15,12 @@ void AttackManager::Update(float deltaTime, std::shared_ptr<Character> &player) 
     // 更新所有攻擊並檢測碰撞
     for (auto it = m_ActiveAttacks.begin(); it != m_ActiveAttacks.end();) {
         auto& attack = *it;
-        
-        // 更新攻擊
+
         attack->Update(deltaTime);
-        // 檢查碰撞
         if (player && attack->GetState() == Attack::State::ATTACKING) {
             attack->CheckCollision(player);
         }
-        // 如果攻擊已完成，從活躍列表中移除
+        // 如果攻擊已完成 從活躍列表中移除
         if (attack->IsFinished()) {
             it = m_ActiveAttacks.erase(it);
         } else {

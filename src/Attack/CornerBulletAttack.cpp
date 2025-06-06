@@ -1,11 +1,11 @@
 #include "Attack/CornerBulletAttack.hpp"
 #include "Util/Logger.hpp"
 #include "Effect/EffectManager.hpp"
-#include "Attack/AttackManager.hpp" // 添加引用攻擊管理器
+#include "Attack/AttackManager.hpp"
 #include <cmath>
 
 CornerBulletAttack::CornerBulletAttack(float delay, int bulletCount, int sequenceNumber)
-    : CircleAttack({0, 0}, delay, 30.0f, sequenceNumber),  // 使用基類構造函數
+    : CircleAttack({0, 0}, delay, 30.0f, sequenceNumber),
       m_BulletCount(bulletCount) {
 
     std::random_device rd;
@@ -32,8 +32,8 @@ std::vector<float> CornerBulletAttack::GenerateRandomAngles(float baseAngle) {
         M_PI / 180.0f * 55.0f
     };
 
-    // 隨機偏移 ±5度
-    float maxDeviation = M_PI / 180.0f * 5.0f;  // 5度轉換為弧度
+    // 隨機偏移 5度
+    float maxDeviation = M_PI / 180.0f * 5.0f;
     std::uniform_real_distribution<float> distribution(-maxDeviation, maxDeviation);
 
     // 生成每個子彈的角度
@@ -56,15 +56,13 @@ void CornerBulletAttack::AddBulletPath(const glm::vec2& startPosition, float ang
 
 void CornerBulletAttack::CreateWarningEffect() {
     m_BulletPaths.clear();
-    m_BulletAttacks.clear();  // 清除之前的子彈攻擊
+    m_BulletAttacks.clear();
 
-    // 四個角落的位置
     glm::vec2 topLeft(-642.0f, 362.0f);
     glm::vec2 topRight(642.0f, 362.0f);
     glm::vec2 bottomLeft(-642.0f, -362.0f);
     glm::vec2 bottomRight(642.0f, -362.0f);
 
-    // 設置各個角落的子彈
     auto tlAngles = GenerateRandomAngles(0.0f);
     for (float angle : tlAngles) {
         AddBulletPath(topLeft, angle);
@@ -95,7 +93,6 @@ void CornerBulletAttack::CreateWarningEffect() {
         float length = glm::distance(path.startPosition, endPosition);
         float width = GetRadius() * 2.0f;
 
-        // 創建矩形警告效果
         auto warningEffect = Effect::EffectManager::GetInstance().GetEffect(Effect::EffectType::RECT_BEAM);
         if (auto rectangleShape = std::dynamic_pointer_cast<Effect::Shape::RectangleShape>(warningEffect->GetBaseShape())) {
             rectangleShape->SetDimensions(glm::vec2(1.0f, width / length));
