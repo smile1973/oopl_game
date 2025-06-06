@@ -62,7 +62,6 @@ void App::Update() {
     rabbitPos.x = std::max(minX, std::min(rabbitPos.x, maxX));
     rabbitPos.y = std::max(minY, std::min(rabbitPos.y, maxY));
     m_Rabbit->SetPosition(rabbitPos); // 更新位置
-    // LOG_ERROR("{},{}",rabbitPos.x,rabbitPos.y);
 
     // 退出
     if (Util::Input::IsKeyPressed(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {

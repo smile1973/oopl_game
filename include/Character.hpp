@@ -52,7 +52,7 @@ public:
     [[nodiscard]] bool IsSkillXUes() const { return m_IsSkillXUes; }
 
     bool IsSkillOnCooldown(int skillId) const;
-    [[nodiscard]] float GetRemainingCooldown(int skillId) const {
+    [[nodiscard]] float GetRemainingCooldown(const int skillId) const {
         auto it = m_Skills.find(skillId);
         if (it != m_Skills.end()) {
             return it->second->GetRemainingCooldown();
@@ -121,7 +121,7 @@ private:
     glm::vec2 m_TargetPosition = glm::vec2(0.0f, 0.0f);
     glm::vec2 m_MoveSpeed = glm::vec2(0.0f, 0.0f);
 
-    int m_Money = 20;
+    int m_Money = 0;
     int m_Experience = 0;
     int m_Level = 1;
     bool m_GodMode = false;

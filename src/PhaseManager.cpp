@@ -100,6 +100,8 @@ void PhaseManager::Update() const {
 }
 
 void PhaseManager::ReStart() {
+    m_ProgressBar->SetProgressBar(4);
+
     m_MainPhase = 0;
     m_SubPhase = -1;
     m_SubPhaseType = 0;

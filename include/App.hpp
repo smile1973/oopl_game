@@ -34,7 +34,7 @@ public:
     App& operator=(const App&) = delete;
 
     [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
-    std::shared_ptr<Util::GameObject> GetOverlay() const { return m_Overlay; }
+    [[nodiscard]] std::shared_ptr<Util::GameObject> GetOverlay() const { return m_Overlay; }
 
     void Start();
 
@@ -63,24 +63,7 @@ private:
     void SetupBattlePhase() const;      // 設置戰鬥關卡配置
     void RestartGame();
 
-    App() : m_CurrentState(State::START),
-           m_Phase(Phase::START) {}
-
-    enum class Phase {
-        START,
-        BATTLE_1,
-        BATTLE_2,
-        BATTLE_3,
-        STORE,
-    };
-    // 暫停指令(好像沒用到)
-    enum class PausedOption {
-        CONTINUE,
-        RESTART,
-        MANAGE_PLAYER,
-        GAME_SETTING,
-        RETURN_TITLE_PAGE,
-    };
+    App() {}
 
     static App* s_Instance;
 
@@ -120,7 +103,6 @@ private:
     std::shared_ptr<Enemy> m_PressZtoJoin;
     bool m_IsReady = false;
     int m_CurrentPausedOption = 0;
-    Phase m_Phase;
     bool m_GKeyDown = false;
 };
 

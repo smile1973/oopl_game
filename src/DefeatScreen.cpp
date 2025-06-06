@@ -25,10 +25,6 @@ DefeatScreen::DefeatScreen(const std::shared_ptr<Character>& character)
     m_UserName -> SetPosition(glm::vec2(-60, 142));
     m_UserName -> SetZIndex(100);
 
-    m_DPS = std::make_shared<TextObject>("123", 20);
-    m_DPS -> SetPosition(glm::vec2(65, -175));
-    m_DPS -> SetZIndex(100);
-
     const std::vector<std::string> optionNames = {"leave_game", "new_game"};
     for (int i = 0; i < static_cast<int>(optionNames.size()); ++i) {
         m_Options.push_back(std::make_shared<Object>(GA_RESOURCE_DIR "/Image/Option/" + optionNames[i] + ".png") );
@@ -63,7 +59,6 @@ DefeatScreen::DefeatScreen(const std::shared_ptr<Character>& character)
     m_Children.push_back(m_GameTime);
     m_Children.push_back(m_UserName);
     m_Children.push_back(m_Level);
-    m_Children.push_back(m_DPS);
 }
 
 
@@ -91,6 +86,7 @@ void DefeatScreen::Reset() {
     for (const auto& option : m_Options) {
         option->m_Transform.scale =  {0.75f, 0.75f};
     }
+    m_PassedLevels.clear();
     LOG_INFO("DefeatScreen::Reset");
 }
 
@@ -111,7 +107,6 @@ void DefeatScreen::Get(const bool isVictory = false) {
 void DefeatScreen::Update(){
     if (m_IsGameStart) {
         m_GameTimer += Util::Time::GetDeltaTimeMs();
-        // LOG_INFO("DefeatScreen::Update--m_GameTimer:{}",m_GameTimer);
     }
     for (const auto& option : m_Options) {
         option->Update();

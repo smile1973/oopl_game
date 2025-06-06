@@ -46,7 +46,6 @@ private:
     std::shared_ptr<TextObject> m_GameTime;
     std::shared_ptr<TextObject> m_UserName;
     std::shared_ptr<TextObject> m_Level;
-    std::shared_ptr<TextObject> m_DPS;
 
     std::vector<std::shared_ptr<Object>> m_Options;
     int m_CurrentOption = 0;
