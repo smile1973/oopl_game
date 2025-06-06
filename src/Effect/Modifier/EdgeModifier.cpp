@@ -1,4 +1,3 @@
-// src/Effect/Modifier/EdgeModifier.cpp - 優化版本
 #include "Effect/Modifier/EdgeModifier.hpp"
 #include "Util/Logger.hpp"
 
@@ -10,7 +9,6 @@ namespace Effect {
         }
 
         void EdgeModifier::Apply(Core::Program& program) {
-            // 獲取 uniform 位置（只在第一次獲取）
             if (m_EdgeTypeLocation == -1) {
                 m_EdgeTypeLocation = glGetUniformLocation(program.GetId(), "u_EdgeType");
                 m_EdgeWidthLocation = glGetUniformLocation(program.GetId(), "u_EdgeWidth");

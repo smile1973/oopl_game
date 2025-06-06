@@ -1,4 +1,3 @@
-// src/Effect/CompositeEffect.cpp - 移除 AnimationModifier 版本
 #include "Effect/CompositeEffect.hpp"
 #include "Util/Logger.hpp"
 
@@ -31,23 +30,19 @@ namespace Effect {
             return;
         }
 
-        // 先綁定程序，這樣才能設置 uniform
         program->Bind();
 
-        // 依次應用修飾器（移除動畫修飾器）
         m_FillModifier.Apply(*program);
         m_EdgeModifier.Apply(*program);
 
-        // 設置時間 uniform - 基本的時間變量
+        // 時間uniform
         GLint timeLocation = glGetUniformLocation(program->GetId(), "u_Time");
         if (timeLocation != -1) {
             glUniform1f(timeLocation, m_ElapsedTime);
         }
 
-        // 驗證著色器程序以確保所有 uniform 都已設置正確
+        // 驗證
         program->Validate();
-
-        // 繪製基本形狀
         m_BaseShape->Draw(data);
     }
 
@@ -57,8 +52,6 @@ namespace Effect {
 
     void CompositeEffect::Update(float deltaTime) {
         if (m_State != State::ACTIVE) return;
-
-        // Update base shape
         m_BaseShape->Update(deltaTime);
 
         // Apply movement modifier
@@ -67,7 +60,6 @@ namespace Effect {
             m_MovementModifier.Update(deltaTime, position);
             m_Transform.translation = position;
 
-            // If reached destination and base shape is still active, end the effect
             if (m_MovementModifier.HasReachedDestination() && m_BaseShape->GetState() == State::ACTIVE) {
                 m_BaseShape->Reset();
                 m_State = State::FINISHED;
@@ -93,10 +85,8 @@ namespace Effect {
         m_ZIndex = zIndex;
         m_State = State::ACTIVE;
 
-        // Sync position to base shape
         m_BaseShape->Play(position, zIndex);
 
-        // Reset movement modifier and set start position
         if (m_MovementModifier.IsMoving()) {
             m_MovementModifier.Reset();
             m_MovementModifier.SetSpeed(m_MovementModifier.GetSpeed() * m_direction);
@@ -113,4 +103,4 @@ namespace Effect {
         m_State = State::INACTIVE;
     }
 
-} // namespace Effect
+}

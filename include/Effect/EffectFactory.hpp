@@ -25,13 +25,6 @@ namespace Effect {
 
         static std::shared_ptr<CompositeEffect> CreateEffect(EffectType type);
 
-        std::shared_ptr<CompositeEffect> CreateCustomEffect(
-            bool isCircle = true,
-            const Modifier::FillType& fillType = Modifier::FillType::SOLID,
-            const Modifier::EdgeType& edgeType = Modifier::EdgeType::NONE,
-            bool isMoving = false
-        );
-
     private:
         EffectFactory() = default;
 

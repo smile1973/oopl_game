@@ -34,7 +34,6 @@ void CircleAttack::CreateWarningEffect() {
         ));
 
         warningEffect->SetDuration(m_Delay + 1.0f);
-        // 使用統一的 Z-index 管理
         warningEffect->Play(m_Position, GetWarningZIndex());
 
         m_WarningEffect = warningEffect;
@@ -78,7 +77,6 @@ void CircleAttack::CreateAttackEffect() {
         }
 
         circleEffect->SetDuration(m_AttackDuration);
-        // 使用統一的 Z-index 管理，移除硬編碼的 z_ind
         circleEffect->Play(m_Position, GetAttackZIndex());
         m_AttackEffect = circleEffect;
     } catch (const std::exception& e) {
@@ -107,7 +105,7 @@ void CircleAttack::CreateDirectionIndicator() {
 
     m_DirectionIndicator = std::make_shared<Util::GameObject>(
         s_ArrowImage,
-        GetIndicatorZIndex(), // 使用統一的 Z-index 管理
+        GetIndicatorZIndex(),
         glm::vec2(0.0f, 0.0f),
         true
     );
@@ -146,7 +144,6 @@ void CircleAttack::CleanupVisuals() {
     }
 }
 
-// 移除 SetZ 方法，改用繼承的 SetAttackZIndex
 void CircleAttack::SetAttackZIndex(float zIndex) {
-    Attack::SetAttackZIndex(zIndex); // 呼叫基類方法
+    Attack::SetAttackZIndex(zIndex);
 }

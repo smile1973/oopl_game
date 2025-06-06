@@ -26,7 +26,7 @@ DefeatScreen::DefeatScreen(const std::shared_ptr<Character>& character)
     m_UserName -> SetZIndex(100);
 
     const std::vector<std::string> optionNames = {"leave_game", "new_game"};
-    for (int i = 0; i < optionNames.size(); ++i) {
+    for (int i = 0; i < static_cast<int>(optionNames.size()); ++i) {
         m_Options.push_back(std::make_shared<Object>(GA_RESOURCE_DIR "/Image/Option/" + optionNames[i] + ".png") );
         m_Options[i] -> SetScale(0.75,0.75);
         m_Options[i] -> SetZIndex(90);
@@ -40,7 +40,7 @@ DefeatScreen::DefeatScreen(const std::shared_ptr<Character>& character)
     constexpr int baseX2 = 30;
     constexpr int baseY2 = 230;
     constexpr float spacing = 126.0f;
-    for (int i = 0; i < PhasesNums.size(); ++i) {
+    for (int i = 0; i < static_cast<int>(PhasesNums.size()); ++i) {
         m_PassedPhases.push_back(std::make_shared<Object>(GA_RESOURCE_DIR "/Image/UI/stage_icon_000" + PhasesNums[i] + ".png") );
         m_PassedPhases[i] -> SetScale(0.1,0.1);
         m_PassedPhases[i] -> SetZIndex(90);
@@ -95,7 +95,7 @@ void DefeatScreen::Get(const bool isVictory = false) {
     m_CurrentOption = -1;
     m_IsGameStart = false;
     SetVisible(true);
-    for (int i = m_PassedLevels.size(); i < m_PassedPhases.size(); ++i) {
+    for (int i = static_cast<int>(m_PassedLevels.size()); i < static_cast<int>(m_PassedPhases.size()); ++i) {
         if (m_PassedPhases[i]) {
             m_PassedPhases[i]->SetVisible(false);
         }

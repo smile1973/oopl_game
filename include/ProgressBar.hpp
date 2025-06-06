@@ -12,7 +12,7 @@ public:
         std::vector<std::string> iconNames = {"store", "battle", "battle", "treasure", "boss",
                                               "R", "bar_w_b", "bar_w_b_r_", "bar_g_b", "bar_g_b_l_",};
 
-        for (int i = 0; i < iconNames.size(); ++i) {
+        for (int i = 0; i < static_cast<int>(iconNames.size()); ++i) {
             constexpr float iconSpacing = 162.5f;
             m_Icons.push_back(std::make_shared<ProgressIcon>(iconNames[i]));
             m_Icons[i]->SetPosition(m_BasePosition + glm::vec2(iconSpacing * (i + 0.0), 0.0f));

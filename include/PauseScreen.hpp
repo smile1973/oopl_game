@@ -8,7 +8,7 @@ class PausedScreen {
 public:
     PausedScreen() {
         std::vector<std::string> optionNames = {"continue", "restart", "manage_player", "game_setting", "leave_game"};
-        for (int i = 0; i < optionNames.size(); ++i) {
+        for (int i = 0; i < static_cast<int>(optionNames.size()); ++i) {
             m_Options.push_back(std::make_shared<Enemy>(optionNames[i],1,std::vector{ ImagePath(optionNames[i])}));
             m_Options[i] -> m_Transform.scale =  {1.05f, 1.05f};
             m_Options[i] -> SetZIndex(100);

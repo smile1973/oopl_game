@@ -11,7 +11,6 @@ namespace Effect {
         CircleShape::CircleShape(float radius, float duration)
             : BaseShape(duration), m_Radius(radius) {
 
-            // Initialize OpenGL resources (shaders and vertex arrays)
             if (s_Program == nullptr || s_VertexArray == nullptr) {
                 CircleShape::InitializeResources();
             }
@@ -19,7 +18,6 @@ namespace Effect {
             m_MatricesBuffer = std::make_unique<Core::UniformBuffer<Core::Matrices>>(
                 *s_Program, "Matrices", 0);
 
-            // Get uniform locations for this instance
             s_Program->Bind();
             m_RadiusLocation = glGetUniformLocation(s_Program->GetId(), "u_Radius");
             m_ColorLocation = glGetUniformLocation(s_Program->GetId(), "u_Color");
@@ -35,18 +33,14 @@ namespace Effect {
         void CircleShape::Draw(const Core::Matrices& data) {
             if (m_State != State::ACTIVE) return;
 
-            // Update matrices
             m_MatricesBuffer->SetData(0, data);
 
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            // 設置圓形特有的 uniform
             glUniform1f(m_RadiusLocation, m_Radius);
-
-            // 設置顏色 - 這個可能會與修飾器衝突，所以確保順序正確
+            // 設置顏色
             glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
-
             // 設置時間
             glUniform1f(m_TimeLocation, m_ElapsedTime);
 
@@ -56,7 +50,6 @@ namespace Effect {
         }
 
         void CircleShape::InitializeResources() {
-            // Initialize shader program
             try {
                 s_Program = std::make_unique<Core::Program>(
                     GA_RESOURCE_DIR "/shaders/Circle.vert",
@@ -66,7 +59,6 @@ namespace Effect {
                 LOG_ERROR("Failed to load circle shape shaders: {}", e.what());
             }
 
-            // Initialize vertex array
             s_VertexArray = std::make_unique<Core::VertexArray>();
 
             // Set vertex data

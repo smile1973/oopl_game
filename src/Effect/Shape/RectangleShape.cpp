@@ -28,14 +28,12 @@ namespace Effect {
             m_ColorLocation = glGetUniformLocation(s_Program->GetId(), "u_Color");
             m_TimeLocation = glGetUniformLocation(s_Program->GetId(), "u_Time");
 
-            // 確保所有 uniform 變數都能被找到
             if (m_DimensionsLocation == -1 || m_ThicknessLocation == -1 ||
                 m_RotationLocation == -1 || m_ColorLocation == -1 ||
                 m_TimeLocation == -1) {
                 LOG_ERROR("Failed to get basic uniform locations for RectangleShape instance");
             }
 
-            // 檢查填充、邊緣和動畫修飾器相關的 uniform 變數也存在
             GLint fillTypeLocation = glGetUniformLocation(s_Program->GetId(), "u_FillType");
             GLint fillThicknessLocation = glGetUniformLocation(s_Program->GetId(), "u_FillThickness");
             GLint edgeTypeLocation = glGetUniformLocation(s_Program->GetId(), "u_EdgeType");
@@ -76,15 +74,13 @@ namespace Effect {
             glUniform1f(m_ThicknessLocation, m_Thickness); // 保持厚度的設置
             glUniform1f(m_RotationLocation, m_Rotation);
 
-            // LOG_DEBUG("RectangleShape::Draw - Rotation: {:.2f} radians", m_Rotation);
-
             // Set color properly
             glUniform4f(m_ColorLocation, m_Color.r, m_Color.g, m_Color.b, m_Color.a);
 
             // Set time for animation
             glUniform1f(m_TimeLocation, m_ElapsedTime);
 
-            // Validate shader program (檢查著色器是否一切正常)
+            // Validate shader program
             s_Program->Validate();
 
             // Draw
@@ -92,14 +88,10 @@ namespace Effect {
             s_VertexArray->DrawTriangles();
         }
         void RectangleShape::Update(float deltaTime) {
-            // 調用基類更新
             BaseShape::Update(deltaTime);
 
-            // 僅在啟用自動旋轉且特效處於活躍狀態時更新旋轉角度
             if (m_AutoRotate && m_State == State::ACTIVE) {
-                // 根據旋轉速度更新角度
                 m_Rotation += deltaTime * m_RotationSpeed * 3.14159f;
-
                 // 保持旋轉角度在0-2π範圍內
                 while (m_Rotation > 2.0f * 3.14159f) {
                     m_Rotation -= 2.0f * 3.14159f;
@@ -149,5 +141,5 @@ namespace Effect {
                 }));
         }
 
-    } // namespace Shape
-} // namespace Effect
+    }
+}

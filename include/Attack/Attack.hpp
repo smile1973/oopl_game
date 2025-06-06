@@ -36,7 +36,6 @@ public:
 
     void SetPosition(const glm::vec2& position);
     void SetDelay(float delay) { m_Delay = delay; }
-    void SetSequenceNumber(int number);
     void SetTargetCharacter(std::shared_ptr<Character> target) { m_TargetCharacter = target; }
 
     void SetAttackZIndex(float zIndex) {

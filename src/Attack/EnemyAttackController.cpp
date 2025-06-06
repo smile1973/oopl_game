@@ -15,49 +15,42 @@ void EnemyAttackController::InitBattle1Patterns() {
     AddPattern(pattern);
 }
 
-// 初始化敵人2的攻擊模式 (Main1, Sub2)
 void EnemyAttackController::InitBattle2Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle2Pattern();
     AddPattern(pattern);
 }
 
-// 初始化敵人3的攻擊模式 (Main1, Sub4)
 void EnemyAttackController::InitBattle3Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle3Pattern();
     AddPattern(pattern);
 }
 
-// 初始化敵人4的攻擊模式 (Main2, Sub1)
 void EnemyAttackController::InitBattle4Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle4Pattern();
     AddPattern(pattern);
 }
 
-// 初始化敵人5的攻擊模式 (Main2, Sub2)
 void EnemyAttackController::InitBattle5Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle5Pattern();
     AddPattern(pattern);
 }
 
-// 初始化敵人6的攻擊模式 (Main2, Sub4)
 void EnemyAttackController::InitBattle6Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle6Pattern();
     AddPattern(pattern);
 }
 
-// 初始化敵人7的攻擊模式 (Main3, Sub1)
 void EnemyAttackController::InitBattle7Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle7Pattern();
     AddPattern(pattern);
 }
 
-// 初始化敵人8的攻擊模式 (Main3, Sub2)
 void EnemyAttackController::InitBattle8Patterns() {
     ClearPatterns();
     auto pattern = AttackPatternFactory::GetInstance().CreateBattle8Pattern();
@@ -71,14 +64,11 @@ void EnemyAttackController::InitBossPatterns() {
 }
 
 void EnemyAttackController::SelectRandomPatternForBoss() {
-    // 確保有模式類型可選
     if (m_BossPatternTypes.empty()) return;
 
-    // 生成隨機索引
     std::uniform_int_distribution<int> distribution(0, m_BossPatternTypes.size() - 1);
     int randomIndex = distribution(m_RandomEngine);
 
-    // 獲取隨機選擇的模式類型
     int patternType = m_BossPatternTypes[randomIndex];
 
     ClearPatterns();
@@ -111,7 +101,6 @@ void EnemyAttackController::SelectRandomPatternForBoss() {
 void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> player) {
     if (!m_IsActive) return;
 
-    // 處理冷卻
     if (m_IsInCooldown) {
         m_ElapsedCooldownTime += deltaTime;
 
@@ -127,8 +116,6 @@ void EnemyAttackController::Update(float deltaTime, std::shared_ptr<Character> p
     // 更新當前攻擊模式
     if (m_CurrentPattern) {
         m_CurrentPattern->Update(deltaTime, player);
-
-        // 檢查當前模式是否已完成
         if (m_CurrentPattern->IsFinished()) {
             m_IsInCooldown = true;
             m_ElapsedCooldownTime = 0.0f;
@@ -176,8 +163,6 @@ void EnemyAttackController::Start() {
 
 void EnemyAttackController::Stop() {
     m_IsActive = false;
-
-    // 停止當前模式
     if (m_CurrentPattern) {
         m_CurrentPattern->Stop();
     }

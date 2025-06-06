@@ -61,9 +61,10 @@ public:
     }
 
     virtual void MovePosition(const glm::vec2& Position, float totalTime);  //平移位置
-    virtual void MoveToPosition(const glm::vec2& targetPosition, float totalTime); //平移到某位置
+    virtual void MoveToPosition(const glm::vec2& targetPosition, float totalTime = 0.0f); //平移到某位置
     [[nodiscard]] virtual glm::vec2& GetTargetPosition() { return m_TargetPosition; }
 
+    // 血量相關
     void TakeDamage(int damage = 1);
     bool IsInvincible() const { return m_Invincible; }
     int GetHealth() const { return m_Health; }
@@ -77,6 +78,7 @@ public:
     bool IsInGodMode() const { return m_GodMode; }
 
 protected:
+    // 為子類提供的方法
     void SetImagePathSet(const std::vector<std::string>& newImageSet) { m_ImagePathSet = newImageSet; }
     void SetIdleAnimation(const std::shared_ptr<Util::Animation> &animation) { m_IdleAnimation = animation; }
     std::shared_ptr<Util::Animation> GetIdleAnimation() const { return m_IdleAnimation; }
@@ -85,12 +87,13 @@ private:
     void ResetPosition() { m_Transform.translation = {0, 0}; }
     void SwitchToIdle();
     void SwitchToSkill(int skillId);
-    void SwitchToHurt();
+    void SwitchToHurt();    // 切換到受傷狀態
 
     std::vector<std::string> m_ImagePathSet;
     std::shared_ptr<Util::Animation> m_IdleAnimation;
-    std::shared_ptr<Util::Animation> m_HurtAnimation;
+    std::shared_ptr<Util::Animation> m_HurtAnimation;  // 受傷動畫
 
+    // 存所有技能
     std::unordered_map<int, std::shared_ptr<Skill>> m_Skills;
     bool m_IsSkillXUes = false;
     bool m_IsSkillCUes = false;
@@ -109,7 +112,7 @@ private:
 
     // 受傷動畫相關
     float m_HurtAnimationTimer = 0.0f;
-    float m_HurtAnimationDuration = 0.5f;
+    float m_HurtAnimationDuration = 0.5f; // 受傷動畫持續時間(秒)
 
     // 移動相關屬性
     bool m_IsMoving = false;
@@ -125,4 +128,4 @@ private:
 };
 
 
-#endif
+#endif //CHARACTER_HPP
