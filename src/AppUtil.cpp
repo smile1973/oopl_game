@@ -44,11 +44,6 @@ void App::GetReady() {
     m_Enemy_dummy->Update();
     m_Onward->Update();
     m_Root.Update();
-
-    // if (m_NKeyDown && !Util::Input::IsKeyPressed(Util::Keycode::N)) {
-    //         m_DefeatScreen->Get();
-    // }
-    // m_NKeyDown = Util::Input::IsKeyPressed(Util::Keycode::N);
 }
 
 /**
@@ -236,7 +231,7 @@ void App::SetSubPhase() const {
     int m_SubPhaseIndex = m_PRM->GetCurrentSubPhase();
 
     // 重置玩家位置
-    m_Rabbit->MoveToPosition({-400.0f, 160.0f});
+    m_Rabbit->MoveToPosition({-400.0f, 160.0f}, 0);
     m_Rabbit->m_Transform.scale.x = 0.5;
 
     // 根據小關索引設置固定的小關類型

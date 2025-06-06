@@ -37,7 +37,6 @@ private:
 
     int m_Health = 100;
     int m_RemainingHealthBar = 3;
-
     bool m_Visible = false;
 
     static constexpr int MAX_HEALTH_BARS = 3;

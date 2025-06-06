@@ -34,7 +34,7 @@ public:
     App& operator=(const App&) = delete;
 
     [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
-    std::shared_ptr<Util::GameObject> GetOverlay() const { return m_Overlay; }
+    [[nodiscard]] std::shared_ptr<Util::GameObject> GetOverlay() const { return m_Overlay; }
 
     void Start();
 

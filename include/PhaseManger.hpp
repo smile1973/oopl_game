@@ -126,16 +126,6 @@ private:
             default: return "Error";
         }
     }
-
-    // enum class SubPhase {
-    //     STORE,
-    //     BATTLE_1,
-    //     BATTLE_2,
-    //     BATTLE_3,
-    //     TREASURE,
-    //     BOSS
-    // };
-    // SubPhase m_CurrentSubPhase = SubPhase::STORE;     // 當前小關類型
 };
 
 #endif // PHASE_MANAGER_HPP
