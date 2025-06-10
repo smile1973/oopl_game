@@ -12,7 +12,7 @@
 ## 專案簡介
 
 ### 遊戲簡介
-
+2D平面的彈幕遊戲
 ### 組別分工
 111820024 廖翊宏：
 - 遊戲主架構 (App.cpp, main.cpp)
@@ -213,3 +213,15 @@
 ### 貢獻比例
 - 111820024 廖翊宏：50%
 - 111820030 楊承諭：50%
+
+### 其他
+若重新請對PTSD框架做以下變更
+1. 更改 include/Util/Gameobject.hpp 中的 Draw 為 virtual
+2. 更改 include/Util/Gameobject.hpp 中的 SetVisible 為 virtual
+```
+void SetVisible(const bool visible) { m_Visible = visible; }
+void Draw();
+--->
+virtual void SetVisible(const bool visible) { m_Visible = visible; }
+virtual void Draw();
+```

@@ -8,19 +8,19 @@ cmake_policy(SET CMP0135 NEW)
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
 
-FetchContent_Declare(
-    ptsd
-
-    URL         https://github.com/ntut-open-source-club/practical-tools-for-simple-design/archive/refs/tags/v0.2.zip
-
-    # Or alternatively if you want to use a specific git commit instead of a release:
-    # GIT_REPOSITORY  https://github.com/ntut-open-source-club/practical-tools-for-simple-design.git
-    # GIT_TAG         <git_tag>
-
-    SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/PTSD
-)
-
-FetchContent_MakeAvailable(ptsd)
+# 停用 PTSD 的自動更新，使用已經修改過的本地版本
+# 只有當 PTSD 目錄不存在時才下載
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/PTSD")
+    FetchContent_Declare(
+        ptsd
+        URL         https://github.com/ntut-open-source-club/practical-tools-for-simple-design/archive/refs/tags/v0.2.zip
+        SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/PTSD
+    )
+    FetchContent_MakeAvailable(ptsd)
+else()
+    # 如果 PTSD 目錄已存在，直接使用本地版本
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/PTSD)
+endif()
 
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
 file(GLOB_RECURSE HEADER_FILES include/*.hpp)
