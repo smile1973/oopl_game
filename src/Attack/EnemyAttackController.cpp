@@ -94,7 +94,7 @@ void EnemyAttackController::SelectRandomPatternForBoss() {
 
     if (newPattern) {
         AddPattern(newPattern);
-        LOG_DEBUG("Created new pattern instance of type {} for Boss", patternType);
+        // LOG_DEBUG("Created new pattern instance of type {} for Boss", patternType);
     }
 }
 

@@ -111,7 +111,7 @@ void RectangleAttack::CreateDirectionIndicator() {
 
     m_DirectionIndicator->m_Transform.scale = glm::vec2(1.0f, 1.0f);
     App::GetInstance().AddToRoot(m_DirectionIndicator);
-    LOG_DEBUG("Direction indicator created for rotation speed: {}", m_RotationSpeed);
+    // LOG_DEBUG("Direction indicator created for rotation speed: {}", m_RotationSpeed);
 }
 
 float RectangleAttack::CalculateRotationAngle() const {

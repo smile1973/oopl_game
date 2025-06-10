@@ -64,8 +64,8 @@ private:
     float m_MaxHealth;
 
     // 圖片集管理
-    std::vector<std::vector<std::string>> m_ImageSetCollection;  // 存储多组图片集
-    int m_CurrentImageSetIndex = 0;  // 当前使用的图片集索引
+    std::vector<std::vector<std::string>> m_ImageSetCollection;
+    int m_CurrentImageSetIndex = 0;
 
     bool m_IsMoving = false;
     float m_Speed = 0.0f;

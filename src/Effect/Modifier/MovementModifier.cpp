@@ -1,5 +1,7 @@
 #include "Effect/Modifier/MovementModifier.hpp"
 
+#include "Util/Logger.hpp"
+
 namespace Effect {
     namespace Modifier {
 

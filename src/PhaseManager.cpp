@@ -28,7 +28,6 @@ void PhaseManager::NextSubPhase() {
     }
     m_SubPhase++;
     std::cout << "\nPhaseManager::NextSubPhase" << std::endl;
-    LOG_DEBUG("Into SubPhase: {}-{}--{}", m_MainPhase, m_SubPhase, GetSubPhaseName(m_SubPhase));
 
     if (m_SubPhase > m_MaxSubPhase) {
         NextMainPhase();

@@ -30,30 +30,27 @@ void Character::AddSkill(int skillId, const std::vector<std::string>& skillImage
 
 bool Character::UseSkill(const int skillId, const std::vector<std::shared_ptr<Character>>& m_Enemies) {
     if (m_State == State::IDLE) {
-        // 檢查技能是否存在
         auto it = m_Skills.find(skillId);
-        if (it != m_Skills.end()) {
-            if (!it->second->IsOnCooldown()) {
-                LOG_DEBUG("Character using skill with ID: " + std::to_string(skillId));
-                TowardNearestEnemy(m_Enemies, skillId==3);
-                if (skillId == 3) {
-                    m_IsSkillCUes = true;
-                }else if (skillId == 4) {
-                    m_IsSkillVUes = true;
-                    // 進入無敵
-                    m_Invincible = true;
-                    m_InvincibleTimer = 0.0f;
-                    m_InvincibleDuration = 2.0f;
-                    SwitchToSkill(skillId);
-                }else {
-                    SwitchToSkill(skillId);
-                }
-                return true;
+        if (!it->second->IsOnCooldown()) {
+            TowardNearestEnemy(m_Enemies, skillId==3);
+            if (skillId == 3) {
+                m_IsSkillCUes = true;
+                m_Invincible = true;
+                m_InvincibleTimer = 0.0f;
+                m_InvincibleDuration = 0.75f;
+            }else if (skillId == 4) {
+                m_IsSkillVUes = true;
+                // 進入無敵
+                m_Invincible = true;
+                m_InvincibleTimer = 0.0f;
+                m_InvincibleDuration = 2.0f;
+                SwitchToSkill(skillId);
+            }else {
+                SwitchToSkill(skillId);
             }
-            LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " is on cooldown! " + std::to_string(it->second->GetRemainingCooldown()));
-        } else {
-            LOG_DEBUG("Skill with ID " + std::to_string(skillId) + " not found!");
+            return true;
         }
+            
     }
     return false;
 }
@@ -80,9 +77,8 @@ void Character::Update() {
             LOG_DEBUG("Character invincibility ended");
             if (m_IsSkillVUes) {
                 m_IsSkillVUes = false;
-                m_InvincibleDuration = 1.5f;
-                // LOG_ERROR("m_InvincibleDuration: " + std::to_string(m_InvincibleDuration));
             }
+            m_InvincibleDuration = 1.5f;
         }
     }
 
@@ -119,7 +115,7 @@ void Character::Update() {
             m_IsMoving = false; // 停止移動
             m_Transform.translation = m_TargetPosition;
             m_TotalTime = 0;
-            LOG_DEBUG("Character move to {}", m_Transform.translation);
+            // LOG_DEBUG("Character move to {}", m_Transform.translation);
         }
     }
 
@@ -131,7 +127,7 @@ void Character::Update() {
 
 void Character::SwitchToIdle() {
     if (m_State != State::IDLE) {
-        LOG_DEBUG("Switching to IDLE animation");
+        // LOG_DEBUG("Switching to IDLE animation");
         m_State = State::IDLE;
         m_Drawable = m_IdleAnimation; // 直接切換到閒置動畫物件
         m_CurrentSkillId = -1;
@@ -143,7 +139,7 @@ void Character::SwitchToIdle() {
 void Character::SwitchToSkill(int skillId) {
     auto it = m_Skills.find(skillId);
     if (it != m_Skills.end()) {
-        LOG_DEBUG("Switching to skill animation for skill ID: " + std::to_string(skillId));
+        // LOG_DEBUG("Switching to skill animation for skill ID: " + std::to_string(skillId));
         m_State = State::USING_SKILL;
         m_CurrentSkillId = skillId;
         m_CurrentSkill = it->second;
@@ -155,7 +151,7 @@ void Character::SwitchToSkill(int skillId) {
 }
 
 void Character::SwitchToHurt() {
-    LOG_DEBUG("Switching to HURT animation");
+    // LOG_DEBUG("Switching to HURT animation");
     m_State = State::HURT;
     m_HurtAnimationTimer = 0.0f;
     m_Drawable = m_HurtAnimation;
@@ -182,10 +178,8 @@ void Character::TowardNearestEnemy(const std::vector<std::shared_ptr<Character>>
 
     if (nearestEnemy) {
         if (nearestEnemy->GetPosition().x > currentPosition.x) {
-            LOG_DEBUG("Towards the Right");
             m_Transform.scale.x = 0.5f;
         } else {
-            LOG_DEBUG("Towards the Left");
             m_Transform.scale.x = -0.5f;
         }
 
@@ -220,7 +214,6 @@ void Character::MoveToPosition(const glm::vec2& targetPosition, const float tota
     m_TargetPosition = targetPosition;
     m_MoveSpeed = (targetPosition - this->GetPosition()) / totalTime;
     m_TotalTime = totalTime * 1000.0f; //(ms)
-    LOG_DEBUG("Move Character to {}", m_Transform.translation);
 }
 
 void Character::TakeDamage(int damage) {
@@ -255,8 +248,7 @@ void Character::SetMaxHealth(int maxHealth) {
 void Character::AddHurtAnimation(const std::vector<std::string>& hurtImageSet, int duration) {
     // 創建受傷動畫
     m_HurtAnimation = std::make_shared<Util::Animation>(hurtImageSet, true, duration, false, 0);
-    m_HurtAnimationDuration = duration / 1000.0f; // 轉換為秒
-    LOG_DEBUG("Added hurt animation with duration: {} ms", duration);
+    m_HurtAnimationDuration = duration / 1000.0f;
 }
 
 void Character::UpdateLevel() {

@@ -82,13 +82,15 @@ void App::Update() {
     // 技能Z
     if (m_ZKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::Z)) {
-            LOG_DEBUG("Z Key UP - Skill 1");
+            // LOG_DEBUG("Z Key UP - Skill 1");
             if (m_Rabbit->UseSkill(1, m_enemies_characters)) {
-                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
-                        enemy->TakeDamage(10);
-                        enemy->TakeDamage(m_Rabbit->IsSkillXUes() ? 1000 : 0);
+                        float damage = 15.0f * rabbitLevel;
+                        if (m_Rabbit->IsSkillXUes()) {
+                            damage *= 1.5f;
+                        }
+                        enemy->TakeDamage(damage);
                     }
                 }
                 m_Rabbit->UpdateSkillXUes(1);
@@ -100,7 +102,7 @@ void App::Update() {
     // 技能X
     if (m_XKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::X)) {
-            LOG_DEBUG("X Key UP - Skill 2");
+            // LOG_DEBUG("X Key UP - Skill 2");
             if (m_Rabbit->UseSkill(2, m_enemies_characters)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideSweptCircle(enemy)) {
@@ -116,13 +118,15 @@ void App::Update() {
     // 技能C
     if (m_CKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::C)) {
-            LOG_DEBUG("C Key UP - Skill 3");
+            // LOG_DEBUG("C Key UP - Skill 3");
             if (m_Rabbit->UseSkill(3, m_enemies_characters)) {
-                // m_Rabbit -> TowardNearestEnemy(m_enemies_characters);
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideEllipse(enemy) || true) {
-                        enemy->TakeDamage(5*rabbitLevel);
-                        enemy->TakeDamage(m_Rabbit->IsSkillXUes() ? 1000 : 0);
+                        float damage = 25.0f * rabbitLevel;
+                        if (m_Rabbit->IsSkillXUes()) {
+                            damage *= 1.5f;
+                        }
+                        enemy->TakeDamage(damage);
                     }
                 }
                 m_Rabbit->UpdateSkillXUes(3);
@@ -134,7 +138,7 @@ void App::Update() {
     // 技能V
     if (m_VKeyDown) {
         if (!Util::Input::IsKeyPressed(Util::Keycode::V)) {
-            LOG_DEBUG("V Key UP - Skill 4");
+            // LOG_DEBUG("V Key UP - Skill 4");
             if (m_Rabbit->UseSkill(4, m_enemies_characters)) {
                 m_Rabbit -> TowardNearestEnemy(m_enemies_characters, false);
                 m_Rabbit->UpdateSkillXUes(4);

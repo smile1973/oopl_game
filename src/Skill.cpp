@@ -12,7 +12,6 @@ Skill::Skill(int skillId, const std::vector<std::string>& imageSet, int duration
 
 void Skill::Play(const glm::vec2& position, float direction) {
     if (m_State == State::IDLE && !m_IsOnCooldown) {
-        LOG_DEBUG("Playing skill animation and effect");
         m_State = State::ACTIVE;
 
         // 開始冷卻

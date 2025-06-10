@@ -65,9 +65,6 @@ void CircleAttack::CreateAttackEffect() {
             float moveDuration = m_Distance / m_Speed;
             m_AttackDuration = std::max(m_AttackDuration, moveDuration);
 
-            LOG_DEBUG("Setting up movement with speed: {}, distance: {}, duration: {}",
-                      m_Speed, m_Distance, moveDuration);
-
             auto movementMod = Effect::Modifier::MovementModifier(
                 true, m_Speed, m_Distance, m_Direction
             );
@@ -87,7 +84,7 @@ void CircleAttack::CreateAttackEffect() {
 bool CircleAttack::CheckCollisionInternal(const std::shared_ptr<Character>& character) {
     glm::vec2 characterPos = character->GetPosition();
     float distance = glm::length(characterPos - m_Position);
-    return distance + 7.0f <= m_Radius;
+    return distance + 3.0f <= m_Radius;
 }
 
 void CircleAttack::SyncWithEffect() {

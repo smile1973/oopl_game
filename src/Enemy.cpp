@@ -31,7 +31,7 @@ Enemy::Enemy(std::string name, const float health, const std::vector<std::string
 void Enemy::TakeDamage(float damage) {
     if (! this->GetVisibility() || m_Health == 0.0f) return;
     m_Health = std::max(0.0f, m_Health - damage);
-    LOG_DEBUG("{} took {:.1f} damage, remaining health: {:.1f}", m_Name, damage, m_Health);
+    // LOG_DEBUG("{} took {:.1f} damage, remaining health: {:.1f}", m_Name, damage, m_Health);
 
     if (m_ShowHealthRing) UpdateHealthRing();
     if (! this->IfAlive()) {
@@ -68,7 +68,6 @@ void Enemy::MoveToPosition(const glm::vec2& targetPosition, const float totalTim
     m_Direction = (targetPosition - this->GetPosition()) / m_MaxDistance;
     m_Speed = m_MaxDistance / totalTime;
     m_TotalTime = totalTime * 1000.0f; //(ms)
-    LOG_DEBUG("Move {} to {}",m_Name , m_Transform.translation);
 }
 
 void Enemy::Update() {
@@ -85,7 +84,6 @@ void Enemy::Update() {
         m_IsMoving = false; // 停止移動
         m_Transform.translation = m_TargetPosition;
         m_DistanceTraveled = 0;
-        LOG_DEBUG("{} move to {}",m_Name , m_Transform.translation);
     }
 
 }
@@ -96,7 +94,7 @@ void Enemy::InitHealthRing() {
     // 創建半透明背景圈
     m_HealthRingBackground = std::make_shared<Util::GameObject>(
         std::make_shared<Util::Image>(GA_RESOURCE_DIR "/Image/hitbox.png"),
-        m_ZIndex - 1  // 確保在敵人下方
+        0.0f
     );
 
     // 設置合適的大小
@@ -185,7 +183,6 @@ void Enemy::SwitchImageSet(const std::vector<std::string>& newImageSet) {
 
     SetImagePathSet(newImageSet);
     RebuildAnimation(newImageSet);
-    LOG_DEBUG("Successfully switched image set for enemy: {}", m_Name);
 }
 
 void Enemy::SwitchImageSetByIndex(int imageSetIndex) {
@@ -208,15 +205,12 @@ void Enemy::SwitchImageSetByIndex(int imageSetIndex) {
     SetImagePathSet(newImageSet);
 
     RebuildAnimation(newImageSet);
-
-    LOG_DEBUG("Successfully switched to image set index {} for enemy: {}", imageSetIndex, m_Name);
 }
 
 void Enemy::AddImageSetCollection(const std::vector<std::vector<std::string>>& imageSets) {
     for (const auto& imageSet : imageSets) {
         if (!imageSet.empty()) {
             m_ImageSetCollection.push_back(imageSet);
-            LOG_DEBUG("Added image set with {} images to enemy: {}", imageSet.size(), m_Name);
         } else {
             LOG_ERROR("Skipped empty image set for enemy: {}", m_Name);
         }
