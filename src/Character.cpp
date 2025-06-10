@@ -263,6 +263,7 @@ void Character::UpdateLevel() {
 void Character::Reset() {
     m_IsSkillXUes = false;
     m_IsSkillCUes = false;
+    m_IsSkillVUes = false;
 
     m_CurrentSkillId = -1;
 
@@ -283,10 +284,13 @@ void Character::Reset() {
     m_TargetPosition = glm::vec2(0.0f, 0.0f);
     m_MoveSpeed = glm::vec2(0.0f, 0.0f);
 
+    m_Transform.scale.x = 0.5;
+
     m_Money = 0;
     m_Experience = 0;
     m_Level = 1;
     SwitchToIdle();
+    ResetSkill();
 }
 
 void Character::ToggleGodMode() {

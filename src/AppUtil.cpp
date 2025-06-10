@@ -50,7 +50,6 @@ void App::GetReady() {
  * @brief 暫停畫面。
  */
 void App::Pause() {
-    m_PausedOption->SetVisible(true);
     m_PRM->SetProgressBarVisible(true);
     if (m_EnterDown && !Util::Input::IsKeyPressed(Util::Keycode::N)) {
         switch (m_PausedOption->GetCurrentOption()) {

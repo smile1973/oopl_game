@@ -22,6 +22,8 @@ public:
 
     [[nodiscard]] bool GetVisibility() const{ return m_IfVisible; }
 
+    [[nodiscard]] float GetGameTimer() const{ return m_GameTimer; }
+
     void Switch (bool isLeft);
 
     [[nodiscard]] bool IsLeaveGame() const{return m_CurrentOption==0;}

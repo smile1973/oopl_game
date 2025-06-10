@@ -224,8 +224,8 @@ void App::Update() {
 
     // 測試
     if (m_NKeyDown) {
-        if (!Util::Input::IsKeyPressed(Util::Keycode::N)) {
-            Pause();
+        if (!Util::Input::IsKeyPressed(Util::Keycode::N) && m_Rabbit->GetPosition()!=glm::vec2(-100,0)) {
+            m_PausedOption->SetVisible(true);
             LOG_DEBUG("--App::Pause--");
         }
     }
