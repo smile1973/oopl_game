@@ -215,7 +215,7 @@
 - 111820030 楊承諭：50%
 
 ### 其他
-若重新請對PTSD框架做以下變更
+有對PTSD框架做以下變更 所以若要從Github獲取專案 需要手動做以下變更
 1. 更改 include/Util/Gameobject.hpp 中的 Draw 為 virtual
 2. 更改 include/Util/Gameobject.hpp 中的 SetVisible 為 virtual
 ```
