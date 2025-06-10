@@ -104,6 +104,8 @@ private:
     bool m_IsReady = false;
     int m_CurrentPausedOption = 0;
     bool m_GKeyDown = false;
+    bool m_HKeyDown = false;  // 用於偵測 H 鍵按下狀態
+    bool m_CheatMode = false;  // 作弊模式標誌
 };
 
 #endif

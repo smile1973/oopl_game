@@ -90,6 +90,9 @@ void App::Update() {
                         if (m_Rabbit->IsSkillXUes()) {
                             damage *= 1.5f;
                         }
+                        if (m_CheatMode) {
+                            damage = 1000.0f;
+                        }
                         enemy->TakeDamage(damage);
                     }
                 }
@@ -106,7 +109,11 @@ void App::Update() {
             if (m_Rabbit->UseSkill(2, m_enemies_characters)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideSweptCircle(enemy)) {
-                        enemy->TakeDamage(5*rabbitLevel);
+                        float damage = 5*rabbitLevel;
+                        if (m_CheatMode) {
+                            damage = 1000.0f;
+                        }
+                        enemy->TakeDamage(damage);
                     }
                 }
                 m_Rabbit->UpdateSkillXUes(2);
@@ -126,6 +133,9 @@ void App::Update() {
                         if (m_Rabbit->IsSkillXUes()) {
                             damage *= 1.5f;
                         }
+                        if (m_CheatMode) {
+                            damage = 1000.0f;
+                        }
                         enemy->TakeDamage(damage);
                     }
                 }
@@ -141,6 +151,21 @@ void App::Update() {
             // LOG_DEBUG("V Key UP - Skill 4");
             if (m_Rabbit->UseSkill(4, m_enemies_characters)) {
                 m_Rabbit -> TowardNearestEnemy(m_enemies_characters, false);
+                
+                // 如果技能V有傷害，添加作弊模式檢查
+                for (const auto& enemy : m_Enemies) {
+                    if (m_Rabbit->IfCollideCircle(enemy, 150)) {
+                        float damage = 20.0f * rabbitLevel;
+                        if (m_Rabbit->IsSkillXUes()) {
+                            damage *= 1.5f;
+                        }
+                        if (m_CheatMode) {
+                            damage = 1000.0f;
+                        }
+                        enemy->TakeDamage(damage);
+                    }
+                }
+                
                 m_Rabbit->UpdateSkillXUes(4);
             }
         }
@@ -220,6 +245,18 @@ void App::Update() {
         }
     }
     m_GKeyDown = Util::Input::IsKeyPressed(Util::Keycode::G);
+
+    if (m_HKeyDown) {
+        if (!Util::Input::IsKeyPressed(Util::Keycode::H)) {
+            m_CheatMode = !m_CheatMode;
+            if (m_CheatMode) {
+                LOG_DEBUG("Cheat Mode enabled - All skills damage boosted to 1000");
+            } else {
+                LOG_DEBUG("Cheat Mode disabled - Normal damage restored");
+            }
+        }
+    }
+    m_HKeyDown = Util::Input::IsKeyPressed(Util::Keycode::H);
 
     m_Root.Update();
 }
