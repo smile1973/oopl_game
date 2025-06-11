@@ -86,12 +86,12 @@ void App::Update() {
             if (m_Rabbit->UseSkill(1, m_enemies_characters)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideCircle(enemy, 200)) {
-                        float damage = 15.0f * rabbitLevel;
+                        float damage = 6.0f * rabbitLevel;
                         if (m_Rabbit->IsSkillXUes()) {
                             damage *= 1.5f;
                         }
                         if (m_CheatMode) {
-                            damage = 1000.0f;
+                            damage = 100000.0f;
                         }
                         enemy->TakeDamage(damage);
                     }
@@ -109,9 +109,9 @@ void App::Update() {
             if (m_Rabbit->UseSkill(2, m_enemies_characters)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideSweptCircle(enemy)) {
-                        float damage = 5*rabbitLevel;
+                        float damage = 2*rabbitLevel;
                         if (m_CheatMode) {
-                            damage = 1000.0f;
+                            damage = 100000.0f;
                         }
                         enemy->TakeDamage(damage);
                     }
@@ -129,12 +129,12 @@ void App::Update() {
             if (m_Rabbit->UseSkill(3, m_enemies_characters)) {
                 for (const auto& enemy : m_Enemies) {// 遍歷範圍內的敵人
                     if (m_Rabbit->IfCollideEllipse(enemy) || true) {
-                        float damage = 25.0f * rabbitLevel;
+                        float damage = 10.0f * rabbitLevel;
                         if (m_Rabbit->IsSkillXUes()) {
                             damage *= 1.5f;
                         }
                         if (m_CheatMode) {
-                            damage = 1000.0f;
+                            damage = 100000.0f;
                         }
                         enemy->TakeDamage(damage);
                     }
@@ -155,12 +155,12 @@ void App::Update() {
                 // 如果技能V有傷害，添加作弊模式檢查
                 for (const auto& enemy : m_Enemies) {
                     if (m_Rabbit->IfCollideCircle(enemy, 150)) {
-                        float damage = 20.0f * rabbitLevel;
+                        float damage = 8.0f * rabbitLevel;
                         if (m_Rabbit->IsSkillXUes()) {
                             damage *= 1.5f;
                         }
                         if (m_CheatMode) {
-                            damage = 1000.0f;
+                            damage = 100000.0f;
                         }
                         enemy->TakeDamage(damage);
                     }

@@ -280,12 +280,12 @@ void App::SetupBattlePhase() const {
     int SubPhaseIndex = m_PRM->GetCurrentSubPhase();
 
     // 第一關血量為150，每個大關增加100血量，每個小關增加50血量
-    const float baseHealth = 100.0f + 250.0f * (MainPhaseIndex - 1);
+    const float baseHealth = 100.0f + 250.0f * (MainPhaseIndex - 1) * (MainPhaseIndex);
     m_Overlay->SetVisible(true);
     // 設置基本敵人
     m_Enemy->SetPosition({197.5f, -3.5f});
     m_Enemy->SetVisible(true);
-    m_Enemy->SetHealth(baseHealth + 50.0f * (SubPhaseIndex - 1));
+    m_Enemy->SetHealth(baseHealth + 150.0f * (SubPhaseIndex - 1) + 50.0f * std::max(m_Rabbit->GetLevel()-10,0));
 
     m_Enemy->SwitchImageSetByIndex(MainPhaseIndex*100 + SubPhaseIndex);
 
